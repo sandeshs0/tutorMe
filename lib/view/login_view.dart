@@ -12,10 +12,14 @@ class LoginScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            //                        +
+            //    
             // Logo
-            Image.asset('assets/images/logo.png'),
-          
-            const SizedBox(height: 8.0),
+             Image.asset(
+              'assets/images/logo.png',
+              height: 50.0, // Adjusted logo size
+            ),
+            const SizedBox(height: 10.0),
             const Text(
               'Login with your account!',
               style: TextStyle(
@@ -28,25 +32,25 @@ class LoginScreen extends StatelessWidget {
               'Kick start your learning journey with an account',
               style: TextStyle(
                 fontSize: 14.0,
-                color: Colors.grey,
+                color: Color.fromARGB(255, 61, 26, 26),
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 40.0),
+            const SizedBox(height: 50.0),
 
             // Password Text Fields
             TextField(
               obscureText: true,
               decoration: InputDecoration(
-                labelText: 'Password',
-                prefixIcon: const Icon(Icons.lock),
+                labelText: 'email',
+                prefixIcon: const Icon(Icons.email),
                 suffixIcon: const Icon(Icons.visibility),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.0),
+                  borderRadius: BorderRadius.circular(15.0),
                 ),
               ),
             ),
-            const SizedBox(height: 16.0),
+            const SizedBox(height: 19.0),
             TextField(
               obscureText: true,
               decoration: InputDecoration(
@@ -58,7 +62,7 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 24.0),
+            const SizedBox(height: 28.0),
 
             // Login Button
             ElevatedButton(
@@ -71,10 +75,11 @@ class LoginScreen extends StatelessWidget {
                 ),
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 minimumSize: const Size(double.infinity, 50),
+                  backgroundColor: Colors.blue,
               ),
               child: const Text(
                 'Login',
-                style: TextStyle(fontSize: 16.0),
+                  style: TextStyle(fontSize: 20.0, color: Color.fromARGB(255, 9, 9, 9)),
               ),
             ),
             const SizedBox(height: 16.0),
