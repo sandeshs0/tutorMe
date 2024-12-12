@@ -21,7 +21,7 @@ class DashboardView extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.notifications_outlined, color: Colors.black),
+            icon: const Icon(Icons.notifications_active, color: Color.fromARGB(255, 4, 32, 91)),
             onPressed: () {},
           )
         ],
@@ -117,7 +117,7 @@ class DashboardView extends StatelessWidget {
       Text(
         'Computer Science',
         style: TextStyle(
-            color: Colors.blue, fontSize: 14, fontWeight: FontWeight.bold),
+            color: Color.fromARGB(255, 0, 40, 73), fontSize: 14, fontWeight: FontWeight.bold),
       ),
       SizedBox(width: 20),
       Text(
@@ -341,7 +341,7 @@ class DashboardView extends StatelessWidget {
       ),
       child: Text(
         skill,
-        style: TextStyle(fontSize: 12, color: Colors.blue[800]),
+        style: const TextStyle(fontSize: 12, color: Color.fromARGB(255, 16, 27, 40)),
       ),
     );
   }

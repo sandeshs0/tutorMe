@@ -3,6 +3,7 @@ import 'package:tutorme/view/login_view.dart';
 
 class SignupView extends StatelessWidget {
   const SignupView({super.key});
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,15 +72,30 @@ class SignupView extends StatelessWidget {
                 const SizedBox(height: 19.0),
         
                 // Gender Field
-                TextField(
-                  decoration: InputDecoration(
-                    labelText: 'Gender',
-                    prefixIcon: const Icon(Icons.person_outline),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                  ),
-                ),
+                // Gender Dropdown
+
+DropdownButtonFormField<String>(
+  // value: selectedGender,
+  decoration: InputDecoration(
+    labelText: 'Gender',
+    prefixIcon: const Icon(Icons.person_outline),
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(15.0),
+    ),
+  ),
+  items: ['Male', 'Female',"Others"]
+
+      .map((gender) => DropdownMenuItem<String>(
+            value: gender,
+            child: Text(gender),
+          ))
+      .toList(),
+  onChanged: (value) {
+    // selectedGender = value;
+  },
+),
+
+                
                 const SizedBox(height: 19.0),
         
                 // Password Field
