@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tutorme/view/dashboard_view.dart';
+import 'package:tutorme/view/signup_view.dart';
 
 class LoginScreen extends StatelessWidget {
 const LoginScreen({super.key});
@@ -98,6 +99,11 @@ const LoginScreen({super.key});
                 GestureDetector(
                   onTap: () {
                     // Navigate to sign up screen
+                    // Handle login
+                  Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) =>  SignupView()),
+                        );
                   },
                   child: const Text(
                     'SIGN UP',
