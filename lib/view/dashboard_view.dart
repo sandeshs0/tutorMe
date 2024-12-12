@@ -1,195 +1,324 @@
 import 'package:flutter/material.dart';
 
-
-
 class DashboardView extends StatelessWidget {
   const DashboardView({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Hi, Sandesh'),
-          centerTitle: true,
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.black,
-          elevation: 2.0,
+    return Scaffold(
+      backgroundColor: const Color(0xFFF5F9FF),
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(0, 89, 62, 62),
+        title: const Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+        // SizedBox(height: 10,),
+            Text('Hi, Sandesh',
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+            
+          ],
         ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.notifications_outlined, color: Colors.black),
+            onPressed: () {},
+          )
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Search Bar
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.2),
+                      blurRadius: 5,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: const Row(
+                  children: [
+                    Icon(Icons.search, color: Colors.grey),
+                    SizedBox(width: 8),
+                    Expanded(
+                      child: TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Search for...',
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                    Icon(Icons.tune, color: Colors.grey),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              // Popular Tutors Section
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Popular Tutors',
+                    style: TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  TextButton(
+                    onPressed: () {},
+                    child: const Text('SEE ALL'),
+                  )
+                ],
+              ),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    _buildPopularTutorCard(context),
+                    _buildPopularTutorCard(context),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              // Categories Section
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Categories',
+                    style: TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  TextButton(
+                    onPressed: () {},
+                    child: const Text('SEE ALL'),
+                  )
+                ],
+              ),
+              Wrap(
+                spacing: 10,
+                runSpacing: 10,
+                children: [
+                  _buildCategoryChip('Physics'),
+                  _buildCategoryChip('Computer Science'),
+                  _buildCategoryChip('Video Animation'),
+                ],
+              ),
+              const SizedBox(height: 20),
+
+              // Recommended Section
+              const Text(
+                'Recommended for you',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 10),
+              Column(
+                children: [
+                  _buildRecommendationCard(context),
+                  _buildRecommendationCard(context),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        items: const [
+          BottomNavigationBarItem(
+              icon: Icon(Icons.home), label: 'HOME'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.search), label: 'BROWSE'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.mail), label: 'INBOX'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.account_balance_wallet), label: 'WALLET'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.person), label: 'PROFILE'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPopularTutorCard(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(right: 16),
+      padding: const EdgeInsets.all(12),
+      width: 350,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            blurRadius: 5,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Row(
+            children: [
+              CircleAvatar(
+                backgroundImage: AssetImage('assets/images/avatar.jpg'),
+                radius: 30,
+              ),
+              SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Er. Narendra Kunwar',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    Text('Machine Learning',
+                        style: TextStyle(color: Colors.grey, fontSize: 12)),
+                  ],
+                ),
+              ),
+              Column(
+                children: [
+                  Text(
+                    '4.4',
+                    style: TextStyle(
+                        color: Colors.orange,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16),
+                  ),
+                  Icon(Icons.star, color: Colors.orange, size: 16),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Divider(color: Colors.grey[300]),
+          const SizedBox(height: 8),
+          const Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Rate',
+                      style: TextStyle(color: Colors.grey, fontSize: 12)),
+                  Text('Rs. 230/hour',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Minutes tutored',
+                      style: TextStyle(color: Colors.grey, fontSize: 12)),
+                  Text('4311',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Students',
+                      style: TextStyle(color: Colors.grey, fontSize: 12)),
+                  Text('140',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                ],
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCategoryChip(String label) {
+    return Chip(
+      label: Text(label),
+      backgroundColor: Colors.white,
+      elevation: 2,
+      shadowColor: Colors.grey.withOpacity(0.3),
+    );
+  }
+
+  Widget _buildRecommendationCard(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            blurRadius: 5,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          const CircleAvatar(
+            backgroundImage: NetworkImage('https://via.placeholder.com/150'),
+            radius: 30,
+          ),
+          const SizedBox(width: 12),
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'What do you want to learn today? Choose a tutor and get to it!',
-                  style: TextStyle(fontSize: 16.0, color: Colors.grey[600]),
-                ),
-                SizedBox(height: 20.0),
-                _buildSearchBar(),
-                SizedBox(height: 20.0),
-                _buildSectionTitle('Popular Tutors'),
-                SizedBox(height: 10.0),
-                _buildTutorCard(
+                const Text(
                   'Er. Narendra Kunwar',
-                  'Machine Learning',
-                  'Minutes tutored: 4311 | Students: 140',
-                  'Rs. 230/hour',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 16),
                 ),
-                _buildTutorCard(
-                  'Another Tutor',
-                  'Physics',
-                  'Minutes tutored: 1200 | Students: 50',
-                  'Rs. 200/hour',
-                ),
-                SizedBox(height: 20.0),
-                _buildSectionTitle('Categories'),
-                SizedBox(height: 10.0),
-                _buildCategories(),
-                SizedBox(height: 20.0),
-                _buildSectionTitle('Recommended for you'),
-                SizedBox(height: 10.0),
-                _buildTutorCard(
-                  'Er. Narendra Kunwar',
-                  'Senior Software Engineer',
-                  'Can teach: JavaScript, Node.js, Data Structures',
-                  'Rs. 230/hour',
-                ),
+                const Text('Senior Software Engineer',
+                    style: TextStyle(color: Colors.grey, fontSize: 12)),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    _buildSkillChip('JavaScript'),
+                    const SizedBox(width: 5),
+                    _buildSkillChip('Node.js'),
+                  ],
+                )
               ],
             ),
           ),
-        ),
-        bottomNavigationBar: _buildBottomNavBar(),
+          const Column(
+            children: [
+              Text('Rate', style: TextStyle(color: Colors.grey)),
+              Text('Rs. 230/hour',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+            ],
+          )
+        ],
       ),
     );
   }
 
-  Widget _buildSearchBar() {
-    return Row(
-      children: [
-        Expanded(
-          child: TextField(
-            decoration: InputDecoration(
-              hintText: 'Search for...',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              contentPadding: EdgeInsets.symmetric(horizontal: 10.0),
-            ),
-          ),
-        ),
-        SizedBox(width: 10.0),
-        ElevatedButton(
-          onPressed: () {},
-          style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.0),
-            ), backgroundColor: Colors.blue,
-          ),
-          child: Text('🔍'),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSectionTitle(String title) {
-    return Text(
-      title,
-      style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-    );
-  }
-
-  Widget _buildTutorCard(
-      String name, String title, String stats, String rate) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
+  Widget _buildSkillChip(String skill) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: Colors.blue[100],
+        borderRadius: BorderRadius.circular(10),
       ),
-      elevation: 2.0,
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Row(
-          children: [
-            CircleAvatar(
-              radius: 25.0,
-              backgroundImage: NetworkImage('https://www.wilsoncenter.org/sites/default/files/media/images/person/james-person-1.jpg'),
-            ),
-            SizedBox(width: 15.0),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    name,
-                    style: TextStyle(
-                        fontSize: 16.0, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    title,
-                    style: TextStyle(fontSize: 14.0, color: Colors.grey[600]),
-                  ),
-                  Text(
-                    stats,
-                    style: TextStyle(fontSize: 12.0, color: Colors.grey[600]),
-                  ),
-                ],
-              ),
-            ),
-            Text(
-              rate,
-              style: TextStyle(fontSize: 14.0, color: Colors.blue),
-            ),
-          ],
-        ),
+      child: Text(
+        skill,
+        style: TextStyle(fontSize: 12, color: Colors.blue[800]),
       ),
-    );
-  }
-
-  Widget _buildCategories() {
-    final categories = ['Computer Science', 'Physics', 'Video Animation'];
-
-    return Wrap(
-      spacing: 10.0,
-      children: categories
-          .map((category) => Chip(
-                label: Text(category),
-                backgroundColor: Colors.blue,
-                labelStyle: TextStyle(color: Colors.white),
-              ))
-          .toList(),
-    );
-  }
-
-  Widget _buildBottomNavBar() {
-    return BottomNavigationBar(
-      items: [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Home',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.search),
-          label: 'Browse',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.message),
-          label: 'Inbox',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.account_balance_wallet),
-          label: 'Wallet',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person),
-          label: 'Profile',
-        ),
-      ],
-      currentIndex: 0,
-      selectedItemColor: Colors.blue,
-      unselectedItemColor: Colors.grey,
-      showUnselectedLabels: true,
-      onTap: (index) {},
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tutorme/view/dashboard_view.dart';
 
 class LoginScreen extends StatelessWidget {
 const LoginScreen({super.key});
@@ -13,9 +14,6 @@ const LoginScreen({super.key});
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            //                        +
-            //    
-            // Logo
              Center(
                child: Image.asset(
                 'assets/images/logo.png',
@@ -70,7 +68,12 @@ const LoginScreen({super.key});
             // Login Button
             ElevatedButton(
               onPressed: () {
+
                 // Handle login
+                  Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) =>  DashboardView()),
+                        );
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
