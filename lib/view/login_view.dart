@@ -1,25 +1,28 @@
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromRGBO(245, 249, 255, 1),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             //                        +
             //    
             // Logo
-             Image.asset(
-              'assets/images/logo.png',
-              height: 50.0, // Adjusted logo size
-            ),
-            const SizedBox(height: 10.0),
+             Center(
+               child: Image.asset(
+                'assets/images/logo.png',
+                height: 50.0, // Adjusted logo size
+                           ),
+             ),
+            const SizedBox(height: 20.0),
             const Text(
               'Login with your account!',
               style: TextStyle(
@@ -42,8 +45,8 @@ class LoginScreen extends StatelessWidget {
             TextField(
               obscureText: true,
               decoration: InputDecoration(
-                labelText: 'email',
-                prefixIcon: const Icon(Icons.email),
+                labelText: 'Username',
+                prefixIcon: const Icon(Icons.person),
                 suffixIcon: const Icon(Icons.visibility),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15.0),
@@ -71,15 +74,15 @@ class LoginScreen extends StatelessWidget {
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.0),
+                  borderRadius: BorderRadius.circular(40),
                 ),
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 minimumSize: const Size(double.infinity, 50),
-                  backgroundColor: Colors.blue,
+                  backgroundColor: const Color.fromARGB(255, 0, 94, 255),
               ),
               child: const Text(
                 'Login',
-                  style: TextStyle(fontSize: 20.0, color: Color.fromARGB(255, 9, 9, 9)),
+                  style: TextStyle(fontSize: 20.0, color: Color.fromARGB(255, 255, 255, 255)),
               ),
             ),
             const SizedBox(height: 16.0),

@@ -15,6 +15,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
   @override
   Widget build(BuildContext context) {
 return Scaffold(
+      backgroundColor: const Color.fromRGBO(245, 249, 255, 1),
       body: Column(
         children: [
           Expanded(
@@ -81,10 +82,9 @@ return Scaffold(
                         curve: Curves.ease,
                       );
                     } else {
-                      // Navigate to home or next screen
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const LoginScreen()),
+                        MaterialPageRoute(builder: (context) =>  LoginScreen()),
                         );
                     }
                   },
