@@ -104,15 +104,34 @@ class DashboardView extends StatelessWidget {
                   )
                 ],
               ),
-              Wrap(
-                spacing: 10,
-                runSpacing: 10,
-                children: [
-                  _buildCategoryChip('Physics'),
-                  _buildCategoryChip('Computer Science'),
-                  _buildCategoryChip('Video Animation'),
-                ],
-              ),
+  const SingleChildScrollView(
+    scrollDirection: Axis.horizontal,
+    child:  Row(
+    children: [
+      Text(
+        'Physics',
+        style: TextStyle(color: Colors.grey, fontSize: 14),
+      ),
+      SizedBox(width: 20),
+      Text(
+        'Computer Science',
+        style: TextStyle(
+            color: Colors.blue, fontSize: 14, fontWeight: FontWeight.bold),
+      ),
+      SizedBox(width: 20),
+      Text(
+        'Video Animation',
+        style: TextStyle(color: Colors.grey, fontSize: 14),
+      ),
+      SizedBox(width: 20),
+      Text(
+        'Video Animation',
+        style: TextStyle(color: Colors.grey, fontSize: 14),
+      ),
+    ],
+    ),
+  ),
+
               const SizedBox(height: 20),
 
               // Recommended Section
@@ -125,13 +144,17 @@ class DashboardView extends StatelessWidget {
                 children: [
                   _buildRecommendationCard(context),
                   _buildRecommendationCard(context),
+                  _buildRecommendationCard(context),
+                  _buildRecommendationCard(context),
                 ],
               ),
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
+      ),bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: const Color.fromARGB(255, 0, 40, 73),
+        selectedItemColor: Colors.blue,
+        unselectedItemColor: Colors.grey,
         type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(
@@ -139,11 +162,11 @@ class DashboardView extends StatelessWidget {
           BottomNavigationBarItem(
               icon: Icon(Icons.search), label: 'BROWSE'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.mail), label: 'INBOX'),
+              icon: Icon(Icons.mail_outline), label: 'INBOX'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.account_balance_wallet), label: 'WALLET'),
+              icon: Icon(Icons.account_balance_wallet_outlined), label: 'WALLET'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.person), label: 'PROFILE'),
+              icon: Icon(Icons.person_outline), label: 'PROFILE'),
         ],
       ),
     );
@@ -243,14 +266,14 @@ class DashboardView extends StatelessWidget {
     );
   }
 
-  Widget _buildCategoryChip(String label) {
-    return Chip(
-      label: Text(label),
-      backgroundColor: Colors.white,
-      elevation: 2,
-      shadowColor: Colors.grey.withOpacity(0.3),
-    );
-  }
+  // Widget _buildCategoryChip(String label) {
+  //   return Chip(
+  //     label: Text(label),
+  //     backgroundColor: Colors.white,
+  //     elevation: 2,
+  //     shadowColor: Colors.grey.withOpacity(0.3),
+  //   );
+  // }
 
   Widget _buildRecommendationCard(BuildContext context) {
     return Container(
@@ -270,7 +293,7 @@ class DashboardView extends StatelessWidget {
       child: Row(
         children: [
           const CircleAvatar(
-            backgroundImage: NetworkImage('https://via.placeholder.com/150'),
+            backgroundImage: AssetImage('assets/images/avatar.jpg'),
             radius: 30,
           ),
           const SizedBox(width: 12),
