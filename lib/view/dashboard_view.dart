@@ -8,6 +8,7 @@ class DashboardView extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F9FF),
       appBar: AppBar(
+                automaticallyImplyLeading: false,
         backgroundColor: const Color.fromARGB(0, 89, 62, 62),
         title: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -172,7 +173,7 @@ class DashboardView extends StatelessWidget {
     );
   }
 
-  Widget _buildPopularTutorCard(BuildContext context) {
+  Widget _buildPopularTutorCard(BuildContext context,) {
     return Container(
       margin: const EdgeInsets.only(right: 16),
       padding: const EdgeInsets.all(12),
