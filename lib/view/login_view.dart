@@ -8,7 +8,7 @@ const LoginScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(245, 249, 255, 1),
+      backgroundColor: const Color.fromRGBO(245, 249, 255, 1),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
@@ -73,7 +73,7 @@ const LoginScreen({super.key});
                 // Handle login
                   Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) =>  DashboardView()),
+                        MaterialPageRoute(builder: (context) =>  const DashboardView()),
                         );
               },
               style: ElevatedButton.styleFrom(
@@ -102,7 +102,7 @@ const LoginScreen({super.key});
                     // Handle login
                   Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) =>  SignupView()),
+                        MaterialPageRoute(builder: (context) =>  const SignupView()),
                         );
                   },
                   child: const Text(

@@ -1,179 +1,88 @@
 import 'package:flutter/material.dart';
+import 'package:tutorme/view/browse_view.dart';
+import 'package:tutorme/view/home_view.dart';
+import 'package:tutorme/view/inbox_view.dart';
+import 'package:tutorme/view/profile_view.dart';
+import 'package:tutorme/view/wallet_view.dart';
 
-class DashboardView extends StatelessWidget {
+class DashboardView extends StatefulWidget {
   const DashboardView({super.key});
+
+  @override
+  State<DashboardView> createState() => _DashboardViewState();
+}
+
+class _DashboardViewState extends State<DashboardView> {
+  int _currentIndex = 0;
+
+  // List of screens
+  final List<Widget> _screens = [
+    const HomeScreen(),
+    const BrowseScreen(),
+    const InboxScreen(),
+    const WalletScreen(),
+    const ProfileScreen(),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F9FF),
+      backgroundColor: const Color(0xfff5f8ff),
       appBar: AppBar(
-                automaticallyImplyLeading: false,
+        automaticallyImplyLeading: false,
         backgroundColor: const Color.fromARGB(0, 89, 62, 62),
         title: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-        // SizedBox(height: 10,),
+            // SizedBox(height: 10,),
             Text('Hi, Sandesh',
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-            
           ],
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.notifications_active, color: Color.fromARGB(255, 4, 32, 91)),
+            icon: const Icon(Icons.notifications_active,
+                color: Color.fromARGB(255, 4, 32, 91)),
             onPressed: () {},
           )
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Search Bar
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.2),
-                      blurRadius: 5,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: const Row(
-                  children: [
-                    Icon(Icons.search, color: Colors.grey),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: TextField(
-                        decoration: InputDecoration(
-                          hintText: 'Search for...',
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                    Icon(Icons.tune, color: Colors.grey),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              // Popular Tutors Section
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Popular Tutors',
-                    style: TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text('SEE ALL'),
-                  )
-                ],
-              ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    _buildPopularTutorCard(context),
-                    _buildPopularTutorCard(context),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              // Categories Section
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Categories',
-                    style: TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text('SEE ALL'),
-                  )
-                ],
-              ),
-  const SingleChildScrollView(
-    scrollDirection: Axis.horizontal,
-    child:  Row(
-    children: [
-      Text(
-        'Physics',
-        style: TextStyle(color: Colors.grey, fontSize: 14),
-      ),
-      SizedBox(width: 20),
-      Text(
-        'Computer Science',
-        style: TextStyle(
-            color: Color.fromARGB(255, 0, 40, 73), fontSize: 14, fontWeight: FontWeight.bold),
-      ),
-      SizedBox(width: 20),
-      Text(
-        'Video Animation',
-        style: TextStyle(color: Colors.grey, fontSize: 14),
-      ),
-      SizedBox(width: 20),
-      Text(
-        'Video Animation',
-        style: TextStyle(color: Colors.grey, fontSize: 14),
-      ),
-    ],
-    ),
-  ),
-
-              const SizedBox(height: 20),
-
-              // Recommended Section
-              const Text(
-                'Recommended for you',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 10),
-              Column(
-                children: [
-                  _buildRecommendationCard(context),
-                  _buildRecommendationCard(context),
-                  _buildRecommendationCard(context),
-                  _buildRecommendationCard(context),
-                ],
-              ),
-            ],
-          ),
+      body: _screens[_currentIndex],
+      bottomNavigationBar: Container(
+        decoration: const BoxDecoration(
+            color: Color.fromARGB(255, 0, 40, 73),
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+        child: BottomNavigationBar(
+          backgroundColor: Colors.transparent,
+          selectedItemColor: Colors.blue,
+          unselectedItemColor: Colors.grey,
+          selectedFontSize: 14,
+          onTap: (index) {
+            setState(() {
+              _currentIndex = index;
+            });
+          },
+          type: BottomNavigationBarType.fixed,
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'HOME'),
+            BottomNavigationBarItem(icon: Icon(Icons.search), label: 'BROWSE'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.mail_outline), label: 'INBOX'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.account_balance_wallet_outlined),
+                label: 'WALLET'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.person_outline), label: 'PROFILE'),
+          ],
         ),
-      ),bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color.fromARGB(255, 0, 40, 73),
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.grey,
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home), label: 'HOME'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.search), label: 'BROWSE'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.mail_outline), label: 'INBOX'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.account_balance_wallet_outlined), label: 'WALLET'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.person_outline), label: 'PROFILE'),
-        ],
       ),
     );
   }
 
-  Widget _buildPopularTutorCard(BuildContext context,) {
+  Widget _buildPopularTutorCard(
+    BuildContext context,
+  ) {
     return Container(
       margin: const EdgeInsets.only(right: 16),
       padding: const EdgeInsets.all(12),
@@ -205,8 +114,8 @@ class DashboardView extends StatelessWidget {
                   children: [
                     Text(
                       'Er. Narendra Kunwar',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 16),
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                     Text('Machine Learning',
                         style: TextStyle(color: Colors.grey, fontSize: 12)),
@@ -247,8 +156,7 @@ class DashboardView extends StatelessWidget {
                 children: [
                   Text('Minutes tutored',
                       style: TextStyle(color: Colors.grey, fontSize: 12)),
-                  Text('4311',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text('4311', style: TextStyle(fontWeight: FontWeight.bold)),
                 ],
               ),
               Column(
@@ -256,8 +164,7 @@ class DashboardView extends StatelessWidget {
                 children: [
                   Text('Students',
                       style: TextStyle(color: Colors.grey, fontSize: 12)),
-                  Text('140',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text('140', style: TextStyle(fontWeight: FontWeight.bold)),
                 ],
               ),
             ],
@@ -268,14 +175,6 @@ class DashboardView extends StatelessWidget {
   }
 
   // Widget _buildCategoryChip(String label) {
-  //   return Chip(
-  //     label: Text(label),
-  //     backgroundColor: Colors.white,
-  //     elevation: 2,
-  //     shadowColor: Colors.grey.withOpacity(0.3),
-  //   );
-  // }
-
   Widget _buildRecommendationCard(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
@@ -304,8 +203,7 @@ class DashboardView extends StatelessWidget {
               children: [
                 const Text(
                   'Er. Narendra Kunwar',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 16),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
                 const Text('Senior Software Engineer',
                     style: TextStyle(color: Colors.grey, fontSize: 12)),
@@ -341,7 +239,8 @@ class DashboardView extends StatelessWidget {
       ),
       child: Text(
         skill,
-        style: const TextStyle(fontSize: 12, color: Color.fromARGB(255, 16, 27, 40)),
+        style: const TextStyle(
+            fontSize: 12, color: Color.fromARGB(255, 16, 27, 40)),
       ),
     );
   }
