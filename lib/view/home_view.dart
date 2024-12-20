@@ -63,6 +63,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isTablet = screenWidth >= 600;
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -70,10 +73,6 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Carousel Section
-              _buildPromoCarousel(),
-              const SizedBox(height: 20),
-
               // Search Bar
               Container(
                 padding:
@@ -106,7 +105,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-
+              // Carousel Section
+              _buildPromoCarousel(),
+              const SizedBox(height: 20),
               // Popular Tutors Section
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -125,8 +126,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    _buildPopularTutorCard(context),
-                    _buildPopularTutorCard(context),
+                    _buildPopularTutorCard(context, isTablet),
+                    _buildPopularTutorCard(context, isTablet),
                   ],
                 ),
               ),
@@ -184,13 +185,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
-              Column(
-                children: [
-                  _buildRecommendationCard(context),
-                  _buildRecommendationCard(context),
-                  _buildRecommendationCard(context),
-                  _buildRecommendationCard(context),
-                ],
+              GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: isTablet ? 2 : 1,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
+                  childAspectRatio: isTablet ? 3 : 2.5,
+                ),
+                itemCount: 4,
+                itemBuilder: (context, index) =>
+                    _buildCustomRecommendationCard(),
               ),
             ],
           ),
@@ -239,10 +245,9 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildRecommendationCard(BuildContext context) {
+  Widget _buildCustomRecommendationCard() {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
@@ -254,41 +259,103 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const CircleAvatar(
-            backgroundImage: AssetImage('assets/images/avatar.jpg'),
-            radius: 30,
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Er. Narendra Kunwar',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-                const Text('Senior Software Engineer',
-                    style: TextStyle(color: Colors.grey, fontSize: 12)),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    _buildSkillChip('JavaScript'),
-                    const SizedBox(width: 5),
-                    _buildSkillChip('Node.js'),
-                  ],
-                )
-              ],
-            ),
-          ),
-          const Column(
+          Row(
             children: [
-              Text('Rate', style: TextStyle(color: Colors.grey)),
-              Text('Rs. 230/hour',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
+              Flexible(
+                flex: 2,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.asset(
+                    'assets/images/avatar.jpg',
+                    width: 80,
+                    height: 80,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              const Expanded(
+                flex: 3,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Er. Narendra Kunwar',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    ),
+                    Text(
+                      'Senior Software Engineer',
+                      style: TextStyle(color: Colors.grey, fontSize: 14),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      'I can teach:',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black),
+                    ),
+                    SizedBox(height: 4),
+                  ],
+                ),
+              ),
             ],
-          )
+          ),
+          const SizedBox(height: 10),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              _buildSkillChip('JavaScript'),
+              _buildSkillChip('Node.js'),
+              _buildSkillChip('Data Structures'),
+              _buildSkillChip('Generative AI'),
+            ],
+          ),
+          const SizedBox(height: 16),
+          const Divider(),
+          const SizedBox(height: 16),
+          const Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Rate', style: TextStyle(color: Colors.grey)),
+                    Text('Rs. 230 / hour',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16)),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Minutes tutored',
+                        style: TextStyle(color: Colors.grey)),
+                    Text('4311',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16)),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Students', style: TextStyle(color: Colors.grey)),
+                    Text('140',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16)),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );
@@ -296,10 +363,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildSkillChip(String skill) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.blue[100],
-        borderRadius: BorderRadius.circular(10),
+        color: Colors.blue[50],
+        borderRadius: BorderRadius.circular(16),
       ),
       child: Text(
         skill,
@@ -309,13 +376,11 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildPopularTutorCard(
-    BuildContext context,
-  ) {
+  Widget _buildPopularTutorCard(BuildContext context, bool isTablet) {
     return Container(
       margin: const EdgeInsets.only(right: 16),
       padding: const EdgeInsets.all(12),
-      width: 350,
+      width: isTablet ? 400 : 350,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
