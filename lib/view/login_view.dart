@@ -3,7 +3,7 @@ import 'package:tutorme/view/dashboard_view.dart';
 import 'package:tutorme/view/signup_view.dart';
 
 class LoginScreen extends StatelessWidget {
-const LoginScreen({super.key});
+  const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,12 +15,12 @@ const LoginScreen({super.key});
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-             Center(
-               child: Image.asset(
+            Center(
+              child: Image.asset(
                 'assets/images/logo.png',
                 height: 50.0, // Adjusted logo size
-                           ),
-             ),
+              ),
+            ),
             const SizedBox(height: 20.0),
             const Text(
               'Login with your account!',
@@ -69,24 +69,25 @@ const LoginScreen({super.key});
             // Login Button
             ElevatedButton(
               onPressed: () {
-
                 // Handle login
-                  Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) =>  const DashboardView()),
-                        );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const DashboardView()),
+                );
               },
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(40),
-                ),
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                minimumSize: const Size(double.infinity, 50),
-                  backgroundColor: const Color.fromARGB(255, 0, 94, 255),
-              ),
+              // style: ElevatedButton.styleFrom(
+              //   shape: RoundedRectangleBorder(
+              //     borderRadius: BorderRadius.circular(40),
+              //   ),
+              //   padding: const EdgeInsets.symmetric(vertical: 16.0),
+              //   minimumSize: const Size(double.infinity, 50),
+              //     backgroundColor: const Color.fromARGB(255, 0, 94, 255),
+              // ),
               child: const Text(
                 'Login',
-                  style: TextStyle(fontSize: 20.0, color: Color.fromARGB(255, 255, 255, 255)),
+                // style: TextStyle(
+                //     fontSize: 20.0, color: Color.fromARGB(255, 255, 255, 255)),
               ),
             ),
             const SizedBox(height: 16.0),
@@ -100,10 +101,11 @@ const LoginScreen({super.key});
                   onTap: () {
                     // Navigate to sign up screen
                     // Handle login
-                  Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) =>  const SignupView()),
-                        );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SignupView()),
+                    );
                   },
                   child: const Text(
                     'SIGN UP',
