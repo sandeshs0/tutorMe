@@ -64,6 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     final isTablet = screenWidth >= 600;
 
     return Scaffold(
@@ -192,12 +193,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisCount: isTablet ? 2 : 1,
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
-                  childAspectRatio: isTablet ? 3 : 2.5,
+                  childAspectRatio:
+                      isTablet ? 3 : 2.1, // Adjusted ratio for better layout
                 ),
                 itemCount: 4,
                 itemBuilder: (context, index) =>
-                    _buildCustomRecommendationCard(),
-              ),
+                    _buildCustomRecommendationCard(screenHeight * 0.3),
+              )
             ],
           ),
         ),
@@ -245,8 +247,9 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildCustomRecommendationCard() {
+  Widget _buildCustomRecommendationCard(double cardHeight) {
     return Container(
+      height: cardHeight,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -264,21 +267,17 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           Row(
             children: [
-              Flexible(
-                flex: 2,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.asset(
-                    'assets/images/avatar.jpg',
-                    width: 80,
-                    height: 80,
-                    fit: BoxFit.cover,
-                  ),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.asset(
+                  'assets/images/avatar.jpg',
+                  width: 80,
+                  height: 80,
+                  fit: BoxFit.cover,
                 ),
               ),
               const SizedBox(width: 12),
               const Expanded(
-                flex: 3,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -297,7 +296,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: TextStyle(
                           fontWeight: FontWeight.bold, color: Colors.black),
                     ),
-                    SizedBox(height: 4),
                   ],
                 ),
               ),
@@ -331,7 +329,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
-              Expanded(
+              Flexible(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -343,7 +341,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
-              Expanded(
+              Flexible(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
