@@ -3,9 +3,12 @@ import 'package:tutorme/view/login_view.dart';
 
 class SignupView extends StatelessWidget {
   const SignupView({super.key});
-  
+
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isTablet = screenWidth >= 600;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF5F9FF),
       body: Center(
@@ -34,7 +37,7 @@ class SignupView extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 50.0),
-        
+
                 // Username Field
                 TextField(
                   decoration: InputDecoration(
@@ -46,7 +49,7 @@ class SignupView extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 19.0),
-        
+
                 // Email Field
                 TextField(
                   decoration: InputDecoration(
@@ -58,7 +61,7 @@ class SignupView extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 19.0),
-        
+
                 // Phone Number Field
                 TextField(
                   decoration: InputDecoration(
@@ -70,34 +73,28 @@ class SignupView extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 19.0),
-        
-                // Gender Field
+
                 // Gender Dropdown
-
-DropdownButtonFormField<String>(
-  // value: selectedGender,
-  decoration: InputDecoration(
-    labelText: 'Gender',
-    prefixIcon: const Icon(Icons.person_outline),
-    border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(15.0),
-    ),
-  ),
-  items: ['Male', 'Female',"Others"]
-
-      .map((gender) => DropdownMenuItem<String>(
-            value: gender,
-            child: Text(gender),
-          ))
-      .toList(),
-  onChanged: (value) {
-    // selectedGender = value;
-  },
-),
-
-                
+                DropdownButtonFormField<String>(
+                  decoration: InputDecoration(
+                    labelText: 'Gender',
+                    prefixIcon: const Icon(Icons.person_outline),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                  ),
+                  items: ['Male', 'Female', "Others"]
+                      .map((gender) => DropdownMenuItem<String>(
+                            value: gender,
+                            child: Text(gender),
+                          ))
+                      .toList(),
+                  onChanged: (value) {
+                    // Handle gender selection
+                  },
+                ),
                 const SizedBox(height: 19.0),
-        
+
                 // Password Field
                 TextField(
                   obscureText: true,
@@ -111,7 +108,7 @@ DropdownButtonFormField<String>(
                   ),
                 ),
                 const SizedBox(height: 19.0),
-        
+
                 // Confirm Password Field
                 TextField(
                   obscureText: true,
@@ -125,32 +122,36 @@ DropdownButtonFormField<String>(
                   ),
                 ),
                 const SizedBox(height: 28.0),
-        
+
                 // Signup Button
                 ElevatedButton(
                   onPressed: () {
-                    // Handle signup
-                      // Handle login
-                  Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const LoginScreen()),
-                        );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LoginScreen()),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(40),
                     ),
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
-                    minimumSize: const Size(double.infinity, 50),
+                    minimumSize: Size(
+                      double.infinity,
+                      isTablet ? 60 : 50,
+                    ),
                     backgroundColor: const Color.fromARGB(255, 0, 94, 255),
                   ),
                   child: const Text(
                     'Signup',
-                    style: TextStyle(fontSize: 20.0, color: Color.fromARGB(255, 255, 255, 255)),
+                    style: TextStyle(
+                        fontSize: 20.0,
+                        color: Color.fromARGB(255, 255, 255, 255)),
                   ),
                 ),
                 const SizedBox(height: 16.0),
-        
+
                 // Login Text
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -159,6 +160,11 @@ DropdownButtonFormField<String>(
                     GestureDetector(
                       onTap: () {
                         // Navigate to login screen
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const LoginScreen()),
+                        );
                       },
                       child: const Text(
                         'LOGIN',
