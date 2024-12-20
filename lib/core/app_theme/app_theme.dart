@@ -4,9 +4,8 @@ ThemeData getApplicationTheme() {
   return ThemeData(
     primarySwatch: Colors.blue,
     scaffoldBackgroundColor: const Color(0xfff5f8ff),
-    fontFamily: 'Monsterrat Regular',
+    fontFamily: 'Montserrat Regular',
     elevatedButtonTheme: ElevatedButtonThemeData(
-      // style: ElevatedButton.styleFrom(
       style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(40),
@@ -16,7 +15,7 @@ ThemeData getApplicationTheme() {
           backgroundColor: const Color.fromARGB(255, 0, 94, 255),
           textStyle: const TextStyle(
               fontSize: 25.0,
-              fontWeight: FontWeight.bold,
+              fontFamily: 'Montserrat Regular',
               color: Color.fromARGB(255, 255, 255, 255)),
           foregroundColor: Colors.white),
       // backgroundColor: const Color(0xff3f51b5),

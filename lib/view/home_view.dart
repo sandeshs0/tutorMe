@@ -129,6 +129,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     _buildPopularTutorCard(context, isTablet),
                     _buildPopularTutorCard(context, isTablet),
+                    _buildPopularTutorCard(context, isTablet),
+                    _buildPopularTutorCard(context, isTablet),
+                    _buildPopularTutorCard(context, isTablet),
                   ],
                 ),
               ),
@@ -171,6 +174,42 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     SizedBox(width: 20),
                     Text(
+                      'Computer Science',
+                      style: TextStyle(
+                          color: Color.fromARGB(255, 0, 40, 73),
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(width: 20),
+                    Text(
+                      'Video Animation',
+                      style: TextStyle(color: Colors.grey, fontSize: 14),
+                    ),
+                    SizedBox(width: 20),
+                    Text(
+                      'Computer Science',
+                      style: TextStyle(
+                          color: Color.fromARGB(255, 0, 40, 73),
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(width: 20),
+                    Text(
+                      'Video Animation',
+                      style: TextStyle(color: Colors.grey, fontSize: 14),
+                    ),
+                    SizedBox(width: 20),
+                    Text(
+                      'Video Animation',
+                      style: TextStyle(color: Colors.grey, fontSize: 14),
+                    ),
+                    SizedBox(width: 20),
+                    Text(
+                      'Video Animation',
+                      style: TextStyle(color: Colors.grey, fontSize: 14),
+                    ),
+                    SizedBox(width: 20),
+                    Text(
                       'Video Animation',
                       style: TextStyle(color: Colors.grey, fontSize: 14),
                     ),
@@ -193,13 +232,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisCount: isTablet ? 2 : 1,
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
-                  childAspectRatio:
-                      isTablet ? 3 : 2.1, // Adjusted ratio for better layout
+                  childAspectRatio: isTablet ? 3 : 2.1,
                 ),
                 itemCount: 4,
-                itemBuilder: (context, index) =>
-                    _buildCustomRecommendationCard(screenHeight * 0.3),
-              )
+                itemBuilder: (context, index) => _buildCustomRecommendationCard(
+                    screenHeight * 0.3, isTablet),
+              ),
             ],
           ),
         ),
@@ -247,7 +285,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildCustomRecommendationCard(double cardHeight) {
+  Widget _buildCustomRecommendationCard(double cardHeight, bool isTablet) {
     return Container(
       height: cardHeight,
       padding: const EdgeInsets.all(16),
@@ -291,34 +329,30 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: TextStyle(color: Colors.grey, fontSize: 14),
                     ),
                     SizedBox(height: 8),
-                    Text(
-                      'I can teach:',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black),
-                    ),
                   ],
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 10),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              _buildSkillChip('JavaScript'),
-              _buildSkillChip('Node.js'),
-              _buildSkillChip('Data Structures'),
-              _buildSkillChip('Generative AI'),
-            ],
-          ),
-          const SizedBox(height: 16),
-          const Divider(),
-          const SizedBox(height: 16),
+          // const SizedBox(height: 10),
+          if (isTablet)
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                _buildSkillChip('JavaScript'),
+                _buildSkillChip('Node.js'),
+                _buildSkillChip('Data Structures'),
+                _buildSkillChip('Generative AI'),
+              ],
+            ),
+          if (isTablet) const SizedBox(height: 1),
+          if (isTablet) const Divider(),
+          // const SizedBox(height: 5),
           const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(
+              Flexible(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
