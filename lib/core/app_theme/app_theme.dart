@@ -15,7 +15,7 @@ ThemeData getApplicationTheme() {
           backgroundColor: const Color.fromARGB(255, 0, 94, 255),
           textStyle: const TextStyle(
               fontSize: 25.0,
-              fontFamily: 'Montserrat Regular',
+              fontFamily: 'Montserrat Bold',
               color: Color.fromARGB(255, 255, 255, 255)),
           foregroundColor: Colors.white),
       // backgroundColor: const Color(0xff3f51b5),
