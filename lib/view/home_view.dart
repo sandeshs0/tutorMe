@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:tutorme/view/tutor_profile.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -409,94 +410,134 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildPopularTutorCard(BuildContext context, bool isTablet) {
-    return Container(
-      margin: const EdgeInsets.only(right: 16),
-      padding: const EdgeInsets.all(12),
-      width: isTablet ? 400 : 350,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            blurRadius: 5,
-            offset: const Offset(0, 3),
+    return GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const TutorProfile(
+                      name: 'Er. Narendra Kunwar',
+                      role: 'Data Scientist • Sr. Engineer',
+                      rating: 4.8,
+                      description:
+                          'Hi, I am Narendra, a data scientist at XYZ company. I can help you with Data Science, Machine Learning concepts.',
+                      rate: 230,
+                      minutesTutored: 2223,
+                      students: 222,
+                      skills: [
+                        'Data Science',
+                        'Python',
+                        'Career',
+                        'Mathematics',
+                        'Machine Learning'
+                      ],
+                      reviews: [
+                        {
+                          'name': 'Will',
+                          'review':
+                              'This course has been very useful. Mentor was great!',
+                          'rating': 4.5,
+                        },
+                        {
+                          'name': 'Emma',
+                          'review':
+                              'Amazing tutor! Helped me understand complex topics easily.',
+                          'rating': 5.0,
+                        },
+                      ],
+                    )),
+          );
+        },
+        child: Container(
+          margin: const EdgeInsets.only(right: 16),
+          padding: const EdgeInsets.all(12),
+          width: isTablet ? 400 : 350,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                blurRadius: 5,
+                offset: const Offset(0, 3),
+              ),
+            ],
           ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Row(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CircleAvatar(
-                backgroundImage: AssetImage('assets/images/avatar.jpg'),
-                radius: 30,
-              ),
-              SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Er. Narendra Kunwar',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                    ),
-                    Text('Machine Learning',
-                        style: TextStyle(color: Colors.grey, fontSize: 12)),
-                  ],
-                ),
-              ),
-              Column(
+              const Row(
                 children: [
-                  Text(
-                    '4.4',
-                    style: TextStyle(
-                        color: Colors.orange,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16),
+                  CircleAvatar(
+                    backgroundImage: AssetImage('assets/images/avatar.jpg'),
+                    radius: 30,
                   ),
-                  Icon(Icons.star, color: Colors.orange, size: 16),
+                  SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Er. Narendra Kunwar',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
+                        Text('Machine Learning',
+                            style: TextStyle(color: Colors.grey, fontSize: 12)),
+                      ],
+                    ),
+                  ),
+                  Column(
+                    children: [
+                      Text(
+                        '4.4',
+                        style: TextStyle(
+                            color: Colors.orange,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16),
+                      ),
+                      Icon(Icons.star, color: Colors.orange, size: 16),
+                    ],
+                  ),
                 ],
               ),
+              const SizedBox(height: 8),
+              Divider(color: Colors.grey[300]),
+              const SizedBox(height: 8),
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Rate',
+                          style: TextStyle(color: Colors.grey, fontSize: 12)),
+                      Text('Rs. 230/hour',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Minutes tutored',
+                          style: TextStyle(color: Colors.grey, fontSize: 12)),
+                      Text('4311',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Students',
+                          style: TextStyle(color: Colors.grey, fontSize: 12)),
+                      Text('140',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                ],
+              )
             ],
           ),
-          const SizedBox(height: 8),
-          Divider(color: Colors.grey[300]),
-          const SizedBox(height: 8),
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Rate',
-                      style: TextStyle(color: Colors.grey, fontSize: 12)),
-                  Text('Rs. 230/hour',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Minutes tutored',
-                      style: TextStyle(color: Colors.grey, fontSize: 12)),
-                  Text('4311', style: TextStyle(fontWeight: FontWeight.bold)),
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Students',
-                      style: TextStyle(color: Colors.grey, fontSize: 12)),
-                  Text('140', style: TextStyle(fontWeight: FontWeight.bold)),
-                ],
-              ),
-            ],
-          )
-        ],
-      ),
-    );
+        ));
   }
 }

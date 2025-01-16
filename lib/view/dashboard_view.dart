@@ -34,7 +34,6 @@ class _DashboardViewState extends State<DashboardView> {
         title: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // SizedBox(height: 10,),
             Text('Hi, Sandesh',
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
           ],
@@ -50,14 +49,16 @@ class _DashboardViewState extends State<DashboardView> {
       body: _screens[_currentIndex],
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
-            color: Color.fromARGB(255, 0, 40, 73),
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+          color: Color.fromARGB(255, 0, 40, 73),
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+        ),
         child: BottomNavigationBar(
           backgroundColor: Colors.transparent,
-          selectedItemColor: Colors.blue,
-          unselectedItemColor: Colors.grey,
+          selectedItemColor: Colors.blue, // Selected item color
+          unselectedItemColor: Colors.grey, // Unselected item color
           selectedFontSize: 14,
+          currentIndex: _currentIndex, // Sync the current index
           onTap: (index) {
             setState(() {
               _currentIndex = index;
@@ -80,9 +81,7 @@ class _DashboardViewState extends State<DashboardView> {
     );
   }
 
-  Widget _buildPopularTutorCard(
-    BuildContext context,
-  ) {
+  Widget _buildPopularTutorCard(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(right: 16),
       padding: const EdgeInsets.all(12),
@@ -174,7 +173,6 @@ class _DashboardViewState extends State<DashboardView> {
     );
   }
 
-  // Widget _buildCategoryChip(String label) {
   Widget _buildRecommendationCard(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
