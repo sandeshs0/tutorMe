@@ -8,19 +8,19 @@ import 'package:tutorme/features/auth/presentation/view_model/login/login_bloc.d
 import 'package:tutorme/features/auth/presentation/view_model/register/register_bloc.dart';
 import 'package:tutorme/features/home/presentation/view_model/home_cubit.dart';
 
-
 final getIt = GetIt.instance;
 
-Future<void> initDependencies() async{
-    // Initialize Hive Service
+Future<void> initDependencies() async {
+  // Initialize Hive Service
   _initHiveService();
 
-  // // Initialize Auth Dependencies
-  // _initAuthDependencies();
+  // Initialize Auth Dependencies
+  _initAuthDependencies();
 
-  // // Initialize Home Dependencies
-  // _initHomeDependencies();
+  // Initialize Home Dependencies
+  _initHomeDependencies();
 }
+
 void _initHiveService() {
   getIt.registerLazySingleton<HiveService>(() => HiveService());
 }
@@ -54,4 +54,8 @@ void _initAuthDependencies() {
       registerUseCase: getIt<RegisterUsecase>(),
     ),
   );
+}
+
+void _initHomeDependencies() {
+  getIt.registerFactory<HomeCubit>(() => HomeCubit());
 }
