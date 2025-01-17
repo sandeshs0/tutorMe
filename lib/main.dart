@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:tutorme/app/app.dart';
+import 'package:tutorme/app/di/di.dart';
+import 'package:tutorme/features/auth/data/model/auth_hive_model.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+// Init dependencies
+  await initDependencies();
+  await Hive.initFlutter(); // Initialize Hive with Flutter support
+  Hive.registerAdapter(UserHiveModelAdapter());
+
   runApp(
     const MyApp(),
   );
