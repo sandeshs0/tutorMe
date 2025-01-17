@@ -3,6 +3,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:tutorme/app/constants/hive_table_constant.dart';
 import 'package:uuid/uuid.dart';
 
+part 'auth_hive_model.g.dart';
+
 @HiveType(typeId: HiveTableConstant.userTableId)
 class UserHiveModel extends Equatable {
   @HiveField(0)
