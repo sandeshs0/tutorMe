@@ -17,7 +17,7 @@ class UserHiveModel extends Equatable {
   final String phone;
   @HiveField(4)
   final String password;
-   
+  
   UserHiveModel({
     String? id,
     required this.fullName,
