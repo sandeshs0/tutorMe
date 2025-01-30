@@ -27,15 +27,19 @@ class _DashboardViewState extends State<DashboardView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xfff5f8ff),
+      backgroundColor: const Color(0xfff2fafa),
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: const Color.fromARGB(0, 89, 62, 62),
-        title: const Column(
+        backgroundColor: const Color(0xfff2fafa),
+        title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Hi, Sandesh',
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+            // const Text('TutorMe',
+            //     style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+            Image.asset(
+              'assets/images/logo.png',
+              height: 30.0,
+            ),
           ],
         ),
         actions: [

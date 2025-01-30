@@ -11,13 +11,10 @@ import 'package:tutorme/features/home/presentation/view_model/home_cubit.dart';
 final getIt = GetIt.instance;
 
 Future<void> initDependencies() async {
-  // Initialize Hive Service
   _initHiveService();
 
-  // Initialize Auth Dependencies
   _initAuthDependencies();
 
-  // Initialize Home Dependencies
   _initHomeDependencies();
 }
 

@@ -69,6 +69,8 @@ class _HomeScreenState extends State<HomeScreen> {
     final isTablet = screenWidth >= 600;
 
     return Scaffold(
+      backgroundColor: const Color(0xfff2fafa), // Set background color here
+
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
@@ -90,11 +92,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ],
                 ),
-                child: const Row(
+                child: Row(
                   children: [
-                    Icon(Icons.search, color: Colors.grey),
-                    SizedBox(width: 8),
-                    Expanded(
+                    const Icon(Icons.search, color: Colors.grey),
+                    const SizedBox(width: 8),
+                    const Expanded(
                       child: TextField(
                         decoration: InputDecoration(
                           hintText: 'Search for...',
@@ -102,7 +104,21 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                     ),
-                    Icon(Icons.tune, color: Colors.grey),
+                    Container(
+                      padding: const EdgeInsets.all(
+                          8), // Adjust padding to match the design
+                      decoration: BoxDecoration(
+                        color: const Color(0xff0961f5), // Blue background color
+                        borderRadius:
+                            BorderRadius.circular(8), // Rounded corners
+                      ),
+                      child: const Icon(
+                        Icons.tune,
+                        color: Colors
+                            .white, // White icon color to match the design
+                        size: 20, // Adjust size if necessary
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -120,7 +136,24 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   TextButton(
                     onPressed: () {},
-                    child: const Text('SEE ALL'),
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'SEE ALL',
+                          style: TextStyle(
+                              color: Color(0xff0961f5),
+                              fontSize: 15,
+                              fontWeight: FontWeight.w800),
+                        ),
+                        SizedBox(width: 4), // Spacing between text and icon
+                        Icon(
+                          Icons.arrow_forward_ios, // Use an arrow icon
+                          size: 16, // Adjust size to match design
+                          color: Color(0xff0961f5),
+                        ),
+                      ],
+                    ),
                   )
                 ],
               ),
@@ -148,7 +181,24 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   TextButton(
                     onPressed: () {},
-                    child: const Text('SEE ALL'),
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'SEE ALL',
+                          style: TextStyle(
+                              color: Color(0xff0961f5),
+                              fontSize: 15,
+                              fontWeight: FontWeight.w800),
+                        ),
+                        SizedBox(width: 4), // Spacing between text and icon
+                        Icon(
+                          Icons.arrow_forward_ios, // Use an arrow icon
+                          size: 16, // Adjust size to match design
+                          color: Color(0xff0961f5),
+                        ),
+                      ],
+                    ),
                   )
                 ],
               ),
@@ -259,7 +309,21 @@ class _HomeScreenState extends State<HomeScreen> {
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
-              color: Colors.blueAccent,
+              gradient: const LinearGradient(
+                colors: [
+                  Color.fromARGB(255, 28, 78, 244),
+                  Color.fromARGB(255, 55, 3, 128)
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
             ),
             padding: const EdgeInsets.all(16),
             child: Column(
