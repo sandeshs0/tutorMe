@@ -69,7 +69,7 @@ class AuthRemoteDataSource implements IAuthDataSource {
       Response response = await _dio.post(
         ApiEndpoints.verifyEmail,
         data: {
-          "username": email,
+          "email": email,
           "otp": otp,
         },
       );

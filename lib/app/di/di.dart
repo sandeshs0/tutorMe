@@ -6,6 +6,7 @@ import 'package:tutorme/features/auth/data/data_source/remote_data_source.dart/a
 import 'package:tutorme/features/auth/data/repository/remote_repository/auth_remote_repository.dart';
 import 'package:tutorme/features/auth/domain/use_case/login_usecase.dart';
 import 'package:tutorme/features/auth/domain/use_case/register_usecase.dart';
+import 'package:tutorme/features/auth/domain/use_case/verify_usecase.dart';
 import 'package:tutorme/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:tutorme/features/auth/presentation/view_model/register/register_bloc.dart';
 import 'package:tutorme/features/home/presentation/view_model/home_cubit.dart';
@@ -38,6 +39,8 @@ void _initAuthDependencies() {
       () => AuthRemoteDataSource(getIt<Dio>()));
   // getIt.registerLazySingleton<AuthLocalDataSource>(
   //     () => AuthLocalDataSource(getIt<HiveService>()));
+  getIt.registerLazySingleton<VerifyEmailUsecase>(
+      () => VerifyEmailUsecase(getIt<AuthRemoteRepository>()));
 
   // Auth Repository
   // getIt.registerLazySingleton<AuthLocalRepository>(
@@ -63,6 +66,7 @@ void _initAuthDependencies() {
   getIt.registerFactory<RegisterBloc>(
     () => RegisterBloc(
       registerUseCase: getIt<RegisterUsecase>(),
+      verifyEmailUsecase: getIt<VerifyEmailUsecase>(),
     ),
   );
 }

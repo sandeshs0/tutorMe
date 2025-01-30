@@ -40,3 +40,15 @@ class RegisterUserEvent extends RegisterEvent {
         file,
       ];
 }
+
+class VerifyOtpEvent extends RegisterEvent {
+  final BuildContext context;
+  final String email;
+  final String otp;
+
+  const VerifyOtpEvent(
+      {required this.context, required this.email, required this.otp});
+
+  @override
+  List<Object> get props => [email, otp];
+}
