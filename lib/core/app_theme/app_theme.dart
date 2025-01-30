@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 ThemeData getApplicationTheme() {
   return ThemeData(
     primarySwatch: Colors.blue,
-    scaffoldBackgroundColor: const Color(0xfff5f8ff),
+    scaffoldBackgroundColor: const Color(0xfff2fafa),
     fontFamily: 'Montserrat Regular',
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(

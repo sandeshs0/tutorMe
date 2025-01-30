@@ -4,15 +4,12 @@ import 'package:tutorme/features/auth/data/model/auth_hive_model.dart';
 
 class HiveService {
   static Future<void> init() async {
-    // Initialize the database
     var directory = await getApplicationDocumentsDirectory();
     var path='${directory.path}/tutorme.db';
     Hive.init(path);
-    // Register Adapters
     Hive.registerAdapter(UserHiveModelAdapter());
   }
 
-  // User Queries
   // Register
   Future<void> addUser(UserHiveModel user)async{
     var box = await Hive.openBox<UserHiveModel>('userBox');
@@ -31,7 +28,7 @@ class HiveService {
     return box.values.toList();
   }
 
-    // Find User by Email and Password (Login)
+    //login
   Future<UserHiveModel?> login(String email, String password) async {
     var box = await Hive.openBox<UserHiveModel>('userBox');
     try {
@@ -39,22 +36,18 @@ class HiveService {
         (user) => user.email == email && user.password == password,
       );
     } catch (e) {
-      return null; // Return null if no user is found
+      return null; 
     }
   }
 
-  
-  // Clear All Data
   Future<void> clearAll() async {
     await Hive.deleteBoxFromDisk('userBox');
   }
 
-  // Clear Specific User Box
   Future<void> clearUserBox() async {
     await Hive.deleteBoxFromDisk('userBox');
   }
 
-  // Close Hive Database
   Future<void> close() async {
     await Hive.close();
   }

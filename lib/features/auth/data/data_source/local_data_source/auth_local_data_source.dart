@@ -31,7 +31,7 @@ class AuthLocalDataSource implements IAuthDataSource {
   @override
   Future<void> registerUser(AuthEntity user) async {
     try {
-      // convert AuthEntity to UserHiveModel
+      // converting AuthEntity to UserHiveModel
       final userHiveModel = UserHiveModel(
         id: user.id,
         fullName: user.fullName,
