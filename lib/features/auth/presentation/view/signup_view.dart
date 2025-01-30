@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:tutorme/features/auth/presentation/view/login_view.dart';
 import 'package:tutorme/features/auth/presentation/view_model/register/register_bloc.dart';
 import 'package:tutorme/features/auth/presentation/view_model/register/register_state.dart';
@@ -21,6 +25,34 @@ class _SignupViewState extends State<SignupView> {
       TextEditingController();
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
+
+  // Check for camera permission
+  Future<void> checkCameraPermission() async {
+    if (await Permission.camera.request().isRestricted ||
+        await Permission.camera.request().isDenied) {
+      await Permission.camera.request();
+    }
+  }
+
+  File? _img;
+  Future _browseImage(ImageSource imageSource) async {
+    try {
+      final image = await ImagePicker().pickImage(source: imageSource);
+      if (image != null) {
+        setState(() {
+          _img = File(image.path);
+          // Send image to server
+          // context.read<RegisterBloc>().add(
+          //       UploadImage(file: _img!),
+          //     );
+        });
+      } else {
+        return;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,6 +106,60 @@ class _SignupViewState extends State<SignupView> {
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 50.0),
+                      InkWell(
+                        onTap: () {
+                          showModalBottomSheet(
+                            backgroundColor: Colors.grey[300],
+                            context: context,
+                            isScrollControlled: true,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(20),
+                              ),
+                            ),
+                            builder: (context) => Padding(
+                              padding: const EdgeInsets.all(20),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  ElevatedButton.icon(
+                                    onPressed: () {
+                                      checkCameraPermission();
+                                      _browseImage(ImageSource.camera);
+                                      Navigator.pop(context);
+                                    },
+                                    icon: const Icon(Icons.camera),
+                                    label: const Text('Camera'),
+                                  ),
+                                  ElevatedButton.icon(
+                                    onPressed: () {
+                                      _browseImage(ImageSource.gallery);
+                                      Navigator.pop(context);
+                                    },
+                                    icon: const Icon(Icons.image),
+                                    label: const Text('Gallery'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                        child: SizedBox(
+                          height: 200,
+                          width: 200,
+                          child: CircleAvatar(
+                            radius: 50,
+                            backgroundImage: _img != null
+                                ? FileImage(_img!)
+                                : const AssetImage('assets/images/avatar.jpg')
+                                    as ImageProvider,
+                            // backgroundImage:
+                            //     const AssetImage('assets/images/profile.png')
+                            //         as ImageProvider,
+                          ),
+                        ),
+                      ),
 
                       // Full Name Field
                       TextFormField(
@@ -211,16 +297,18 @@ class _SignupViewState extends State<SignupView> {
                       ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
+                            // final registerState= context.read<RegisterBloc>
                             context.read<RegisterBloc>().add(
                                   RegisterUserEvent(
-                                    context: context,
-                                    fullName: _fullNameController.text,
-                                    phone: _phoneController.text,
-                                    email: _emailController.text,
-                                    password: _passwordController.text,
-                                    confirmPassword:
-                                        _confirmPasswordController.text,
-                                  ),
+                                      context: context,
+                                      fullName: _fullNameController.text,
+                                      phone: _phoneController.text,
+                                      email: _emailController.text,
+                                      password: _passwordController.text,
+                                      confirmPassword:
+                                          _confirmPasswordController.text,
+                                      file: _img!,
+                                      role: "student"),
                                 );
                           }
                         },
@@ -236,13 +324,13 @@ class _SignupViewState extends State<SignupView> {
                           backgroundColor:
                               const Color.fromARGB(255, 0, 94, 255),
                         ),
-                        child: const Text(
-                          'Signup',
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            color: Colors.white,
-                          ),
-                        ),
+                        child: state.isLoading
+                            ? const CircularProgressIndicator(
+                                color: Colors.white)
+                            : const Text(
+                                'Signup',
+                                style: TextStyle(fontSize: 18),
+                              ),
                       ),
                       const SizedBox(height: 16.0),
 
