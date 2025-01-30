@@ -41,26 +41,24 @@ class AuthRemoteDataSource implements IAuthDataSource {
   @override
   Future<void> registerUser(AuthEntity user) async {
     try {
+      final formData = FormData.fromMap({
+        "name": user.fullName,
+        "email": user.email,
+        "phone": user.phone,
+        "password": user.password,
+        "role": user.role,
+        "profileImage": await MultipartFile.fromFile(user.profileImage!),
+      });
+
       Response response = await _dio.post(
         ApiEndpoints.register,
-        data: {
-          "name": user.fullName,
-          "email": user.email,
-          "phone": user.phone,
-          "password": user.password,
-          "role": user.role,
-          "profileImage": user.profileImage,
-        },
+        data: formData,
       );
 
-      if (response.statusCode == 201) {
-        return;
-      } else {
+      if (response.statusCode != 201) {
         throw Exception(response.statusMessage);
       }
     } on DioException catch (e) {
-      throw Exception(e);
-    } catch (e) {
       throw Exception(e);
     }
   }
