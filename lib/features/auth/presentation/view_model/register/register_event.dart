@@ -12,8 +12,11 @@ class RegisterUserEvent extends RegisterEvent {
   final String fullName;
   final String email;
   final String phone;
+  final String role;
+  // final String? profileImage;
   final String password;
   final String confirmPassword;
+  final File file;
 
   const RegisterUserEvent({
     required this.context,
@@ -22,8 +25,30 @@ class RegisterUserEvent extends RegisterEvent {
     required this.phone,
     required this.password,
     required this.confirmPassword,
+    required this.role,
+    required this.file,
   });
 
   @override
-  List<Object> get props => [fullName, email, phone, password, confirmPassword];
+  List<Object> get props => [
+        fullName,
+        email,
+        phone,
+        password,
+        confirmPassword,
+        role,
+        file,
+      ];
+}
+
+class VerifyOtpEvent extends RegisterEvent {
+  final BuildContext context;
+  final String email;
+  final String otp;
+
+  const VerifyOtpEvent(
+      {required this.context, required this.email, required this.otp});
+
+  @override
+  List<Object> get props => [email, otp];
 }

@@ -37,7 +37,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             ),
           );
         },
-        (success) {
+        (token) {
           emit(state.copyWith(isLoading: false, isSuccess: true));
           Navigator.pushReplacement(
             event.context,

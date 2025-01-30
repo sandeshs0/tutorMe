@@ -1,9 +1,14 @@
+import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tutorme/app/shared_prefs/token_shared_prefs.dart';
+import 'package:tutorme/core/network/api_service.dart';
 import 'package:tutorme/core/network/hive_service.dart';
-import 'package:tutorme/features/auth/data/data_source/local_data_source/auth_local_data_source.dart';
-import 'package:tutorme/features/auth/data/repository/local_repository/auth_local_repository.dart';
+import 'package:tutorme/features/auth/data/data_source/remote_data_source.dart/auth_remote_datasource.dart';
+import 'package:tutorme/features/auth/data/repository/remote_repository/auth_remote_repository.dart';
 import 'package:tutorme/features/auth/domain/use_case/login_usecase.dart';
 import 'package:tutorme/features/auth/domain/use_case/register_usecase.dart';
+import 'package:tutorme/features/auth/domain/use_case/verify_usecase.dart';
 import 'package:tutorme/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:tutorme/features/auth/presentation/view_model/register/register_bloc.dart';
 import 'package:tutorme/features/home/presentation/view_model/home_cubit.dart';
@@ -12,6 +17,8 @@ final getIt = GetIt.instance;
 
 Future<void> initDependencies() async {
   _initHiveService();
+  _initApiService();
+  _initSharedPreferences();
 
   _initAuthDependencies();
 
@@ -22,20 +29,44 @@ void _initHiveService() {
   getIt.registerLazySingleton<HiveService>(() => HiveService());
 }
 
+_initApiService() {
+  // Remote Data Source
+  getIt.registerLazySingleton<Dio>(
+    () => ApiService(Dio()).dio,
+  );
+}
+
+Future<void> _initSharedPreferences() async {
+  final sharedPreferences = await SharedPreferences.getInstance();
+  getIt.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
+}
+
 void _initAuthDependencies() {
+  getIt.registerLazySingleton<TokenSharedPrefs>(
+    () => TokenSharedPrefs(getIt<SharedPreferences>()),
+  );
+
   // Auth Local Data Source
-  getIt.registerLazySingleton<AuthLocalDataSource>(
-      () => AuthLocalDataSource(getIt<HiveService>()));
+  getIt.registerLazySingleton<AuthRemoteDataSource>(
+      () => AuthRemoteDataSource(getIt<Dio>()));
+  // getIt.registerLazySingleton<AuthLocalDataSource>(
+  //     () => AuthLocalDataSource(getIt<HiveService>()));
+  getIt.registerLazySingleton<VerifyEmailUsecase>(
+      () => VerifyEmailUsecase(getIt<AuthRemoteRepository>()));
 
   // Auth Repository
-  getIt.registerLazySingleton<AuthLocalRepository>(
-      () => AuthLocalRepository(getIt<AuthLocalDataSource>()));
+  // getIt.registerLazySingleton<AuthLocalRepository>(
+  //     () => AuthLocalRepository(getIt<AuthLocalDataSource>()));
+  getIt.registerLazySingleton<AuthRemoteRepository>(
+      () => AuthRemoteRepository(getIt<AuthRemoteDataSource>()));
 
   // Use Cases
-  getIt.registerLazySingleton<LoginUsecase>(
-      () => LoginUsecase(getIt<AuthLocalRepository>()));
+  getIt.registerLazySingleton<LoginUsecase>(() => LoginUsecase(
+        getIt<AuthRemoteRepository>(),
+        getIt<TokenSharedPrefs>(),
+      ));
   getIt.registerLazySingleton<RegisterUsecase>(
-      () => RegisterUsecase(getIt<AuthLocalRepository>()));
+      () => RegisterUsecase(getIt<AuthRemoteRepository>()));
 
   // Login Bloc
   getIt.registerFactory<LoginBloc>(
@@ -49,6 +80,7 @@ void _initAuthDependencies() {
   getIt.registerFactory<RegisterBloc>(
     () => RegisterBloc(
       registerUseCase: getIt<RegisterUsecase>(),
+      verifyEmailUsecase: getIt<VerifyEmailUsecase>(),
     ),
   );
 }
