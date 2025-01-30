@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tutorme/app/shared_prefs/token_shared_prefs.dart';
 import 'package:tutorme/core/network/api_service.dart';
 import 'package:tutorme/core/network/hive_service.dart';
 import 'package:tutorme/features/auth/data/data_source/remote_data_source.dart/auth_remote_datasource.dart';
@@ -16,6 +18,7 @@ final getIt = GetIt.instance;
 Future<void> initDependencies() async {
   _initHiveService();
   _initApiService();
+  _initSharedPreferences();
 
   _initAuthDependencies();
 
@@ -33,7 +36,16 @@ _initApiService() {
   );
 }
 
+Future<void> _initSharedPreferences() async {
+  final sharedPreferences = await SharedPreferences.getInstance();
+  getIt.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
+}
+
 void _initAuthDependencies() {
+  getIt.registerLazySingleton<TokenSharedPrefs>(
+    () => TokenSharedPrefs(getIt<SharedPreferences>()),
+  );
+
   // Auth Local Data Source
   getIt.registerLazySingleton<AuthRemoteDataSource>(
       () => AuthRemoteDataSource(getIt<Dio>()));
@@ -49,8 +61,10 @@ void _initAuthDependencies() {
       () => AuthRemoteRepository(getIt<AuthRemoteDataSource>()));
 
   // Use Cases
-  getIt.registerLazySingleton<LoginUsecase>(
-      () => LoginUsecase(getIt<AuthRemoteRepository>()));
+  getIt.registerLazySingleton<LoginUsecase>(() => LoginUsecase(
+        getIt<AuthRemoteRepository>(),
+        getIt<TokenSharedPrefs>(),
+      ));
   getIt.registerLazySingleton<RegisterUsecase>(
       () => RegisterUsecase(getIt<AuthRemoteRepository>()));
 
