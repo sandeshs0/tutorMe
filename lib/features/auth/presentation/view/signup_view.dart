@@ -72,9 +72,9 @@ class _SignupViewState extends State<SignupView> {
             //   MaterialPageRoute(builder: (context) => LoginScreen()),
             // );
           } else if (state.errorMessage.isNotEmpty) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.errorMessage)),
-            );
+            // ScaffoldMessenger.of(context).showSnackBar(
+            //   SnackBar(content: Text(state.errorMessage)),
+            // );
           }
         },
         builder: (context, state) {
@@ -145,21 +145,26 @@ class _SignupViewState extends State<SignupView> {
                             ),
                           );
                         },
-                        child: SizedBox(
-                          height: 200,
-                          width: 200,
-                          child: CircleAvatar(
-                            radius: 50,
-                            backgroundImage: _img != null
-                                ? FileImage(_img!)
-                                : const AssetImage('assets/images/avatar.jpg')
-                                    as ImageProvider,
-                            // backgroundImage:
-                            //     const AssetImage('assets/images/profile.png')
-                            //         as ImageProvider,
+                        child: Center(
+                          child: SizedBox(
+                            height: 150,
+                            width: 150,
+                            child: CircleAvatar(
+                              // radius: 50,
+                              backgroundColor: Colors.transparent,
+                              backgroundImage: _img != null
+                                  ? FileImage(_img!)
+                                  : const AssetImage(
+                                          'assets/images/uploadImage.png')
+                                      as ImageProvider,
+                              // backgroundImage:
+                              //     const AssetImage('assets/images/profile.png')
+                              //         as ImageProvider,
+                            ),
                           ),
                         ),
                       ),
+                      const SizedBox(height: 15.0),
 
                       // Full Name Field
                       TextFormField(
@@ -329,7 +334,8 @@ class _SignupViewState extends State<SignupView> {
                                 color: Colors.white)
                             : const Text(
                                 'Signup',
-                                style: TextStyle(fontSize: 18),
+                                style: TextStyle(
+                                    fontSize: 18, color: Colors.white),
                               ),
                       ),
                       const SizedBox(height: 16.0),
