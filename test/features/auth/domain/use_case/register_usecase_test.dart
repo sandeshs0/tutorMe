@@ -19,7 +19,7 @@ void main() {
 
   const userParams = RegisterUserParams(
       fullName: "Sandesh Sapkota",
-      email: "hellosandesh0@gmail.com",
+      email: "hellosandes0@gmail.com",
       phone: "9869118472",
       password: "password",
       profileImage: "imageurl.png",
@@ -29,7 +29,7 @@ void main() {
     test('should fail when email already exists', () async {
       // Arrange
       when(() => repository.registerUser(any())).thenAnswer(
-          (_) async => const Left(ApiFailure(message: "Email already taken")));
+          (_) async => const Left(ApiFailure(message: "Email already exists")));
 
       // Act
       final result = await usecase(userParams);
@@ -39,19 +39,51 @@ void main() {
       verify(() => repository.registerUser(any())).called(1);
     });
 
-     test('should fail if all fields are not filled',
-        () async {
+    test('should fail if all fields are not filled', () async {
       // Arrange
       when(() => repository.registerUser(any())).thenAnswer((_) async =>
-          const Left(ApiFailure(message: "One or more credentials is empty")));
-
+          const Left(ApiFailure(message: "All fields are not filled")));
+      const userParams = RegisterUserParams(
+          fullName: "Sandesh Sapkota",
+          email: "",
+          phone: "",
+          password: "password",
+          profileImage: "imageurl.png",
+          role: "student");
       // Act
-      final result = await usecase(userParams.copyWith(userName: ""));
+      final result = await usecase(userParams);
 
       // Assert
-      expect(result,
-          const Left(ApiFailure(message: "One or more credentials is empty")));
+      expect(
+          result, const Left(ApiFailure(message: "All fields are not filled")));
       verify(() => repository.registerUser(any())).called(1);
+    });
+
+    test('should fail when there is a server error', () async {
+      // Arrange
+      when(() => repository.registerUser(any())).thenAnswer((_) async =>
+          const Left(ApiFailure(message: "Internal Server Error")));
+
+      // Act
+      final result = await usecase(userParams);
+
+      // Assert
+      expect(result, const Left(ApiFailure(message: "Internal Server Error")));
+      verify(() => repository.registerUser(any())).called(1);
+    });
+
+    test('successful registration and return Right(null)', () async {
+      // Arrange
+      when(() => repository.registerUser(any()))
+          .thenAnswer((_) async => const Right(null));
+
+      // Act
+      final result = await usecase(userParams);
+
+      // Assert
+      expect(result, const Right(null));
+      verify(() => repository.registerUser(any())).called(1);
+      verifyNoMoreInteractions(repository);
     });
   });
 }
