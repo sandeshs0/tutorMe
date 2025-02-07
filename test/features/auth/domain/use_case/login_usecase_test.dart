@@ -91,9 +91,18 @@ void main() {
       verifyNever(() => tokenSharedPrefs.saveToken(any()));
     });
 
-    test("should fail when there is server error", ()async{
+    test("should fail when there is server error", () async {
       // Arrange
-      when(()=> repository.loginUser(any(), any())).t
+      when(() => repository.loginUser(any(), any())).thenAnswer((_) async =>
+          const Left(ApiFailure(message: "Internal Server Error")));
+
+      // Act
+      final result = await usecase(userLoginParams);
+
+      // Assert
+      expect(result, const Left(ApiFailure(message: "Internal Server Error")));
+      verify(() => repository.loginUser(any(), any())).called(1);
+      verifyNever(() => tokenSharedPrefs.saveToken(any()));
     });
   });
 }
