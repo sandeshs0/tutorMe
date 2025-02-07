@@ -64,6 +64,14 @@ void main() {
       const userLoginParams = LoginParams(email: '', password: 'password');
       when(() => repository.loginUser(any(), any())).thenAnswer((_) async =>
           const Left(ApiFailure(message: "Email cannot be empty")));
+
+      // Act
+      final result = await usecase(userLoginParams);
+
+      // Assert
+      expect(result, const Left(ApiFailure(message: 'Email cannot be empty')));
+      verify(() => repository.loginUser(any(), any())).called(1);
+      verifyNever(() => tokenSharedPrefs.saveToken(any()));
     });
   });
 }
