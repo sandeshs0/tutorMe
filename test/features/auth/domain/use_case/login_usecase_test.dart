@@ -73,5 +73,27 @@ void main() {
       verify(() => repository.loginUser(any(), any())).called(1);
       verifyNever(() => tokenSharedPrefs.saveToken(any()));
     });
+
+    test('should fail when password is empty', () async {
+      // Arrange
+      const userLoginParams =
+          LoginParams(email: 'hellosandesh0@gmail.com', password: '');
+      when(() => repository.loginUser(any(), any())).thenAnswer((_) async =>
+          const Left(ApiFailure(message: 'Password cannot be empty')));
+
+      // Act
+      final result = await usecase(userLoginParams);
+
+      // Assert
+      expect(
+          result, const Left(ApiFailure(message: 'Password cannot be empty')));
+      verify(() => repository.loginUser(any(), any())).called(1);
+      verifyNever(() => tokenSharedPrefs.saveToken(any()));
+    });
+
+    test("should fail when there is server error", ()async{
+      // Arrange
+      when(()=> repository.loginUser(any(), any())).t
+    });
   });
 }
