@@ -6,6 +6,8 @@ import 'package:tutorme/features/auth/domain/use_case/verify_usecase.dart';
 
 import 'repository.mock.dart';
 
+// flutter test --coverage
+//  flutter pub run test_cov_console
 void main() {
   late MockAuthRepository repository;
   late VerifyEmailUsecase usecase;

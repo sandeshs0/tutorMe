@@ -22,7 +22,7 @@ void main() {
   const userLoginParams =
       LoginParams(email: "hellosandesh0@gmail.com", password: "password");
 
-  const generatedToken = "mock_jwt_token";
+  const generatedToken = "fake_jwt_token";
 
   group('Login Usecase Tests', () {
     test('login fails when incorrect credentials', () async {
