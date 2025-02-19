@@ -23,7 +23,7 @@ class _DashboardViewState extends State<DashboardView> {
     const WalletScreen(),
     const ProfileScreen(),
   ];
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
