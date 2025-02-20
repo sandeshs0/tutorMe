@@ -12,4 +12,9 @@ class ApiEndpoints {
   static const String login="auth/login";
   static const String verifyEmail="auth/verify-email";
 
+
+  // Routes for Tutors
+  static const String getAllTutors = "api/tutors";  // Use query params for pagination
+  static const String getTutorProfile = "api/tutors/profile"; // Append "/{username}" dynamically
+
 }

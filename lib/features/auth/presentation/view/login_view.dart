@@ -7,20 +7,18 @@ import 'package:tutorme/features/home/presentation/view/dashboard_view.dart';
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
 
-  final _formKey =
-      GlobalKey<FormState>(); 
+  final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  bool _isPasswordVisible =
-      false; 
+  bool _isPasswordVisible = false;
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isTablet = screenWidth >= 600;
 
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(245, 249, 255, 1),
+      // backgroundColor: const Color.fromRGBO(245, 249, 255, 1),
       body: BlocConsumer<LoginBloc, LoginState>(
         listener: (context, state) {
           if (state.isLoading) {
@@ -59,7 +57,7 @@ class LoginScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 20.0),
                     const Text(
-                      'Login with your account!',
+                      'Welcome Back!',
                       style: TextStyle(
                         fontSize: 20.0,
                         fontWeight: FontWeight.bold,
@@ -67,10 +65,10 @@ class LoginScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 8.0),
                     const Text(
-                      'Kick start your learning journey with an account',
+                      'Login and start learning!',
                       style: TextStyle(
                         fontSize: 14.0,
-                        color: Color.fromARGB(255, 61, 26, 26),
+                        // color: Color.fromARGB(255, 61, 26, 26),
                       ),
                       textAlign: TextAlign.center,
                     ),

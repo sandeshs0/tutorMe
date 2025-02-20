@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tutorme/app/di/di.dart';
+import 'package:tutorme/bloc/tutor_bloc.dart';
+import 'package:tutorme/core/app_theme/app_theme.dart';
 import 'package:tutorme/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:tutorme/features/auth/presentation/view_model/register/register_bloc.dart';
 import 'package:tutorme/features/home/presentation/view_model/home_cubit.dart';
@@ -29,16 +31,21 @@ class MyApp extends StatelessWidget {
           BlocProvider<RegisterBloc>(
             create: (_) => getIt<RegisterBloc>(),
           ),
+          BlocProvider<TutorBloc>(
+            create: (_) => getIt<TutorBloc>(),
+          ),
           BlocProvider<HomeCubit>(
             create: (_) => getIt<HomeCubit>(),
           ),
         ],
         child: MaterialApp(
           title: 'TutorMe',
-          theme: ThemeData(
-            primaryColor: Colors.blue,
-          ),
+          // theme: ThemeData(primaryColor: const Color(0xFF0961F5)),
+          theme: getApplicationTheme(),
+          darkTheme: getDarkTheme(),
           home: const SplashScreen(),
+          themeMode: ThemeMode.system, // or ThemeMode.dark / ThemeMode.light
+
           debugShowCheckedModeBanner: false,
         ));
   }

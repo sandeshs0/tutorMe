@@ -60,7 +60,7 @@ class _SignupViewState extends State<SignupView> {
     final isTablet = screenWidth >= 600;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F9FF),
+      // backgroundColor: const Color(0xFFF5F9FF),
       body: BlocConsumer<RegisterBloc, RegisterState>(
         listener: (context, state) {
           if (state.isSuccess) {
@@ -101,7 +101,7 @@ class _SignupViewState extends State<SignupView> {
                         'Kick start your learning journey with an account',
                         style: TextStyle(
                           fontSize: 14.0,
-                          color: Color.fromARGB(255, 61, 26, 26),
+                          // color: Color.fromARGB(255, 61, 26, 26),
                         ),
                         textAlign: TextAlign.center,
                       ),
