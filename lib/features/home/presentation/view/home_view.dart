@@ -81,10 +81,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   backgroundColor: Colors.transparent,
                   elevation: 0,
                   automaticallyImplyLeading: false,
-                  expandedHeight: 120,
+                  expandedHeight: 90,
                   flexibleSpace: FlexibleSpaceBar(
                     background: Padding(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.all(16),
                       child: _buildSearchBar(),
                     ),
                   ),
@@ -181,7 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       children: [
         SizedBox(
-          height: 180,
+          height: 150,
           child: PageView.builder(
             controller: _pageController,
             itemCount: _promoCards.length,
@@ -199,7 +199,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFF2196F3).withOpacity(0.3),
+                      color: const Color.fromARGB(255, 255, 255, 255)
+                          .withOpacity(0),
                       blurRadius: 15,
                       offset: const Offset(0, 8),
                     ),
@@ -213,19 +214,19 @@ class _HomeScreenState extends State<HomeScreen> {
                     Text(
                       promo['title']!,
                       style: const TextStyle(
-                        fontSize: 28,
+                        fontSize: 26,
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                         letterSpacing: 1.2,
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 10),
                     Text(
                       promo['description']!,
                       style: const TextStyle(
-                        fontSize: 16,
+                        fontSize: 14,
                         color: Colors.white,
-                        height: 1.5,
+                        // height: 1.5,
                       ),
                     ),
                   ],
@@ -378,9 +379,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildTutorList(DashboardState state) {
-    final tutorsToShow = state.tutors.take(_loadedTutors).toList();
+    // final tutorsToShow = state.tutors.take(_loadedTutors).toList();
+    // return Column(
+    //   children: tutorsToShow.map((tutor) => _buildTutorCard(tutor)).toList(),
+    // );
     return Column(
-      children: tutorsToShow.map((tutor) => _buildTutorCard(tutor)).toList(),
+      children: state.tutors.map((tutor) => _buildTutorCard(tutor)).toList(),
     );
   }
 

@@ -6,7 +6,6 @@ import 'package:tutorme/features/auth/domain/use_case/login_usecase.dart';
 import 'package:tutorme/features/auth/presentation/view_model/register/register_bloc.dart';
 import 'package:tutorme/features/home/presentation/view/dashboard_view.dart';
 import 'package:tutorme/features/home/presentation/view_model/home_cubit.dart';
-import 'package:tutorme/features/home/presentation/view_model/home_state.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';

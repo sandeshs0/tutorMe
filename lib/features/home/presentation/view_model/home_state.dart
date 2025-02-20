@@ -97,7 +97,6 @@
 //   }
 // }
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:tutorme/view/home_view.dart';
 import 'package:tutorme/view/browse_view.dart';
