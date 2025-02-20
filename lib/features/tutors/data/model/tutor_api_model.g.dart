@@ -15,6 +15,7 @@ TutorApiModel _$TutorApiModelFromJson(Map<String, dynamic> json) =>
       description: json['description'] as String,
       hourlyRate: (json['hourlyRate'] as num).toDouble(),
       profileImage: json['profileImage'] as String,
+      username: json['username'] as String,
       rating: (json['rating'] as num).toDouble(),
       subjects:
           (json['subjects'] as List<dynamic>).map((e) => e as String).toList(),
@@ -25,6 +26,7 @@ Map<String, dynamic> _$TutorApiModelToJson(TutorApiModel instance) =>
       '_id': instance.tutorId,
       'name': instance.name,
       'email': instance.email,
+      'username': instance.username,
       'profileImage': instance.profileImage,
       'bio': instance.bio,
       'hourlyRate': instance.hourlyRate,

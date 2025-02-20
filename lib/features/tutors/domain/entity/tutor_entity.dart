@@ -5,7 +5,7 @@ class TutorEntity extends Equatable {
   final String name;
   final String profileImage;
   final String email;
-  // final String username;
+  final String username;
   final String bio;
   final String description;
   final double hourlyRate;
@@ -22,7 +22,7 @@ class TutorEntity extends Equatable {
     required this.profileImage,
     required this.rating,
     required this.subjects,
-    // required this.username,
+    required this.username,
   });
   @override
   List<Object?> get props => [
@@ -35,6 +35,6 @@ class TutorEntity extends Equatable {
         subjects,
         rating,
         hourlyRate,
-        // username,
+        username,
       ];
 }
