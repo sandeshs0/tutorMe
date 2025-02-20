@@ -17,16 +17,16 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void _navigateToLogin() async {
     await Future.delayed(const Duration(seconds: 3));
-      Navigator.push(
+    Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const OnboardingPage()),
-  );
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

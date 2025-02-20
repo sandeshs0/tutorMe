@@ -73,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return BlocBuilder<HomeCubit, DashboardState>(
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: const Color(0xFFF8FAFF),
+          // backgroundColor: const Color(0xFFF8FAFF),
           body: SafeArea(
             child: CustomScrollView(
               slivers: [
@@ -280,11 +280,13 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildPopularTutorCard(TutorEntity tutor) {
+    final theme = Theme.of(context);
+
     return Container(
       width: 180,
       margin: const EdgeInsets.only(right: 16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -390,10 +392,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildTutorCard(TutorEntity tutor) {
+    final theme = Theme.of(context);
+
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -495,7 +499,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            '₹${tutor.hourlyRate}₹${tutor.hourlyRate}/hr',
+                            'Rs. ${tutor.hourlyRate} /hr',
                             style: TextStyle(
                               fontSize: 16,
                               color: Colors.grey.shade600,

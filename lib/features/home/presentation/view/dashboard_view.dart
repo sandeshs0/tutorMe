@@ -316,7 +316,7 @@ class _DashboardViewState extends State<DashboardView> {
 
   Widget _buildBottomNavigationBar(BuildContext context) {
     return BottomNavigationBar(
-      backgroundColor: Colors.transparent,
+      // backgroundColor: Colors.transparent,
       selectedItemColor: Colors.blue,
       unselectedItemColor: Colors.grey,
       selectedFontSize: 14,
