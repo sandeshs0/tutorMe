@@ -5,17 +5,20 @@ import 'package:tutorme/features/tutors/domain/entity/tutor_entity.dart';
 import 'package:tutorme/features/tutors/domain/repository/tutor_repository.dart';
 
 class GetAllTutorsUsecase
-    implements UsecaseWithParams<List<TutorEntity>, NoParams> {
+    implements UsecaseWithParams<List<TutorEntity>, GetTutorsParams> {
   final ITutorRepository tutorRepository;
 
   GetAllTutorsUsecase({required this.tutorRepository});
 
   @override
-  Future<Either<Failure, List<TutorEntity>>> call(NoParams params) async {
-    return await tutorRepository.getAllTutors();
+  Future<Either<Failure, List<TutorEntity>>> call(GetTutorsParams params) async {
+    return await tutorRepository.getAllTutors(page: params.page, limit: params.limit);
   }
 }
 
-class NoParams {
-  const NoParams();
+class GetTutorsParams {
+  final int page;
+  final int limit;
+  const GetTutorsParams({required this.page, required this.limit});
 }
+

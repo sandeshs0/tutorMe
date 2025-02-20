@@ -11,10 +11,10 @@ class TutorRemoteRepository implements ITutorRepository {
   TutorRemoteRepository(this._tutorRemoteDataSource);
 
   @override
-  Future<Either<Failure, List<TutorEntity>>> getAllTutors() async {
+  Future<Either<Failure, List<TutorEntity>>> getAllTutors({int page = 1, int limit = 10}) async {
     try {
-      debugPrint("Fetching all tutors");
-      final tutors = await _tutorRemoteDataSource.getAllTutors();
+      debugPrint("Fetching all tutors page: $page, limit: $limit");
+      final tutors = await _tutorRemoteDataSource.getAllTutors(page: page, limit: limit);
       return Right(tutors);
     } catch (e) {
       return Left(ApiFailure(message: e.toString()));

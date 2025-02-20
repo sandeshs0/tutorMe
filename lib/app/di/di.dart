@@ -12,6 +12,10 @@ import 'package:tutorme/features/auth/domain/use_case/verify_usecase.dart';
 import 'package:tutorme/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:tutorme/features/auth/presentation/view_model/register/register_bloc.dart';
 import 'package:tutorme/features/home/presentation/view_model/home_cubit.dart';
+import 'package:tutorme/features/tutors/data/data_source/remote_data_source/tutor_remote_data_source.dart';
+import 'package:tutorme/features/tutors/data/repository/remote_repository/tutor_remote_repository.dart';
+import 'package:tutorme/features/tutors/domain/repository/tutor_repository.dart';
+import 'package:tutorme/features/tutors/domain/usecase/get_all_tutors_usecase.dart';
 
 final getIt = GetIt.instance;
 
@@ -21,12 +25,26 @@ Future<void> initDependencies() async {
   _initSharedPreferences();
 
   _initAuthDependencies();
-
+  _initTutorDependencies(); // ✅ Add this before HomeCubit
   _initHomeDependencies();
 }
 
 void _initHiveService() {
   getIt.registerLazySingleton<HiveService>(() => HiveService());
+}
+
+void _initTutorDependencies() {
+  // Register Remote Data Source
+  getIt.registerLazySingleton<TutorRemoteDataSource>(
+      () => TutorRemoteDataSource(dio: getIt<Dio>()));
+
+  // Register Repository
+  getIt.registerLazySingleton<ITutorRepository>(
+      () => TutorRemoteRepository(getIt<TutorRemoteDataSource>()));
+
+  // Register Use Case
+  getIt.registerLazySingleton<GetAllTutorsUsecase>(
+      () => GetAllTutorsUsecase(tutorRepository: getIt<ITutorRepository>()));
 }
 
 _initApiService() {
@@ -86,5 +104,7 @@ void _initAuthDependencies() {
 }
 
 void _initHomeDependencies() {
-  getIt.registerFactory<HomeCubit>(() => HomeCubit());
+  getIt.registerFactory<HomeCubit>(
+    () => HomeCubit(getAllTutorsUsecase: getIt<GetAllTutorsUsecase>()),
+  );
 }
