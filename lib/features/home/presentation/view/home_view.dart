@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tutorme/features/home/presentation/view_model/home_cubit.dart';
 import 'package:tutorme/features/home/presentation/view_model/home_state.dart';
 import 'package:tutorme/features/tutors/domain/entity/tutor_entity.dart';
+import 'package:tutorme/features/tutors/presentation/view/tutor_profile_view.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -506,9 +507,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        // Navigator.push(context, MaterialPageRoute(
-                        //   builder: (context) => TutorProfileView(tutor: tutor),
-                        // ));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  TutorProfileView(tutor: tutor),
+                            ));
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF0961F5),
