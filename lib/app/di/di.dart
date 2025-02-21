@@ -16,6 +16,7 @@ import 'package:tutorme/features/student/data/data_source/repository/remote_repo
 import 'package:tutorme/features/student/data/data_source/student_remote_data_source.dart/student_remote_data_source.dart';
 import 'package:tutorme/features/student/domain/repository/student_repository.dart';
 import 'package:tutorme/features/student/domain/usecase/get_student_profile_usecase.dart';
+import 'package:tutorme/features/student/domain/usecase/update_student_profile_usecase.dart';
 import 'package:tutorme/features/student/presentation/view_model/bloc/student_profile_bloc.dart';
 import 'package:tutorme/features/tutors/data/data_source/remote_data_source/tutor_remote_data_source.dart';
 import 'package:tutorme/features/tutors/data/repository/remote_repository/tutor_remote_repository.dart';
@@ -31,7 +32,7 @@ Future<void> initDependencies() async {
 
   _initAuthDependencies();
   _initTutorDependencies(); // ✅ Add this before HomeCubit
-  _initStudentProfileDependencies();    
+  _initStudentProfileDependencies();
   _initHomeDependencies();
 }
 
@@ -67,9 +68,14 @@ void _initStudentProfileDependencies() {
   getIt.registerLazySingleton<GetStudentProfileUsecase>(
       () => GetStudentProfileUsecase(repository: getIt<IStudentRepository>()));
 
-  // ✅ Register BLoC
+  getIt.registerLazySingleton<UpdateStudentProfileUsecase>(() =>
+      UpdateStudentProfileUsecase(
+          studentRepository: getIt<IStudentRepository>()));
+
   getIt.registerFactory(() => StudentProfileBloc(
-      getStudentProfileUsecase: getIt<GetStudentProfileUsecase>()));
+        getStudentProfileUsecase: getIt<GetStudentProfileUsecase>(),
+        updateStudentProfileUsecase: getIt<UpdateStudentProfileUsecase>(),
+      ));
 }
 
 _initApiService() {

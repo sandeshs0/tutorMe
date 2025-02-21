@@ -11,3 +11,13 @@ sealed class StudentProfileEvent extends Equatable {
 final class FetchStudentProfile extends StudentProfileEvent {
   const FetchStudentProfile();
 }
+
+// Event to update student profile
+final class UpdateStudentProfile extends StudentProfileEvent {
+  final UpdateStudentProfileDTO updatedData;
+
+  const UpdateStudentProfile({required this.updatedData});
+
+  @override
+  List<Object?> get props => [updatedData];
+}

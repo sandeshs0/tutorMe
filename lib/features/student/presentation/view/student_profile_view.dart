@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tutorme/features/student/domain/entity/student_entity.dart';
+import 'package:tutorme/features/student/presentation/view/edit_profile_view.dart';
 import 'package:tutorme/features/student/presentation/view/terms_view.dart';
 import 'package:tutorme/features/student/presentation/view_model/bloc/student_profile_bloc.dart';
 
@@ -17,7 +18,19 @@ class StudentProfileView extends StatelessWidget {
         automaticallyImplyLeading: false,
         elevation: 0,
       ),
-      body: BlocBuilder<StudentProfileBloc, StudentProfileState>(
+      body: BlocConsumer<StudentProfileBloc, StudentProfileState>(
+        listener: (context, state) {
+          if (state is StudentProfileSuccess) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("Profile updated successfully!"),
+                  backgroundColor: Colors.green,
+                ),
+              );
+            });
+          }
+        },
         builder: (context, state) {
           if (state is StudentProfileLoading) {
             return const Center(child: CircularProgressIndicator());
@@ -106,7 +119,17 @@ class StudentProfileView extends StatelessWidget {
 
             // 🟢 Profile Options
             _buildProfileOption(Icons.edit, "Edit Profile", () {
-              // TODO: Implement Edit Profile Navigation
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => EditStudentProfileView(student: student),
+                ),
+              ).then((_) {
+                // ✅ Refresh the profile when returning from Edit Profile
+                context
+                    .read<StudentProfileBloc>()
+                    .add(const FetchStudentProfile());
+              });
             }),
             _buildProfileOption(Icons.notifications, "Notifications", () {
               // TODO: Implement Notifications
@@ -122,7 +145,7 @@ class StudentProfileView extends StatelessWidget {
               );
             }),
 
-            // const SizedBox(height: 10),
+            const SizedBox(height: 10),
 
             // 🟢 Logout Button (Subtle)
             _buildLogoutButton(context),
@@ -176,7 +199,6 @@ class StudentProfileView extends StatelessWidget {
   Widget _buildLogoutButton(BuildContext context) {
     return TextButton.icon(
       onPressed: () {
-        // TODO: Implement logout logic
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Logout functionality coming soon!")),
         );

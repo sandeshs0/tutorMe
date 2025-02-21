@@ -32,3 +32,5 @@ final class StudentProfileError extends StudentProfileState {
   @override
   List<Object?> get props => [message];
 }
+
+final class StudentProfileSuccess extends StudentProfileState {}

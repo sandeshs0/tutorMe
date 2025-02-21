@@ -12,7 +12,7 @@ StudentApiModel _$StudentApiModelFromJson(Map<String, dynamic> json) =>
       name: json['name'] as String,
       email: json['email'] as String,
       phone: json['phone'] as String,
-      profileImage: json['profileImage'] as String,
+      profileImage: json['profileImage'] as String?,
       role: json['role'] as String,
       walletBalance: (json['walletBalance'] as num).toDouble(),
     );
