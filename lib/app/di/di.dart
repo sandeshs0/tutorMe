@@ -12,6 +12,11 @@ import 'package:tutorme/features/auth/domain/use_case/verify_usecase.dart';
 import 'package:tutorme/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:tutorme/features/auth/presentation/view_model/register/register_bloc.dart';
 import 'package:tutorme/features/home/presentation/view_model/home_cubit.dart';
+import 'package:tutorme/features/student/data/data_source/repository/remote_repository/student_remote_repository.dart';
+import 'package:tutorme/features/student/data/data_source/student_remote_data_source.dart/student_remote_data_source.dart';
+import 'package:tutorme/features/student/domain/repository/student_repository.dart';
+import 'package:tutorme/features/student/domain/usecase/get_student_profile_usecase.dart';
+import 'package:tutorme/features/student/presentation/view_model/bloc/student_profile_bloc.dart';
 import 'package:tutorme/features/tutors/data/data_source/remote_data_source/tutor_remote_data_source.dart';
 import 'package:tutorme/features/tutors/data/repository/remote_repository/tutor_remote_repository.dart';
 import 'package:tutorme/features/tutors/domain/repository/tutor_repository.dart';
@@ -26,6 +31,7 @@ Future<void> initDependencies() async {
 
   _initAuthDependencies();
   _initTutorDependencies(); // ✅ Add this before HomeCubit
+  _initStudentProfileDependencies();    
   _initHomeDependencies();
 }
 
@@ -45,6 +51,25 @@ void _initTutorDependencies() {
   // Register Use Case
   getIt.registerLazySingleton<GetAllTutorsUsecase>(
       () => GetAllTutorsUsecase(tutorRepository: getIt<ITutorRepository>()));
+}
+
+void _initStudentProfileDependencies() {
+  // ✅ Register Remote Data Source
+  getIt.registerLazySingleton<StudentRemoteDataSource>(() =>
+      StudentRemoteDataSource(
+          dio: getIt<Dio>(), tokenSharedPrefs: getIt<TokenSharedPrefs>()));
+
+  // ✅ Register Repository
+  getIt.registerLazySingleton<IStudentRepository>(
+      () => StudentRemoteRepository(getIt<StudentRemoteDataSource>()));
+
+  // ✅ Register Use Case
+  getIt.registerLazySingleton<GetStudentProfileUsecase>(
+      () => GetStudentProfileUsecase(repository: getIt<IStudentRepository>()));
+
+  // ✅ Register BLoC
+  getIt.registerFactory(() => StudentProfileBloc(
+      getStudentProfileUsecase: getIt<GetStudentProfileUsecase>()));
 }
 
 _initApiService() {

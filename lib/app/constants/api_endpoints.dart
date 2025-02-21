@@ -2,9 +2,9 @@ class ApiEndpoints {
   ApiEndpoints._();
   static const Duration connectionTimeout = Duration(seconds: 1000);
   static const Duration receiveTimeout = Duration(seconds: 1000);
-  // static const String baseUrl = "http://10.0.2.2:3000/";
+  static const String baseUrl = "http://10.0.2.2:3000/";
   // To Run in USB Connected Android Device:
-  static const String baseUrl = "http://192.168.0.103:3000/";
+  // static const String baseUrl = "http://192.168.0.103:3000/";
 
   // Routes for Auth
   static const String register = "auth/register";
@@ -17,8 +17,6 @@ class ApiEndpoints {
   static const String getTutorProfile =
       "api/tutors/profile"; // Append "/{username}" dynamically
 
-    // Routes for Student Profile Fetching
-    static const String getStudentProfile="api/student/profile";
-
+  // Routes for Student Profile Fetching
+  static const String getStudentProfile = "api/student/profile";
 }
-

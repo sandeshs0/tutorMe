@@ -7,7 +7,7 @@ import 'package:tutorme/features/student/domain/repository/student_repository.da
 class GetStudentProfileUsecase implements UsecaseWithoutParams<StudentEntity> {
   final IStudentRepository repository;
 
-  GetStudentProfileUsecase(this.repository);
+  GetStudentProfileUsecase({required this.repository});
 
   @override
   Future<Either<Failure, StudentEntity>> call() async {

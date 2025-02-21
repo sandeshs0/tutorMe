@@ -254,10 +254,12 @@ import 'package:tutorme/app/di/di.dart';
 import 'package:tutorme/features/home/presentation/view/home_view.dart';
 import 'package:tutorme/features/home/presentation/view_model/home_cubit.dart';
 import 'package:tutorme/features/home/presentation/view_model/home_state.dart';
+import 'package:tutorme/features/student/presentation/view/student_profile_view.dart';
+import 'package:tutorme/features/student/presentation/view_model/bloc/student_profile_bloc.dart';
 import 'package:tutorme/view/browse_view.dart';
 // import 'package:tutorme/view/home_view.dart';
 import 'package:tutorme/view/inbox_view.dart';
-import 'package:tutorme/view/profile_view.dart';
+// import 'package:tutorme/view/profile_view.dart';
 import 'package:tutorme/view/wallet_view.dart';
 
 class DashboardView extends StatefulWidget {
@@ -275,7 +277,14 @@ class _DashboardViewState extends State<DashboardView> {
     const BrowseScreen(),
     const InboxScreen(),
     const WalletScreen(),
-    const ProfileScreen(),
+    // const StudentProfileView(),
+
+    /// ✅ Wrap `StudentProfileView` with BlocProvider
+    BlocProvider(
+      create: (_) =>
+          getIt<StudentProfileBloc>()..add(const FetchStudentProfile()),
+      child: const StudentProfileView(),
+    ),
   ];
 
   @override
@@ -325,6 +334,10 @@ class _DashboardViewState extends State<DashboardView> {
         setState(() {
           _currentIndex = index;
         });
+
+        if (index == 4) {
+          context.read<StudentProfileBloc>().add(const FetchStudentProfile());
+        }
         context.read<HomeCubit>().selectTab(index);
       },
       type: BottomNavigationBarType.fixed,
