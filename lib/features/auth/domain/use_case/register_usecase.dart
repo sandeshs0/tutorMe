@@ -7,6 +7,7 @@ import 'package:tutorme/features/auth/domain/repository/auth_repository.dart';
 
 class RegisterUserParams extends Equatable {
   final String fullName;
+  final String username;
   final String email;
   final String phone;
   final String password;
@@ -15,6 +16,7 @@ class RegisterUserParams extends Equatable {
 
   const RegisterUserParams(
       {required this.fullName,
+      required this.username,
       required this.email,
       required this.phone,
       required this.password,
@@ -22,6 +24,7 @@ class RegisterUserParams extends Equatable {
       required this.role});
   const RegisterUserParams.initial()
       : fullName = '',
+      username='',
         email = '',
         phone = '',
         password = '',
@@ -31,7 +34,7 @@ class RegisterUserParams extends Equatable {
 
   @override
   // TODO: implement props
-  List<Object?> get props => [fullName, email, phone, password, role, profileImage];
+  List<Object?> get props => [fullName, username, email, phone, password, role, profileImage];
 }
 
 class RegisterUsecase implements UsecaseWithParams<void, RegisterUserParams> {
@@ -43,6 +46,7 @@ class RegisterUsecase implements UsecaseWithParams<void, RegisterUserParams> {
     final authEntity = AuthEntity(
         id: null,
         fullName: params.fullName,
+        username:params.username,
         email: params.email,
         phone: params.phone,
         password: params.password,

@@ -43,6 +43,7 @@ class AuthRemoteDataSource implements IAuthDataSource {
     try {
       final formData = FormData.fromMap({
         "name": user.fullName,
+        "username": user.username,
         "email": user.email,
         "phone": user.phone,
         "password": user.password,

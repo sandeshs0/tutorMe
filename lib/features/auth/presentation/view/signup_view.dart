@@ -18,6 +18,7 @@ class SignupView extends StatefulWidget {
 class _SignupViewState extends State<SignupView> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _fullNameController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -186,6 +187,26 @@ class _SignupViewState extends State<SignupView> {
                       ),
                       const SizedBox(height: 19.0),
 
+                      // Username Field
+                      TextFormField(
+                        controller: _usernameController,
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                          labelText: 'Username',
+                          prefixIcon: const Icon(Icons.person),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Username is required';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 19.0),
+
                       // Email Field
                       TextFormField(
                         controller: _emailController,
@@ -307,6 +328,7 @@ class _SignupViewState extends State<SignupView> {
                                   RegisterUserEvent(
                                       context: context,
                                       fullName: _fullNameController.text,
+                                      username: _usernameController.text,
                                       phone: _phoneController.text,
                                       email: _emailController.text,
                                       password: _passwordController.text,
