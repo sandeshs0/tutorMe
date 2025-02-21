@@ -274,9 +274,10 @@ class _DashboardViewState extends State<DashboardView> {
 
   final List<Widget> _screens = [
     const HomeScreen(),
-    const BrowseScreen(),
     const InboxScreen(),
     const WalletScreen(),
+    const BrowseScreen(),
+
     // const StudentProfileView(),
 
     /// ✅ Wrap `StudentProfileView` with BlocProvider
@@ -295,26 +296,26 @@ class _DashboardViewState extends State<DashboardView> {
         builder: (context, state) {
           return Scaffold(
             backgroundColor: const Color(0xfff2fafa),
-            appBar: AppBar(
-              automaticallyImplyLeading: false,
-              backgroundColor: const Color(0xfff2fafa),
-              title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Image.asset(
-                    'assets/images/logo.png',
-                    height: 30.0,
-                  ),
-                ],
-              ),
-              actions: [
-                IconButton(
-                  icon: const Icon(Icons.notifications_active,
-                      color: Color.fromARGB(255, 4, 32, 91)),
-                  onPressed: () {},
-                )
-              ],
-            ),
+            // appBar: AppBar(
+            //   automaticallyImplyLeading: false,
+            //   backgroundColor: const Color(0xfff2fafa),
+            //   title: Column(
+            //     crossAxisAlignment: CrossAxisAlignment.start,
+            //     children: [
+            //       Image.asset(
+            //         'assets/images/logo.png',
+            //         height: 30.0,
+            //       ),
+            //     ],
+            //   ),
+            //   actions: [
+            //     IconButton(
+            //       icon: const Icon(Icons.notifications_active,
+            //           color: Color.fromARGB(255, 4, 32, 91)),
+            //       onPressed: () {},
+            //     )
+            //   ],
+            // ),
             body: _screens[_currentIndex],
             bottomNavigationBar: _buildBottomNavigationBar(context),
           );
@@ -343,10 +344,11 @@ class _DashboardViewState extends State<DashboardView> {
       type: BottomNavigationBarType.fixed,
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: 'HOME'),
-        BottomNavigationBarItem(icon: Icon(Icons.search), label: 'BROWSE'),
         BottomNavigationBarItem(icon: Icon(Icons.mail_outline), label: 'INBOX'),
         BottomNavigationBarItem(
             icon: Icon(Icons.account_balance_wallet_outlined), label: 'WALLET'),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.notifications), label: 'Updates'),
         BottomNavigationBarItem(
             icon: Icon(Icons.person_outline), label: 'PROFILE'),
       ],
