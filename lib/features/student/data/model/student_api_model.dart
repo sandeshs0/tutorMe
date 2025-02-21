@@ -11,7 +11,7 @@ class StudentApiModel extends Equatable {
   final String name;
   final String email;
   final String phone;
-  final String profileImage;
+  final String? profileImage;
   final String role;
   final double walletBalance;
 
@@ -20,7 +20,7 @@ class StudentApiModel extends Equatable {
     required this.name,
     required this.email,
     required this.phone,
-    required this.profileImage,
+     this.profileImage,
     required this.role,
     required this.walletBalance,
   });
@@ -39,7 +39,7 @@ class StudentApiModel extends Equatable {
       name: name,
       email: email,
       phone: phone,
-      profileImage: profileImage,
+      profileImage: profileImage ?? "",
       role: role,
       walletBalance: walletBalance,
     );
