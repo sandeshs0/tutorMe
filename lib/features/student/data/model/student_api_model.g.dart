@@ -1,30 +1,29 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'auth_api_model.dart';
+part of 'student_api_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-AuthApiModel _$AuthApiModelFromJson(Map<String, dynamic> json) => AuthApiModel(
-      id: json['_id'] as String?,
+StudentApiModel _$StudentApiModelFromJson(Map<String, dynamic> json) =>
+    StudentApiModel(
+      studentId: json['_id'] as String?,
       name: json['name'] as String,
-      username: json['username'] as String,
       email: json['email'] as String,
       phone: json['phone'] as String,
       profileImage: json['profileImage'] as String?,
-      password: json['password'] as String?,
       role: json['role'] as String,
+      walletBalance: (json['walletBalance'] as num).toDouble(),
     );
 
-Map<String, dynamic> _$AuthApiModelToJson(AuthApiModel instance) =>
+Map<String, dynamic> _$StudentApiModelToJson(StudentApiModel instance) =>
     <String, dynamic>{
-      '_id': instance.id,
+      '_id': instance.studentId,
       'name': instance.name,
-      'username': instance.username,
       'email': instance.email,
       'phone': instance.phone,
-      'password': instance.password,
       'profileImage': instance.profileImage,
       'role': instance.role,
+      'walletBalance': instance.walletBalance,
     };

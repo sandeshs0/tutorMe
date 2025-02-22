@@ -254,10 +254,12 @@ import 'package:tutorme/app/di/di.dart';
 import 'package:tutorme/features/home/presentation/view/home_view.dart';
 import 'package:tutorme/features/home/presentation/view_model/home_cubit.dart';
 import 'package:tutorme/features/home/presentation/view_model/home_state.dart';
+import 'package:tutorme/features/student/presentation/view/student_profile_view.dart';
+import 'package:tutorme/features/student/presentation/view_model/bloc/student_profile_bloc.dart';
 import 'package:tutorme/view/browse_view.dart';
 // import 'package:tutorme/view/home_view.dart';
 import 'package:tutorme/view/inbox_view.dart';
-import 'package:tutorme/view/profile_view.dart';
+// import 'package:tutorme/view/profile_view.dart';
 import 'package:tutorme/view/wallet_view.dart';
 
 class DashboardView extends StatefulWidget {
@@ -272,10 +274,18 @@ class _DashboardViewState extends State<DashboardView> {
 
   final List<Widget> _screens = [
     const HomeScreen(),
-    const BrowseScreen(),
     const InboxScreen(),
     const WalletScreen(),
-    const ProfileScreen(),
+    const BrowseScreen(),
+
+    // const StudentProfileView(),
+
+    /// ✅ Wrap `StudentProfileView` with BlocProvider
+    BlocProvider(
+      create: (_) =>
+          getIt<StudentProfileBloc>()..add(const FetchStudentProfile()),
+      child: const StudentProfileView(),
+    ),
   ];
 
   @override
@@ -286,26 +296,26 @@ class _DashboardViewState extends State<DashboardView> {
         builder: (context, state) {
           return Scaffold(
             backgroundColor: const Color(0xfff2fafa),
-            appBar: AppBar(
-              automaticallyImplyLeading: false,
-              backgroundColor: const Color(0xfff2fafa),
-              title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Image.asset(
-                    'assets/images/logo.png',
-                    height: 30.0,
-                  ),
-                ],
-              ),
-              actions: [
-                IconButton(
-                  icon: const Icon(Icons.notifications_active,
-                      color: Color.fromARGB(255, 4, 32, 91)),
-                  onPressed: () {},
-                )
-              ],
-            ),
+            // appBar: AppBar(
+            //   automaticallyImplyLeading: false,
+            //   backgroundColor: const Color(0xfff2fafa),
+            //   title: Column(
+            //     crossAxisAlignment: CrossAxisAlignment.start,
+            //     children: [
+            //       Image.asset(
+            //         'assets/images/logo.png',
+            //         height: 30.0,
+            //       ),
+            //     ],
+            //   ),
+            //   actions: [
+            //     IconButton(
+            //       icon: const Icon(Icons.notifications_active,
+            //           color: Color.fromARGB(255, 4, 32, 91)),
+            //       onPressed: () {},
+            //     )
+            //   ],
+            // ),
             body: _screens[_currentIndex],
             bottomNavigationBar: _buildBottomNavigationBar(context),
           );
@@ -325,15 +335,20 @@ class _DashboardViewState extends State<DashboardView> {
         setState(() {
           _currentIndex = index;
         });
+
+        if (index == 4) {
+          context.read<StudentProfileBloc>().add(const FetchStudentProfile());
+        }
         context.read<HomeCubit>().selectTab(index);
       },
       type: BottomNavigationBarType.fixed,
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: 'HOME'),
-        BottomNavigationBarItem(icon: Icon(Icons.search), label: 'BROWSE'),
         BottomNavigationBarItem(icon: Icon(Icons.mail_outline), label: 'INBOX'),
         BottomNavigationBarItem(
             icon: Icon(Icons.account_balance_wallet_outlined), label: 'WALLET'),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.notifications), label: 'Updates'),
         BottomNavigationBarItem(
             icon: Icon(Icons.person_outline), label: 'PROFILE'),
       ],

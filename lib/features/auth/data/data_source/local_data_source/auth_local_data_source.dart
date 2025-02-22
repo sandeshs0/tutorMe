@@ -11,7 +11,14 @@ class AuthLocalDataSource implements IAuthDataSource {
   @override
   Future<AuthEntity> getCurrentUser() {
     return Future.value(const AuthEntity(
-        id: "1", fullName: "", email: "", phone: "", password: "", profileImage: "", role: ''));
+        id: "1",
+        fullName: "",
+        username: "",
+        email: "",
+        phone: "",
+        password: "",
+        profileImage: "",
+        role: ''));
   }
 
   @override
@@ -46,7 +53,7 @@ class AuthLocalDataSource implements IAuthDataSource {
       return Future.error(e);
     }
   }
-  
+
   @override
   Future<void> verifyEmail(String email, String otp) {
     // TODO: implement verifyEmail

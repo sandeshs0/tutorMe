@@ -16,6 +16,24 @@ class TokenSharedPrefs {
     }
   }
 
+  Future<Either<Failure, void>> saveUserId(String userId) async {
+    try {
+      await _sharedPreferences.setString('userId', userId);
+      return const Right(null);
+    } catch (e) {
+      return Left(SharedPrefsFailure(message: e.toString()));
+    }
+  }
+
+  Future<Either<Failure, String>> getUserId() async {
+    try {
+      final userId = _sharedPreferences.getString('userId');
+      return Right(userId ?? '');
+    } catch (e) {
+      return Left(SharedPrefsFailure(message: e.toString()));
+    }
+  }
+
   Future<Either<Failure, String>> getToken() async {
     try {
       final token = _sharedPreferences.getString('token');

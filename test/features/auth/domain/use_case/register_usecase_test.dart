@@ -20,6 +20,7 @@ void main() {
   const userParams = RegisterUserParams(
       fullName: "Sandesh Sapkota",
       email: "hellosandes0@gmail.com",
+      username: "sandesh123",
       phone: "9869118472",
       password: "password",
       profileImage: "imageurl.png",
@@ -46,6 +47,7 @@ void main() {
       const userParams = RegisterUserParams(
           fullName: "Sandesh Sapkota",
           email: "",
+          username: "",
           phone: "",
           password: "password",
           profileImage: "imageurl.png",

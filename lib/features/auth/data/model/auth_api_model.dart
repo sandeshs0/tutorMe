@@ -8,6 +8,7 @@ class AuthApiModel extends Equatable {
   @JsonKey(name: '_id')
   final String? id;
   final String name;
+  final String username;
   final String email;
   final String phone;
   final String? password;
@@ -17,6 +18,7 @@ class AuthApiModel extends Equatable {
   const AuthApiModel({
     this.id,
     required this.name,
+    required this.username,
     required this.email,
     required this.phone,
     required this.profileImage,
@@ -33,6 +35,7 @@ class AuthApiModel extends Equatable {
     return AuthEntity(
       id: id,
       fullName: name,
+      username: username,
       email: email,
       phone: phone,
       role: role,
@@ -45,6 +48,7 @@ class AuthApiModel extends Equatable {
   factory AuthApiModel.fromEntity(AuthEntity entity) {
     return AuthApiModel(
         name: entity.fullName,
+        username: entity.username,
         email: entity.email,
         phone: entity.phone,
         profileImage: entity.profileImage,

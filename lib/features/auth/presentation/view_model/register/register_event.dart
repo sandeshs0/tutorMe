@@ -13,6 +13,7 @@ class RegisterUserEvent extends RegisterEvent {
   final String email;
   final String phone;
   final String role;
+  final String username;
   // final String? profileImage;
   final String password;
   final String confirmPassword;
@@ -21,6 +22,7 @@ class RegisterUserEvent extends RegisterEvent {
   const RegisterUserEvent({
     required this.context,
     required this.fullName,
+    required this.username,
     required this.email,
     required this.phone,
     required this.password,
@@ -33,6 +35,7 @@ class RegisterUserEvent extends RegisterEvent {
   List<Object> get props => [
         fullName,
         email,
+        username,
         phone,
         password,
         confirmPassword,
