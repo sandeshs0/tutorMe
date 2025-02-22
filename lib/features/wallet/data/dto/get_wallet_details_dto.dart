@@ -16,12 +16,23 @@ class GetWalletDetailsDTO {
     required this.transactions,
   });
 
-  factory GetWalletDetailsDTO.fromJson(Map<String, dynamic> json) =>
-      _$GetWalletDetailsDTOFromJson(json);
+  /// **✅ Convert from JSON**
+  factory GetWalletDetailsDTO.fromJson(Map<String, dynamic> json) {
+    return GetWalletDetailsDTO(
+      success: json['success'] ?? false,
+      walletBalance:
+          (json['walletBalance'] as num).toDouble(), // ✅ Ensure it's a double
+      transactions: (json['transactions'] as List<dynamic>?)
+              ?.map((txn) => TransactionApiModel.fromJson(txn))
+              .toList() ??
+          [], // ✅ Ensure transactions is always a List (never null)
+    );
+  }
 
+  /// **✅ Convert to JSON**
   Map<String, dynamic> toJson() => _$GetWalletDetailsDTOToJson(this);
 
-  /// ✅ Convert to Domain Entity
+  /// **✅ Convert to Domain Entity**
   WalletEntity toEntity() {
     return WalletEntity(
       walletBalance: walletBalance,

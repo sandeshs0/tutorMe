@@ -30,6 +30,7 @@ import 'package:tutorme/features/wallet/domain/usecase/get_transaction_history.d
 import 'package:tutorme/features/wallet/domain/usecase/get_wallet_details_usecase.dart';
 import 'package:tutorme/features/wallet/domain/usecase/initiate_transaction_usecase.dart';
 import 'package:tutorme/features/wallet/domain/usecase/verify_transaction_usecase.dart';
+import 'package:tutorme/features/wallet/presentation/view_model/bloc/wallet_bloc.dart';
 
 final getIt = GetIt.instance;
 
@@ -41,8 +42,8 @@ Future<void> initDependencies() async {
   _initAuthDependencies();
   _initTutorDependencies(); // ✅ Add this before HomeCubit
   _initStudentProfileDependencies();
-  _initWalletDependencies(); // ✅ Register Wallet Dependencies
   _initHomeDependencies();
+  _initWalletDependencies(); // ✅ Register Wallet Dependencies
 }
 
 void _initHiveService() {
@@ -171,4 +172,12 @@ void _initWalletDependencies() {
 
   getIt.registerLazySingleton<GetTransactionHistoryUsecase>(() =>
       GetTransactionHistoryUsecase(repository: getIt<IWalletRepository>()));
+
+  // ✅ Register Bloc
+  getIt.registerFactory(() => WalletBloc(
+        getWalletDetailsUseCase: getIt<GetWalletDetailsUsecase>(),
+        initiateTransactionUseCase: getIt<InitiateTransactionUsecase>(),
+        verifyTransactionUseCase: getIt<VerifyTransactionUsecase>(),
+        getTransactionHistoryUseCase: getIt<GetTransactionHistoryUsecase>(),
+      ));
 }
