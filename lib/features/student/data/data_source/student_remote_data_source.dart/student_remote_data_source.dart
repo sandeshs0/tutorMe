@@ -69,15 +69,31 @@ class StudentRemoteDataSource implements IStudentDataSource {
       if (token == null || token.isEmpty) {
         throw Exception("Token not found in shared prefs");
       }
+      FormData formData = FormData();
+
+      if (updatedData.profileImage != null &&
+          updatedData.profileImage!.isNotEmpty) {
+        formData.files.add(MapEntry(
+          "profileImage",
+          await MultipartFile.fromFile(updatedData.profileImage!,
+              filename: "profile.jpg"),
+        ));
+      }
+      formData.fields.addAll([
+        if (updatedData.name != null) MapEntry("name", updatedData.name!),
+        if (updatedData.email != null) MapEntry("email", updatedData.email!),
+        if (updatedData.phone != null) MapEntry("phone", updatedData.phone!),
+      ]);
 
       final response = await _dio.put(
         ApiEndpoints.getStudentProfile,
         options: Options(
           headers: {
-            "Authorization": "Bearer $token", // Send JWT token
+            "Authorization": "Bearer $token", 
+            "Content-Type": "multipart/form-data",
           },
         ),
-        data: updatedData.toJson(),
+        data: formData,
       );
 
       if (response.statusCode == 200) {

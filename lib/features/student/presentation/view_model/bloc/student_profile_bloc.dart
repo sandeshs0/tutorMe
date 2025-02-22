@@ -49,8 +49,8 @@ class StudentProfileBloc
       (failure) =>
           emit(StudentProfileError(message: _mapFailureToMessage(failure))),
        (updatedStudent) {
-      emit(StudentProfileSuccess()); // ✅ Show success message
-      emit(StudentProfileLoaded(student: updatedStudent)); // ✅ Update UI immediately
+      emit(StudentProfileUpdated(student: updatedStudent));
+      // emit(StudentProfileLoaded(student: updatedStudent)); // ✅ Update UI immediately
     },
     );
   }

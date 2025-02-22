@@ -20,22 +20,34 @@ class StudentProfileView extends StatelessWidget {
       ),
       body: BlocConsumer<StudentProfileBloc, StudentProfileState>(
         listener: (context, state) {
-          if (state is StudentProfileSuccess) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Profile updated successfully!"),
-                  backgroundColor: Colors.green,
-                ),
-              );
+          if (state is StudentProfileUpdated) {
+            // ✅ Show toast for success message
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text("Profile updated successfully!"),
+                backgroundColor: Colors.green,
+                duration: Duration(seconds: 5), // Ensure it stays long enough
+              ),
+            );
+
+            // ✅ Delay fetching profile to prevent overriding the success toast immediately
+            Future.delayed(const Duration(seconds: 2), () {
+              context
+                  .read<StudentProfileBloc>()
+                  .add(const FetchStudentProfile());
             });
           }
         },
         builder: (context, state) {
           if (state is StudentProfileLoading) {
             return const Center(child: CircularProgressIndicator());
-          } else if (state is StudentProfileLoaded) {
-            return _buildProfileContent(state.student, context);
+          } else if (state is StudentProfileLoaded ||
+              state is StudentProfileUpdated) {
+            final student = state is StudentProfileLoaded
+                ? state.student
+                : (state as StudentProfileUpdated).student;
+
+            return _buildProfileContent(student, context);
           } else if (state is StudentProfileError) {
             return Center(
               child: Text(state.message,
@@ -73,24 +85,6 @@ class StudentProfileView extends StatelessWidget {
                     radius: 100,
                     backgroundColor: theme.dividerColor,
                     backgroundImage: NetworkImage(student.profileImage),
-                  ),
-                ),
-                Positioned(
-                  bottom: 5,
-                  right: 5,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.blueGrey,
-                      border: Border.all(color: Colors.white, width: 2),
-                    ),
-                    child: IconButton(
-                      icon: const Icon(Icons.camera_enhance,
-                          color: Colors.white, size: 18),
-                      onPressed: () {
-                        // TODO: Implement profile image upload
-                      },
-                    ),
                   ),
                 ),
               ],

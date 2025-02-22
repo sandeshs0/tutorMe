@@ -33,4 +33,12 @@ final class StudentProfileError extends StudentProfileState {
   List<Object?> get props => [message];
 }
 
-final class StudentProfileSuccess extends StudentProfileState {}
+final class StudentProfileUpdated extends StudentProfileState {
+  final StudentEntity student;
+  
+  const StudentProfileUpdated({required this.student});
+  
+  @override
+  List<Object?> get props => [student];
+}
+
