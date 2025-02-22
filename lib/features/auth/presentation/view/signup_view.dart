@@ -317,6 +317,7 @@ class _SignupViewState extends State<SignupView> {
                           return null;
                         },
                       ),
+                     
                       const SizedBox(height: 28.0),
 
                       // Signup Button
