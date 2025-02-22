@@ -13,6 +13,9 @@ class WalletInitial extends WalletState {}
 // Wallet loading state
 class WalletLoading extends WalletState {}
 
+// 🔹 Transaction history specific loading state
+class TransactionHistoryLoading extends WalletState {}
+
 // Wallet details fetched successfully
 class WalletLoaded extends WalletState {
   final WalletEntity wallet;

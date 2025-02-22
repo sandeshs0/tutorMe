@@ -35,22 +35,20 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
   }
 
   /// 🔹 Fetch Wallet Details
-  /// 🔹 Fetch Wallet Details
-Future<void> _onFetchWalletDetails(
-    FetchWalletDetails event, Emitter<WalletState> emit) async {
-  emit(WalletLoading()); // Show loading before API call
+  Future<void> _onFetchWalletDetails(
+      FetchWalletDetails event, Emitter<WalletState> emit) async {
+    emit(WalletLoading()); // Show loading before API call
 
-  final result = await _getWalletDetailsUseCase();
+    final result = await _getWalletDetailsUseCase();
 
-  result.fold(
-    (failure) => emit(WalletError(message: _mapFailureToMessage(failure))),
-    (wallet) {
-      debugPrint("Wallet Data Emitted: Rs. ${wallet.walletBalance}"); // ✅ Log data
-      emit(WalletLoaded(wallet: wallet)); // ✅ Ensure correct state is emitted
-    },
-  );
-}
-
+    result.fold(
+      (failure) => emit(WalletError(message: _mapFailureToMessage(failure))),
+      (wallet) {
+        debugPrint("Wallet Data Emitted: Rs. ${wallet.walletBalance}");
+        emit(WalletLoaded(wallet: wallet)); // ✅ Ensure correct state is emitted
+      },
+    );
+  }
 
   /// 🔹 Initiate Transaction
   Future<void> _onInitiateTransaction(
@@ -87,14 +85,19 @@ Future<void> _onFetchWalletDetails(
   /// 🔹 Fetch Transaction History
   Future<void> _onFetchTransactionHistory(
       FetchTransactionHistory event, Emitter<WalletState> emit) async {
-    emit(WalletLoading());
+    emit(TransactionHistoryLoading()); // 🔹 Show loader only for history
 
     final result = await _getTransactionHistoryUseCase();
 
     result.fold(
       (failure) => emit(WalletError(message: _mapFailureToMessage(failure))),
-      (transactions) =>
-          emit(TransactionHistoryLoaded(transactions: transactions)),
+      (transactions) {
+        if (transactions.isEmpty) {
+          emit(const WalletError(message: "No transactions available."));
+        } else {
+          emit(TransactionHistoryLoaded(transactions: transactions));
+        }
+      },
     );
   }
 
@@ -107,6 +110,3 @@ Future<void> _onFetchWalletDetails(
     }
   }
 }
-
-// class GetTransactionHistoryUseCase {
-// }
