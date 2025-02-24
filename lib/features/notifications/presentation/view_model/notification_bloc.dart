@@ -36,14 +36,16 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   }
 
   /// Handles marking notifications as read
-  Future<void> _onMarkNotificationsAsRead(
-      MarkNotificationsAsReadEvent event, Emitter<NotificationState> emit) async {
-    final Either<Failure, void> result =
-        await markNotificationsAsReadUsecase();
+  Future<void> _onMarkNotificationsAsRead(MarkNotificationsAsReadEvent event,
+      Emitter<NotificationState> emit) async {
+    final Either<Failure, void> result = await markNotificationsAsReadUsecase();
 
     result.fold(
       (failure) => emit(NotificationError(failure.message)),
-      (_) => emit(NotificationsMarkedAsRead()),
+      (_) {
+        emit(NotificationsMarkedAsRead()); // Show success message
+        add(FetchNotificationsEvent()); // ✅ Re-fetch notifications after marking them as read
+      },
     );
   }
 }
