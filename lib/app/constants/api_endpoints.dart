@@ -25,7 +25,4 @@ class ApiEndpoints {
   static const String verifyTransaction = "api/transaction/verify";
   static const String getWalletBalance = "api/transaction/balance";
   static const String getTransactions = "api/transaction/history";
-
-
-
 }
