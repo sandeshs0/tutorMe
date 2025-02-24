@@ -165,7 +165,7 @@ class StudentProfileView extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Text(
-            "Rs. $balance",
+            "Rs. ${balance.toStringAsFixed(2)}",
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.bold,
