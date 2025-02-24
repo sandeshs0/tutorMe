@@ -254,11 +254,12 @@ import 'package:tutorme/app/di/di.dart';
 import 'package:tutorme/features/home/presentation/view/home_view.dart';
 import 'package:tutorme/features/home/presentation/view_model/home_cubit.dart';
 import 'package:tutorme/features/home/presentation/view_model/home_state.dart';
+import 'package:tutorme/features/notifications/presentation/view/notification_view.dart';
+import 'package:tutorme/features/notifications/presentation/view_model/notification_bloc.dart';
 import 'package:tutorme/features/student/presentation/view/student_profile_view.dart';
 import 'package:tutorme/features/student/presentation/view_model/bloc/student_profile_bloc.dart';
 import 'package:tutorme/features/wallet/presentation/view/wallet_view.dart';
 import 'package:tutorme/features/wallet/presentation/view_model/bloc/wallet_bloc.dart';
-import 'package:tutorme/view/browse_view.dart';
 // import 'package:tutorme/view/home_view.dart';
 import 'package:tutorme/view/inbox_view.dart';
 // import 'package:tutorme/view/profile_view.dart';
@@ -283,9 +284,14 @@ class _DashboardViewState extends State<DashboardView> {
       child: const WalletView(),
     ),
     // const WalletScreen(),
-    const BrowseScreen(),
+    // const BrowseScreen(),
 
     // const StudentProfileView(),
+    BlocProvider(
+      create: (_) => getIt<NotificationBloc>()
+        ..add(FetchNotificationsEvent()), // 👈 Fetch wallet on navigation
+      child: const NotificationScreen(),
+    ),
 
     /// ✅ Wrap `StudentProfileView` with BlocProvider
     BlocProvider(

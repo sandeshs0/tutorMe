@@ -17,6 +17,7 @@ import 'package:tutorme/features/notifications/data/repository/notification_remo
 import 'package:tutorme/features/notifications/domain/repository/notification_repository.dart';
 import 'package:tutorme/features/notifications/domain/usecase/get_notification_usecase.dart';
 import 'package:tutorme/features/notifications/domain/usecase/mark_notification_usecase.dart';
+import 'package:tutorme/features/notifications/presentation/view_model/notification_bloc.dart';
 import 'package:tutorme/features/student/data/data_source/repository/remote_repository/student_remote_repository.dart';
 import 'package:tutorme/features/student/data/data_source/student_remote_data_source.dart/student_remote_data_source.dart';
 import 'package:tutorme/features/student/domain/repository/student_repository.dart';
@@ -45,13 +46,11 @@ Future<void> initDependencies() async {
   _initSharedPreferences();
 
   _initAuthDependencies();
-  _initTutorDependencies(); 
+  _initTutorDependencies();
   _initStudentProfileDependencies();
   _initHomeDependencies();
-  _initWalletDependencies(); 
-  _initNotificationDependencies(); 
-
-
+  _initWalletDependencies();
+  _initNotificationDependencies();
 }
 
 void _initHiveService() {
@@ -158,25 +157,30 @@ void _initHomeDependencies() {
   );
 }
 
-
 void _initNotificationDependencies() {
   // Register Remote Data Source
-  getIt.registerLazySingleton<NotificationRemoteDataSource>(
-      () => NotificationRemoteDataSource(dio: getIt<Dio>()));
+  getIt.registerLazySingleton<NotificationRemoteDataSource>(() =>
+      NotificationRemoteDataSource(
+          dio: getIt<Dio>(), tokenSharedPrefs: getIt<TokenSharedPrefs>()));
 
   // Register Repository
-  getIt.registerLazySingleton<INotificationRepository>(
-      () => NotificationRemoteRepository(getIt<NotificationRemoteDataSource>()));
+  getIt.registerLazySingleton<INotificationRepository>(() =>
+      NotificationRemoteRepository(getIt<NotificationRemoteDataSource>()));
 
   // Register Use Cases
-  getIt.registerLazySingleton<GetNotificationsUsecase>(
-      () => GetNotificationsUsecase(notificationRepository: getIt<INotificationRepository>()));
+  getIt.registerLazySingleton<GetNotificationsUsecase>(() =>
+      GetNotificationsUsecase(
+          notificationRepository: getIt<INotificationRepository>()));
 
-  getIt.registerLazySingleton<MarkNotificationsAsReadUsecase>(
-      () => MarkNotificationsAsReadUsecase(notificationRepository: getIt<INotificationRepository>()));
+  getIt.registerLazySingleton<MarkNotificationsAsReadUsecase>(() =>
+      MarkNotificationsAsReadUsecase(
+          notificationRepository: getIt<INotificationRepository>()));
+
+  getIt.registerFactory(() => NotificationBloc(
+        getNotificationsUsecase: getIt<GetNotificationsUsecase>(),
+        markNotificationsAsReadUsecase: getIt<MarkNotificationsAsReadUsecase>(),
+      ));
 }
-
-
 
 void _initWalletDependencies() {
   // ✅ Register Remote Data Source

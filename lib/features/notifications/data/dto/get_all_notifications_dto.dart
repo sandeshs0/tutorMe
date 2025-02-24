@@ -5,18 +5,23 @@ part 'get_all_notifications_dto.g.dart';
 
 @JsonSerializable()
 class GetNotificationsDTO {
-  final String message;
   final List<NotificationApiModel> notifications;
 
   GetNotificationsDTO({
-    required this.message,
     required this.notifications,
   });
 
-  /// **Convert from JSON**
-  factory GetNotificationsDTO.fromJson(Map<String, dynamic> json) =>
-      _$GetNotificationsDTOFromJson(json);
+  /// **Fix: Handle list response properly**
+  factory GetNotificationsDTO.fromJson(List<dynamic> jsonList) {
+    return GetNotificationsDTO(
+      notifications: jsonList
+          .map((json) => NotificationApiModel.fromJson(json as Map<String, dynamic>))
+          .toList(),
+    );
+  }
 
-  /// **Convert to JSON**
-  Map<String, dynamic> toJson() => _$GetNotificationsDTOToJson(this);
+  /// **Convert to JSON** (Not really needed for list responses, but keeping for consistency)
+  Map<String, dynamic> toJson() => {
+        'notifications': notifications.map((notification) => notification.toJson()).toList(),
+      };
 }
