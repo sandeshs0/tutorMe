@@ -22,6 +22,15 @@ import 'package:tutorme/features/tutors/data/data_source/remote_data_source/tuto
 import 'package:tutorme/features/tutors/data/repository/remote_repository/tutor_remote_repository.dart';
 import 'package:tutorme/features/tutors/domain/repository/tutor_repository.dart';
 import 'package:tutorme/features/tutors/domain/usecase/get_all_tutors_usecase.dart';
+import 'package:tutorme/features/wallet/data/data_source/remote_data_source/wallet_remote_datasource.dart';
+import 'package:tutorme/features/wallet/data/data_source/wallet_data_source.dart';
+import 'package:tutorme/features/wallet/data/repository/remote_repository.dart/remote_wallet_repository.dart';
+import 'package:tutorme/features/wallet/domain/repository/wallet_repository.dart';
+import 'package:tutorme/features/wallet/domain/usecase/get_transaction_history.dart';
+import 'package:tutorme/features/wallet/domain/usecase/get_wallet_details_usecase.dart';
+import 'package:tutorme/features/wallet/domain/usecase/initiate_transaction_usecase.dart';
+import 'package:tutorme/features/wallet/domain/usecase/verify_transaction_usecase.dart';
+import 'package:tutorme/features/wallet/presentation/view_model/bloc/wallet_bloc.dart';
 
 final getIt = GetIt.instance;
 
@@ -34,6 +43,7 @@ Future<void> initDependencies() async {
   _initTutorDependencies(); // ✅ Add this before HomeCubit
   _initStudentProfileDependencies();
   _initHomeDependencies();
+  _initWalletDependencies(); // ✅ Register Wallet Dependencies
 }
 
 void _initHiveService() {
@@ -138,4 +148,36 @@ void _initHomeDependencies() {
   getIt.registerFactory<HomeCubit>(
     () => HomeCubit(getAllTutorsUsecase: getIt<GetAllTutorsUsecase>()),
   );
+}
+
+void _initWalletDependencies() {
+  // ✅ Register Remote Data Source
+  getIt.registerLazySingleton<IWalletDataSource>(() => WalletRemoteDataSource(
+        dio: getIt<Dio>(),
+        tokenSharedPrefs: getIt<TokenSharedPrefs>(),
+      ));
+// ✅ Correct
+  getIt.registerLazySingleton<IWalletRepository>(() =>
+      WalletRemoteRepository(walletDataSource: getIt<IWalletDataSource>()));
+
+  // ✅ Register Use Cases
+  getIt.registerLazySingleton<GetWalletDetailsUsecase>(
+      () => GetWalletDetailsUsecase(repository: getIt<IWalletRepository>()));
+
+  getIt.registerLazySingleton<InitiateTransactionUsecase>(
+      () => InitiateTransactionUsecase(repository: getIt<IWalletRepository>()));
+
+  getIt.registerLazySingleton<VerifyTransactionUsecase>(
+      () => VerifyTransactionUsecase(repository: getIt<IWalletRepository>()));
+
+  getIt.registerLazySingleton<GetTransactionHistoryUsecase>(() =>
+      GetTransactionHistoryUsecase(repository: getIt<IWalletRepository>()));
+
+  // ✅ Register Bloc
+  getIt.registerFactory(() => WalletBloc(
+        getWalletDetailsUseCase: getIt<GetWalletDetailsUsecase>(),
+        initiateTransactionUseCase: getIt<InitiateTransactionUsecase>(),
+        verifyTransactionUseCase: getIt<VerifyTransactionUsecase>(),
+        getTransactionHistoryUseCase: getIt<GetTransactionHistoryUsecase>(),
+      ));
 }

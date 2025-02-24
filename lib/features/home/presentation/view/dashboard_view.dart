@@ -256,11 +256,12 @@ import 'package:tutorme/features/home/presentation/view_model/home_cubit.dart';
 import 'package:tutorme/features/home/presentation/view_model/home_state.dart';
 import 'package:tutorme/features/student/presentation/view/student_profile_view.dart';
 import 'package:tutorme/features/student/presentation/view_model/bloc/student_profile_bloc.dart';
+import 'package:tutorme/features/wallet/presentation/view/wallet_view.dart';
+import 'package:tutorme/features/wallet/presentation/view_model/bloc/wallet_bloc.dart';
 import 'package:tutorme/view/browse_view.dart';
 // import 'package:tutorme/view/home_view.dart';
 import 'package:tutorme/view/inbox_view.dart';
 // import 'package:tutorme/view/profile_view.dart';
-import 'package:tutorme/view/wallet_view.dart';
 
 class DashboardView extends StatefulWidget {
   const DashboardView({super.key});
@@ -275,7 +276,13 @@ class _DashboardViewState extends State<DashboardView> {
   final List<Widget> _screens = [
     const HomeScreen(),
     const InboxScreen(),
-    const WalletScreen(),
+    // ✅ Wrap WalletScreen with BlocProvider
+    BlocProvider(
+      create: (_) => getIt<WalletBloc>()
+        ..add(FetchWalletDetails()), // 👈 Fetch wallet on navigation
+      child: const WalletView(),
+    ),
+    // const WalletScreen(),
     const BrowseScreen(),
 
     // const StudentProfileView(),
@@ -335,7 +342,9 @@ class _DashboardViewState extends State<DashboardView> {
         setState(() {
           _currentIndex = index;
         });
-
+        if (index == 2) {
+          context.read<WalletBloc>().add(FetchWalletDetails());
+        }
         if (index == 4) {
           context.read<StudentProfileBloc>().add(const FetchStudentProfile());
         }

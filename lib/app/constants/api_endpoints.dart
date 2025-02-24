@@ -2,9 +2,9 @@ class ApiEndpoints {
   ApiEndpoints._();
   static const Duration connectionTimeout = Duration(seconds: 1000);
   static const Duration receiveTimeout = Duration(seconds: 1000);
-  static const String baseUrl = "http://10.0.2.2:3000/";
+  // static const String baseUrl = "http://10.0.2.2:3000/";
   // To Run in USB Connected Android Device:
-  // static const String baseUrl = "http://192.168.0.103:3000/";
+  static const String baseUrl = "http://192.168.1.75:3000/";
 
   // Routes for Auth
   static const String register = "auth/register";
@@ -19,4 +19,13 @@ class ApiEndpoints {
 
   // Routes for Student Profile Fetching
   static const String getStudentProfile = "api/student/profile";
+
+  // Routes for Wallet
+  static const String initiateTransaction = "api/transaction/initiate";
+  static const String verifyTransaction = "api/transaction/verify";
+  static const String getWalletBalance = "api/transaction/balance";
+  static const String getTransactions = "api/transaction/history";
+
+
+
 }

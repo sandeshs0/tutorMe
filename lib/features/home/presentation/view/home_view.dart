@@ -18,8 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Map<String, String>> _promoCards = [
     {
       'title': '25% OFF*',
-      'description':
-          'New Year Offer! Use Promo Code "Everest20" to get 25% off from Jan 1 - Jan 7.'
+      'description': 'New Year Offer! Get 25% off from Jan 1 - Jan 7.'
     },
     {
       'title': 'Exclusive Access',
