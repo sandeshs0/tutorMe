@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tutorme/app/shared_prefs/token_shared_prefs.dart';
 import 'package:tutorme/core/network/api_service.dart';
 import 'package:tutorme/core/network/hive_service.dart';
+import 'package:tutorme/core/services/notification_service.dart';
 import 'package:tutorme/core/services/socket_service.dart';
 import 'package:tutorme/features/auth/data/data_source/remote_data_source.dart/auth_remote_datasource.dart';
 import 'package:tutorme/features/auth/data/repository/remote_repository/auth_remote_repository.dart';
@@ -52,8 +53,8 @@ Future<void> initDependencies() async {
   _initHomeDependencies();
   _initWalletDependencies();
   _initNotificationDependencies();
-    _initSocketService();
-
+  // _initSocketService();
+  _initNotificationService();
 }
 
 void _initHiveService() {
@@ -159,10 +160,14 @@ void _initHomeDependencies() {
     () => HomeCubit(getAllTutorsUsecase: getIt<GetAllTutorsUsecase>()),
   );
 }
+
 void _initSocketService() {
-  final userId = getIt<TokenSharedPrefs>().getUserId(); // Retrieve logged-in user's ID
-  getIt.registerLazySingleton<SocketService>(() => SocketService(userId: "67ab301840c082415bc12e5a"));
+  final userId =
+      getIt<TokenSharedPrefs>().getUserId(); // Retrieve logged-in user's ID
+  getIt.registerLazySingleton<SocketService>(
+      () => SocketService(userId: "67ab301840c082415bc12e5a"));
 }
+
 void _initNotificationDependencies() {
   // Register Remote Data Source
   getIt.registerLazySingleton<NotificationRemoteDataSource>(() =>
@@ -185,7 +190,13 @@ void _initNotificationDependencies() {
   getIt.registerFactory(() => NotificationBloc(
         getNotificationsUsecase: getIt<GetNotificationsUsecase>(),
         markNotificationsAsReadUsecase: getIt<MarkNotificationsAsReadUsecase>(),
+        // socketService: getIt<SocketService>(),
+        notificationService: getIt<NotificationService>(),
       ));
+}
+
+void _initNotificationService() {
+  getIt.registerLazySingleton<NotificationService>(() => NotificationService());
 }
 
 void _initWalletDependencies() {

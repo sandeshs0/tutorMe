@@ -71,6 +71,11 @@ class _NotificationScreenState extends State<NotificationScreen> {
                         content: Text(state.message,
                             style: const TextStyle(color: Colors.white))),
                   );
+                } else if (state is NotificationLoaded) {
+                  setState(() {
+                    notifications = state
+                        .notifications; // ✅ Update UI when new notifications arrive
+                  });
                 }
               },
               child: BlocBuilder<NotificationBloc, NotificationState>(
@@ -150,10 +155,14 @@ class _NotificationScreenState extends State<NotificationScreen> {
   }
 
   /// **Marks all notifications as read in the UI**
+  // void _markAllAsRead() {
+  //   setState(() {
+  //     notifications =
+  //         notifications.map((n) => n.copyWith(isRead: true)).toList();
+  //   });
+  // }
+  
   void _markAllAsRead() {
-    setState(() {
-      notifications =
-          notifications.map((n) => n.copyWith(isRead: true)).toList();
-    });
+    context.read<NotificationBloc>().add(MarkNotificationsAsReadEvent());
   }
 }
