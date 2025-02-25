@@ -6,6 +6,7 @@ import 'package:tutorme/core/app_theme/app_theme.dart';
 import 'package:tutorme/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:tutorme/features/auth/presentation/view_model/register/register_bloc.dart';
 import 'package:tutorme/features/home/presentation/view_model/home_cubit.dart';
+import 'package:tutorme/features/notifications/presentation/view_model/notification_bloc.dart';
 import 'package:tutorme/features/student/presentation/view_model/bloc/student_profile_bloc.dart';
 import 'package:tutorme/features/wallet/presentation/view_model/bloc/wallet_bloc.dart';
 import 'package:tutorme/view/splash_view.dart';
@@ -41,6 +42,9 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider<WalletBloc>(
             create: (_) => getIt<WalletBloc>(),
+          ),
+          BlocProvider<NotificationBloc>(
+            create: (_) => getIt<NotificationBloc>(),
           ),
           BlocProvider<HomeCubit>(
             create: (_) => getIt<HomeCubit>(),

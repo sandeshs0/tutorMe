@@ -4,6 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tutorme/app/shared_prefs/token_shared_prefs.dart';
 import 'package:tutorme/core/network/api_service.dart';
 import 'package:tutorme/core/network/hive_service.dart';
+import 'package:tutorme/core/services/notification_service.dart';
+import 'package:tutorme/core/services/socket_service.dart';
 import 'package:tutorme/features/auth/data/data_source/remote_data_source.dart/auth_remote_datasource.dart';
 import 'package:tutorme/features/auth/data/repository/remote_repository/auth_remote_repository.dart';
 import 'package:tutorme/features/auth/domain/use_case/login_usecase.dart';
@@ -12,6 +14,12 @@ import 'package:tutorme/features/auth/domain/use_case/verify_usecase.dart';
 import 'package:tutorme/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:tutorme/features/auth/presentation/view_model/register/register_bloc.dart';
 import 'package:tutorme/features/home/presentation/view_model/home_cubit.dart';
+import 'package:tutorme/features/notifications/data/datasource/remote_datasource/notification_remote_datasource.dart';
+import 'package:tutorme/features/notifications/data/repository/notification_remote_repository.dart';
+import 'package:tutorme/features/notifications/domain/repository/notification_repository.dart';
+import 'package:tutorme/features/notifications/domain/usecase/get_notification_usecase.dart';
+import 'package:tutorme/features/notifications/domain/usecase/mark_notification_usecase.dart';
+import 'package:tutorme/features/notifications/presentation/view_model/notification_bloc.dart';
 import 'package:tutorme/features/student/data/data_source/repository/remote_repository/student_remote_repository.dart';
 import 'package:tutorme/features/student/data/data_source/student_remote_data_source.dart/student_remote_data_source.dart';
 import 'package:tutorme/features/student/domain/repository/student_repository.dart';
@@ -40,10 +48,13 @@ Future<void> initDependencies() async {
   _initSharedPreferences();
 
   _initAuthDependencies();
-  _initTutorDependencies(); // ✅ Add this before HomeCubit
+  _initTutorDependencies();
   _initStudentProfileDependencies();
   _initHomeDependencies();
-  _initWalletDependencies(); // ✅ Register Wallet Dependencies
+  _initWalletDependencies();
+  _initNotificationDependencies();
+  // _initSocketService();
+  _initNotificationService();
 }
 
 void _initHiveService() {
@@ -148,6 +159,44 @@ void _initHomeDependencies() {
   getIt.registerFactory<HomeCubit>(
     () => HomeCubit(getAllTutorsUsecase: getIt<GetAllTutorsUsecase>()),
   );
+}
+
+void _initSocketService() {
+  final userId =
+      getIt<TokenSharedPrefs>().getUserId(); // Retrieve logged-in user's ID
+  getIt.registerLazySingleton<SocketService>(
+      () => SocketService(userId: "67ab301840c082415bc12e5a"));
+}
+
+void _initNotificationDependencies() {
+  // Register Remote Data Source
+  getIt.registerLazySingleton<NotificationRemoteDataSource>(() =>
+      NotificationRemoteDataSource(
+          dio: getIt<Dio>(), tokenSharedPrefs: getIt<TokenSharedPrefs>()));
+
+  // Register Repository
+  getIt.registerLazySingleton<INotificationRepository>(() =>
+      NotificationRemoteRepository(getIt<NotificationRemoteDataSource>()));
+
+  // Register Use Cases
+  getIt.registerLazySingleton<GetNotificationsUsecase>(() =>
+      GetNotificationsUsecase(
+          notificationRepository: getIt<INotificationRepository>()));
+
+  getIt.registerLazySingleton<MarkNotificationsAsReadUsecase>(() =>
+      MarkNotificationsAsReadUsecase(
+          notificationRepository: getIt<INotificationRepository>()));
+
+  getIt.registerFactory(() => NotificationBloc(
+        getNotificationsUsecase: getIt<GetNotificationsUsecase>(),
+        markNotificationsAsReadUsecase: getIt<MarkNotificationsAsReadUsecase>(),
+        // socketService: getIt<SocketService>(),
+        notificationService: getIt<NotificationService>(),
+      ));
+}
+
+void _initNotificationService() {
+  getIt.registerLazySingleton<NotificationService>(() => NotificationService());
 }
 
 void _initWalletDependencies() {
