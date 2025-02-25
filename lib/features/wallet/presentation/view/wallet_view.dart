@@ -20,28 +20,46 @@ class _WalletViewState extends State<WalletView> {
   void initState() {
     super.initState();
     context.read<WalletBloc>().add(FetchWalletDetails());
-    const payConfig = KhaltiPayConfig(
-      publicKey: 'your_public_key', // Replace with your actual public key
-      pidx: 'your_generated_pidx', // Replace with the pidx from your backend
-      environment: Environment.test, // Use Environment.prod for production
-    );
-
+    // const payConfig = KhaltiPayConfig(
+    //   publicKey: 'your_public_key', // Replace with your actual public key
+    //   pidx: 'your_generated_pidx', // Replace with the pidx from your backend
+    //   environment: Environment.test, // Use Environment.prod for production
+    // );
     khalti = Khalti.init(
       enableDebugging: true,
-      payConfig: payConfig,
+      payConfig: const KhaltiPayConfig(
+        publicKey: '0b353ee393f14dd48743e73b7306ed14',
+        pidx: '',
+        environment: Environment.test,
+      ),
+      //   final payConfig = KhaltiPayConfig(
+      //   publicKey: '0b353ee393f14dd48743e73b7306ed14',
+      //   pidx: state.transaction.pidx ?? "",
+      //   environment: Environment
+      //       .test, // ✅ Use Environment.prod for production
+      // );
       onPaymentResult: (paymentResult, khalti) {
-        // Handle payment result
-        print(paymentResult.toString());
+        debugPrint("✅ Payment Result: ${paymentResult.payload}");
+
+        context.read<WalletBloc>().add(
+              VerifyTransaction(
+                  pidx: paymentResult.payload!.pidx!, transactionId: ''),
+            );
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Payment Successful!")),
+        );
         khalti.close(context);
       },
       onMessage: (khalti,
           {description, statusCode, event, needsPaymentConfirmation}) async {
-        // Handle messages
-        print(
-            'Description: $description, Status Code: $statusCode, Event: $event, NeedsPaymentConfirmation: $needsPaymentConfirmation');
-        khalti.close(context);
+        //   if (needsPaymentConfirmation) {
+        //     await khalti
+        //         .verify(); // ✅ Manually verify if needed
+        //   }
+        //   khalti.close(context);
+        // },
       },
-      onReturn: () => print('Successfully redirected to return_url.'),
+      onReturn: () => debugPrint('Successfully redirected to return_url.'),
     );
   }
 
@@ -246,6 +264,117 @@ class _WalletViewState extends State<WalletView> {
   //   );
   // }
 
+  // void _showLoadWalletBottomSheet() {
+  //   TextEditingController amountController = TextEditingController();
+
+  //   showModalBottomSheet(
+  //     context: context,
+  //     shape: const RoundedRectangleBorder(
+  //       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+  //     ),
+  //     builder: (context) {
+  //       return Padding(
+  //         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+  //         child: Column(
+  //           mainAxisSize: MainAxisSize.min,
+  //           children: [
+  //             const Text("Enter Amount",
+  //                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+  //             const SizedBox(height: 15),
+  //             TextField(
+  //               controller: amountController,
+  //               keyboardType: TextInputType.number,
+  //               decoration: InputDecoration(
+  //                 labelText: "Enter amount",
+  //                 prefixIcon: const Icon(FontAwesomeIcons.coins),
+  //                 border: OutlineInputBorder(
+  //                     borderRadius: BorderRadius.circular(12)),
+  //               ),
+  //             ),
+  //             const SizedBox(height: 10),
+  //             ElevatedButton(
+  //               onPressed: () {
+  //                 final amount = double.tryParse(amountController.text) ?? 0;
+  //                 if (amount >= 50) {
+  //                   debugPrint("🟢 Initiating transaction for amount: $amount");
+
+  //                   context.read<WalletBloc>().add(
+  //                         InitiateTransaction(
+  //                           amount: amount,
+  //                           paymentGateway: "Khalti",
+  //                         ),
+  //                       );
+
+  //                   context.read<WalletBloc>().stream.listen((state) async {
+  //                     if (state is TransactionInitiated) {
+  //                       debugPrint(
+  //                           "✅ Transaction Initiated, Opening Khalti Checkout...");
+
+  //                       final payConfig = KhaltiPayConfig(
+  //                         publicKey: 'your_public_key',
+  //                         pidx: state.transaction.pidx ?? "",
+  //                         environment: Environment
+  //                             .test, // ✅ Use Environment.prod for production
+  //                       );
+
+  //                       final khalti = await Khalti.init(
+  //                         enableDebugging: true,
+  //                         payConfig: payConfig,
+  //                         onPaymentResult: (paymentResult, khalti) {
+  //                           debugPrint(
+  //                               "✅ Payment Result: ${paymentResult.payload}");
+
+  //                           context.read<WalletBloc>().add(
+  //                                 VerifyTransaction(
+  //                                   pidx: paymentResult.payload!.pidx!,
+  //                                   transactionId:
+  //                                       state.transaction.transactionId ?? "",
+  //                                 ),
+  //                               );
+  //                           ScaffoldMessenger.of(context).showSnackBar(
+  //                             const SnackBar(
+  //                                 content: Text("Payment Successful!")),
+  //                           );
+  //                           khalti.close(context);
+  //                         },
+  //                         onMessage: (khalti,
+  //                             {description,
+  //                             statusCode,
+  //                             event,
+  //                             needsPaymentConfirmation}) async {
+  //                           //   if (needsPaymentConfirmation) {
+  //                           //     await khalti
+  //                           //         .verify(); // ✅ Manually verify if needed
+  //                           //   }
+  //                           //   khalti.close(context);
+  //                           // },
+  //                         },
+  //                         onReturn: () => debugPrint(
+  //                             'Successfully redirected to return_url.'),
+  //                       );
+
+  //                       debugPrint("🟢 Opening Khalti Checkout...");
+  //                       khalti.open(context);
+  //                     }
+  //                   });
+
+  //                   Navigator.pop(context);
+  //                 } else {
+  //                   ScaffoldMessenger.of(context).showSnackBar(
+  //                     const SnackBar(
+  //                         content: Text("Amount must be greater than 50.")),
+  //                   );
+  //                 }
+  //               },
+  //               child: const Text("Pay with Khalti"),
+  //             ),
+  //           ],
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+
   void _showLoadWalletBottomSheet() {
     TextEditingController amountController = TextEditingController();
 
@@ -274,101 +403,97 @@ class _WalletViewState extends State<WalletView> {
                 ),
               ),
               const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text("Close", style: TextStyle(fontSize: 16)),
-                  ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      final amount =
-                          double.tryParse(amountController.text) ?? 0;
-                      if (amount >= 50) {
-                        // ✅ Step 1: Call Backend API to Get `pidx`
-                        context.read<WalletBloc>().add(
-                              InitiateTransaction(
-                                amount: amount,
-                                paymentGateway: "Khalti",
-                              ),
-                            );
+              ElevatedButton(
+                onPressed: () {
+                  final amount = double.tryParse(amountController.text) ?? 0;
+                  if (amount >= 50) {
+                    debugPrint("🟢 Initiating transaction for amount: $amount");
 
-                        context.read<WalletBloc>().stream.listen((state) async {
-                          if (state is TransactionInitiated) {
-                            // ✅ Step 2: Open Khalti Checkout
-                            const payConfig = KhaltiPayConfig(
-                              publicKey:
-                                  'your_public_key', // Replace with actual key
-                              // pidx: state.transaction.pidx,
-                              pidx: "lll",
-                              environment: Environment
-                                  .test, // Use Environment.prod for production
-                            );
+                    context.read<WalletBloc>().add(
+                          InitiateTransaction(
+                            amount: amount,
+                            paymentGateway: "Khalti",
+                          ),
+                        );
 
-                            final khalti = await Khalti.init(
-                              enableDebugging: true,
-                              payConfig: payConfig,
-                              onPaymentResult: (paymentResult, khalti) {
-                                // ✅ Step 3: Verify Transaction
-                                context.read<WalletBloc>().add(
-                                      VerifyTransaction(
-                                          pidx: paymentResult.payload!.pidx!,
-                                          transactionId:
-                                              //     state.transaction.transactionId,
-                                              // transactionId:
-                                              "111"),
-                                    );
+                    context.read<WalletBloc>().stream.listen((state) async {
+                      if (state is TransactionInitiated) {
+                        debugPrint(
+                            "✅ Transaction Initiated, Opening Khalti Checkout...");
+                        final safeContext = Navigator.of(context)
+                            .overlay!
+                            .context; // Ensure valid context
 
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text("Payment Successful!")),
+                        final updatedPayConfig = KhaltiPayConfig(
+                          publicKey: '0b353ee393f14dd48743e73b7306ed14',
+                          pidx: state.transaction.pidx ?? "",
+                          environment: Environment
+                              .test, // ✅ Use Environment.prod for production
+                        );
+
+                        // await khalti.then((k) {
+                        //   k.payConfig=updatedPayConfig;
+                        //   k.open(safeContext);
+                        // });
+                        // Might work
+                        await Khalti.init(
+                          enableDebugging: true,
+                          payConfig: KhaltiPayConfig(
+                            publicKey: '0b353ee393f14dd48743e73b7306ed14',
+                            pidx: state.transaction.pidx ?? "",
+                            environment: Environment
+                                .test, // ✅ Use Environment.prod for production
+                          ),
+                          onPaymentResult: (paymentResult, khalti) {
+                            debugPrint(
+                                "✅ Payment Result: ${paymentResult.payload}");
+
+                            context.read<WalletBloc>().add(
+                                  VerifyTransaction(
+                                    pidx: paymentResult.payload!.pidx!,
+                                    transactionId:
+                                        state.transaction.transactionId ?? "",
+                                  ),
                                 );
-                                khalti.close(context);
-                              },
-                              onMessage: (khalti,
-                                  {description,
-                                  statusCode,
-                                  event,
-                                  needsPaymentConfirmation}) async {
-                                //   if (needsPaymentConfirmation) {
-                                //     await khalti
-                                //         .verify(); // ✅ Manually verify if needed
-                                //   }
-                                //   khalti.close(context);
-                                // },
-                              },
-                              onReturn: () => debugPrint(
-                                  'Successfully redirected to return_url.'),
-                            );
 
-                            // ✅ Step 4: Open Khalti Payment Page
-                            khalti.open(context);
-                          }
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text("Payment Successful!")),
+                            );
+                            khalti.close(context);
+                          },
+                          onMessage: (khalti,
+                              {description,
+                              statusCode,
+                              event,
+                              needsPaymentConfirmation}) async {
+                            debugPrint(
+                                '🔴 Error: $description, Status Code: $statusCode, Event: $event, Needs Confirmation: $needsPaymentConfirmation');
+                          },
+                          onReturn: () => debugPrint(
+                              '✅ Successfully redirected to return_url.'),
+                        ).then((k) {
+                          debugPrint("🟢 Opening Khalti Checkout...");
+                          k.open(safeContext);
                         });
 
+                        // Migh work
+
                         Navigator.pop(context);
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text("Amount must be greater than 50.")),
-                        );
+                        debugPrint("🟢 Opening Khalti Checkout...");
+                        // khalti.open(navigatorContext);
                       }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 99, 2, 117),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 12),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12)),
-                    ),
-                    child: const Text("Pay with Khalti",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold)),
-                  ),
-                ],
+                    });
+
+                    Navigator.pop(context);
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text("Amount must be greater than 50.")),
+                    );
+                  }
+                },
+                child: const Text("Pay with Khalti"),
               ),
             ],
           ),

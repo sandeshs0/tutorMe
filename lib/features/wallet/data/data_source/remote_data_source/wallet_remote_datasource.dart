@@ -4,6 +4,7 @@ import 'package:tutorme/app/shared_prefs/token_shared_prefs.dart';
 import 'package:tutorme/core/error/failure.dart';
 import 'package:tutorme/features/wallet/data/data_source/wallet_data_source.dart';
 import 'package:tutorme/features/wallet/data/dto/get_wallet_details_dto.dart';
+import 'package:tutorme/features/wallet/data/dto/initiate_transaction_dto.dart';
 import 'package:tutorme/features/wallet/data/dto/transaction_dto.dart';
 import 'package:tutorme/features/wallet/domain/entity/transaction_entity.dart';
 import 'package:tutorme/features/wallet/domain/entity/wallet_entity.dart';
@@ -49,7 +50,7 @@ class WalletRemoteDataSource implements IWalletDataSource {
 
   /// **🔹 Initiate a Payment Transaction**
   @override
-  Future<String> initiateTransaction({
+  Future<InitiateTransactionDTO> initiateTransaction({
     required double amount,
     required String paymentGateway,
   }) async {
@@ -73,7 +74,7 @@ class WalletRemoteDataSource implements IWalletDataSource {
       );
 
       if (response.statusCode == 201) {
-        return response.data["payment_url"];
+      return InitiateTransactionDTO.fromJson(response.data); // ✅ Return DTO with pidx
       } else {
         throw const ApiFailure(message: "Failed to initiate transaction.");
       }

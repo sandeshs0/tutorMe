@@ -15,10 +15,21 @@ class InitiateTransaction extends WalletEvent {
   final double amount;
   final String paymentGateway;
 
-  const InitiateTransaction({required this.amount, required this.paymentGateway});
+  const InitiateTransaction(
+      {required this.amount, required this.paymentGateway});
 
   @override
   List<Object?> get props => [amount, paymentGateway];
+}
+
+class TransactionInitiatedEvent extends WalletEvent {
+  final TransactionEntity
+      transaction; // ✅ Now stores `TransactionEntity` including `pidx`
+
+  const TransactionInitiatedEvent({required this.transaction});
+
+  @override
+  List<Object?> get props => [transaction];
 }
 
 // Verify transaction

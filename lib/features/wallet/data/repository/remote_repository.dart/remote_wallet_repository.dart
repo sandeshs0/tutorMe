@@ -1,6 +1,8 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 import 'package:tutorme/core/error/failure.dart';
 import 'package:tutorme/features/wallet/data/data_source/wallet_data_source.dart';
+import 'package:tutorme/features/wallet/data/dto/initiate_transaction_dto.dart';
 import 'package:tutorme/features/wallet/domain/entity/transaction_entity.dart';
 import 'package:tutorme/features/wallet/domain/entity/wallet_entity.dart';
 import 'package:tutorme/features/wallet/domain/repository/wallet_repository.dart';
@@ -24,21 +26,34 @@ class WalletRemoteRepository implements IWalletRepository {
 
   /// 🔹 Initiate a Transaction
   @override
-  Future<Either<Failure, String>> initiateTransaction({
+  Future<Either<Failure, TransactionEntity>> initiateTransaction({
     required double amount,
     required String paymentGateway,
   }) async {
     try {
-      final paymentUrl = await _walletDataSource.initiateTransaction(
+      final InitiateTransactionDTO transactionDTO =
+          await _walletDataSource.initiateTransaction(
         amount: amount,
         paymentGateway: paymentGateway,
       );
-      return Right(paymentUrl);
+      final transactionEntity = TransactionEntity(
+        transactionId: transactionDTO.transactionId,
+        pidx: transactionDTO.pidx, // ✅ Use `pidx` in Entity
+        paymentDate: DateTime.now().toIso8601String(),
+        paymentGateway: paymentGateway,
+        amount: amount,
+      );
+
+      debugPrint("🔵 Received pidx: ${transactionDTO.pidx}");
+      debugPrint("🔵 Received paymentUrl: ${transactionDTO.paymentUrl}");
+      debugPrint("🔵 Received transactionId: ${transactionDTO.transactionId}");
+
+      return Right(transactionEntity);
     } catch (e) {
       return Left(ApiFailure(message: "Failed to initiate transaction: $e"));
     }
   }
-
+  
   /// 🔹 Verify a Transaction
   @override
   Future<Either<Failure, bool>> verifyTransaction({
