@@ -64,6 +64,7 @@ dependencies:
   light_sensor: ^3.0.1
   light: ^4.0.0
   khalti_checkout_flutter: ^1.0.0-dev.8
+  webview_flutter: ^4.10.0
 
 dev_dependencies:
   flutter_test:
