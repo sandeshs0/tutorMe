@@ -653,6 +653,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.1"
+  light:
+    dependency: "direct main"
+    description:
+      name: light
+      sha256: "0f2f4b17e12eb01d5c731f05a306eefa346501b07244c596349549372e44d765"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.0"
+  light_sensor:
+    dependency: "direct main"
+    description:
+      name: light_sensor
+      sha256: "84cdab036e87f1e7310bc0f1c30bb3ce661b581c8695fb9d5a4af32c8b0c2c2b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.1"
   lints:
     dependency: transitive
     description:
@@ -933,6 +949,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.5.0"
+  sensors_plus:
+    dependency: "direct main"
+    description:
+      name: sensors_plus
+      sha256: "905282c917c6bb731c242f928665c2ea15445aa491249dea9d98d7c79dc8fd39"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.1.1"
+  sensors_plus_platform_interface:
+    dependency: transitive
+    description:
+      name: sensors_plus_platform_interface
+      sha256: "58815d2f5e46c0c41c40fb39375d3f127306f7742efe3b891c0b1c87e2b5cd5d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.1"
   shared_preferences:
     dependency: "direct main"
     description:

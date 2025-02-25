@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tutorme/app/shared_prefs/token_shared_prefs.dart';
+import 'package:tutorme/bloc/theme_cubit.dart';
 import 'package:tutorme/core/network/api_service.dart';
 import 'package:tutorme/core/network/hive_service.dart';
 import 'package:tutorme/core/services/notification_service.dart';
@@ -55,10 +56,15 @@ Future<void> initDependencies() async {
   _initNotificationDependencies();
   // _initSocketService();
   _initNotificationService();
+  _initThemeCubit();
 }
 
 void _initHiveService() {
   getIt.registerLazySingleton<HiveService>(() => HiveService());
+}
+
+void _initThemeCubit() {
+  getIt.registerLazySingleton<ThemeCubit>(() => ThemeCubit());
 }
 
 void _initTutorDependencies() {

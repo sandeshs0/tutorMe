@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tutorme/app/di/di.dart';
+import 'package:tutorme/bloc/theme_cubit.dart';
 import 'package:tutorme/bloc/tutor_bloc.dart';
 import 'package:tutorme/core/app_theme/app_theme.dart';
 import 'package:tutorme/features/auth/presentation/view_model/login/login_bloc.dart';
@@ -49,16 +50,24 @@ class MyApp extends StatelessWidget {
           BlocProvider<HomeCubit>(
             create: (_) => getIt<HomeCubit>(),
           ),
+          BlocProvider<ThemeCubit>(
+              create: (_) => getIt<ThemeCubit>()), // ✅ Register ThemeCubit
         ],
-        child: MaterialApp(
-          title: 'TutorMe',
-          // theme: ThemeData(primaryColor: const Color(0xFF0961F5)),
-          theme: getApplicationTheme(),
-          darkTheme: getDarkTheme(),
-          home: const SplashScreen(),
-          themeMode: ThemeMode.system, // or ThemeMode.dark / ThemeMode.light
-
-          debugShowCheckedModeBanner: false,
-        ));
+        child: Builder(builder: (context) {
+          return BlocBuilder<ThemeCubit, ThemeMode>(
+            builder: (context, themeMode) {
+              debugPrint("🎨 ThemeMode Updated: $themeMode");
+              return MaterialApp(
+                title: 'TutorMe',
+                // theme: ThemeData(primaryColor: const Color(0xFF0961F5)),
+                theme: getApplicationTheme(),
+                darkTheme: getDarkTheme(),
+                home: const SplashScreen(),
+                themeMode: themeMode,
+                debugShowCheckedModeBanner: false,
+              );
+            },
+          );
+        }));
   }
 }
