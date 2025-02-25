@@ -63,6 +63,7 @@ dependencies:
   sensors_plus: ^6.1.1
   light_sensor: ^3.0.1
   light: ^4.0.0
+  khalti_checkout_flutter: ^1.0.0-dev.8
 
 dev_dependencies:
   flutter_test:
