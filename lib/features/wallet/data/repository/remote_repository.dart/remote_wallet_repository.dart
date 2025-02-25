@@ -39,6 +39,7 @@ class WalletRemoteRepository implements IWalletRepository {
       final transactionEntity = TransactionEntity(
         transactionId: transactionDTO.transactionId,
         pidx: transactionDTO.pidx, // ✅ Use `pidx` in Entity
+        paymentUrl: transactionDTO.paymentUrl,
         paymentDate: DateTime.now().toIso8601String(),
         paymentGateway: paymentGateway,
         amount: amount,
@@ -53,7 +54,7 @@ class WalletRemoteRepository implements IWalletRepository {
       return Left(ApiFailure(message: "Failed to initiate transaction: $e"));
     }
   }
-  
+
   /// 🔹 Verify a Transaction
   @override
   Future<Either<Failure, bool>> verifyTransaction({
