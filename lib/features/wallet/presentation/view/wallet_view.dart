@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:khalti_checkout_flutter/khalti_checkout_flutter.dart';
 import 'package:tutorme/features/wallet/presentation/view/transaction_history_screen.dart';
 import 'package:tutorme/features/wallet/presentation/view_model/bloc/wallet_bloc.dart';
 
@@ -13,10 +14,35 @@ class WalletView extends StatefulWidget {
 }
 
 class _WalletViewState extends State<WalletView> {
+  late final Future<Khalti> khalti;
+
   @override
   void initState() {
     super.initState();
     context.read<WalletBloc>().add(FetchWalletDetails());
+    const payConfig = KhaltiPayConfig(
+      publicKey: 'your_public_key', // Replace with your actual public key
+      pidx: 'your_generated_pidx', // Replace with the pidx from your backend
+      environment: Environment.test, // Use Environment.prod for production
+    );
+
+    khalti = Khalti.init(
+      enableDebugging: true,
+      payConfig: payConfig,
+      onPaymentResult: (paymentResult, khalti) {
+        // Handle payment result
+        print(paymentResult.toString());
+        khalti.close(context);
+      },
+      onMessage: (khalti,
+          {description, statusCode, event, needsPaymentConfirmation}) async {
+        // Handle messages
+        print(
+            'Description: $description, Status Code: $statusCode, Event: $event, NeedsPaymentConfirmation: $needsPaymentConfirmation');
+        khalti.close(context);
+      },
+      onReturn: () => print('Successfully redirected to return_url.'),
+    );
   }
 
   @override

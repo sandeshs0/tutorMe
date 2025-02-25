@@ -77,9 +77,11 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
     );
 
     result.fold(
-      (failure) => emit(WalletError(message: _mapFailureToMessage(failure))),
-      (_) => emit(TransactionVerified()),
-    );
+        (failure) => emit(WalletError(message: _mapFailureToMessage(failure))),
+        (_) {
+      emit(TransactionVerified());
+      add(FetchWalletDetails()); // ✅ Refresh Wallet Balance after payment
+    });
   }
 
   /// 🔹 Fetch Transaction History
