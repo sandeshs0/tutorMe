@@ -60,10 +60,18 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
       paymentGateway: event.paymentGateway,
     );
 
+    // result.fold(
+    //   (failure) => emit(WalletError(message: _mapFailureToMessage(failure))),
+    //   (paymentUrl) => emit(TransactionInitiated(paymentUrl: paymentUrl)),
+    // );
     result.fold(
-      (failure) => emit(WalletError(message: _mapFailureToMessage(failure))),
-      (paymentUrl) => emit(TransactionInitiated(paymentUrl: paymentUrl)),
-    );
+    (failure) => emit(WalletError(message: _mapFailureToMessage(failure))),
+    (transaction) {
+      // ✅ `pidx` received, now use KhaltiCheckout
+      emit(TransactionInitiated(transaction: transaction));
+    },
+  );
+
   }
 
   /// 🔹 Verify Transaction
