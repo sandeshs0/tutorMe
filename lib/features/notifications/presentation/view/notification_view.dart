@@ -140,7 +140,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
       ),
     );
   }
-
+  
   /// **✅ Improved Notification UI with Modern Card Design**
   Widget _buildNotificationList(List<NotificationEntity> notifications) {
     final theme = Theme.of(context);
