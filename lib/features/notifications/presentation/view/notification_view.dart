@@ -1,6 +1,10 @@
+import 'dart:async';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:sensors_plus/sensors_plus.dart';
 import 'package:tutorme/features/notifications/domain/entity/notification_entity.dart';
 import 'package:tutorme/features/notifications/presentation/view_model/notification_bloc.dart';
 
@@ -13,12 +17,49 @@ class NotificationScreen extends StatefulWidget {
 
 class _NotificationScreenState extends State<NotificationScreen> {
   late List<NotificationEntity> notifications;
+  AccelerometerEvent? _accelerometerEvent;
+  final _streamSubscriptions = <StreamSubscription<dynamic>>[];
+  static const double shakeThreshold = 15.0; // Adjust shake sensitivity
+  bool hasShaken = false; // To prevent multiple triggers
 
   @override
   void initState() {
     super.initState();
     context.read<NotificationBloc>().add(FetchNotificationsEvent());
     notifications = []; // Initialize empty list
+    // ✅ Listen for accelerometer events
+    _streamSubscriptions.add(
+      accelerometerEventStream().listen(
+        (AccelerometerEvent event) {
+          setState(() {
+            _accelerometerEvent = event;
+          });
+
+          // Calculate the total acceleration
+          double acceleration =
+              sqrt(event.x * event.x + event.y * event.y + event.z * event.z);
+
+          // If acceleration exceeds threshold, trigger mark as read
+          if (acceleration > shakeThreshold && !hasShaken) {
+            hasShaken = true;
+            _markAllAsRead();
+            Future.delayed(const Duration(seconds: 1), () => hasShaken = false);
+          }
+        },
+        onError: (e) {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return const AlertDialog(
+                  title: Text("Sensor Not Found"),
+                  content: Text(
+                      "It seems that your device doesn't support the Accelerometer Sensor."),
+                );
+              });
+        },
+        cancelOnError: true,
+      ),
+    );
   }
 
   @override
@@ -161,7 +202,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   //         notifications.map((n) => n.copyWith(isRead: true)).toList();
   //   });
   // }
-  
+
   void _markAllAsRead() {
     context.read<NotificationBloc>().add(MarkNotificationsAsReadEvent());
   }
