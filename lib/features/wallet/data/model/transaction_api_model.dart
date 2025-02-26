@@ -37,5 +37,6 @@ class TransactionApiModel extends Equatable {
   }
 
   @override
-  List<Object?> get props => [transactionId, amount, paymentGateway, paymentDate];
+  List<Object?> get props =>
+      [transactionId, amount, paymentGateway, paymentDate];
 }

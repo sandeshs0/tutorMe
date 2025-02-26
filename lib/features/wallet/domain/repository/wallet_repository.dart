@@ -5,7 +5,7 @@ import 'package:tutorme/features/wallet/domain/entity/wallet_entity.dart';
 
 abstract class IWalletRepository {
   Future<Either<Failure, WalletEntity>> getWalletDetails();
-  Future<Either<Failure, String>> initiateTransaction({
+  Future<Either<Failure, TransactionEntity>> initiateTransaction({
     required double amount,
     required String paymentGateway,
   });

@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:tutorme/core/error/failure.dart';
+import 'package:tutorme/features/wallet/domain/entity/transaction_entity.dart';
 import 'package:tutorme/features/wallet/domain/repository/wallet_repository.dart';
 
 class InitiateTransactionUsecase {
@@ -7,7 +8,7 @@ class InitiateTransactionUsecase {
 
   InitiateTransactionUsecase({required this.repository});
 
-  Future<Either<Failure, String>> call({
+  Future<Either<Failure, TransactionEntity>> call({
     required double amount,
     required String paymentGateway,
   }) async {

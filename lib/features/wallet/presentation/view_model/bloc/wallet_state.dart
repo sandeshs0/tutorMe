@@ -27,14 +27,26 @@ class WalletLoaded extends WalletState {
 }
 
 // Transaction initiation success
-class TransactionInitiated extends WalletState {
-  final String paymentUrl;
+// class TransactionInitiated extends WalletState {
+//   // final String paymentUrl;
+//   final String transaction;
+//   // const TransactionInitiated({required this.paymentUrl});
+//   const TransactionInitiated({required this.transaction});
 
-  const TransactionInitiated({required this.paymentUrl});
+//   @override
+//   List<Object?> get props => [transaction];
+//   // List<Object?> get props => [paymentUrl];
+// }
+// Transaction initiation success
+class TransactionInitiated extends WalletState {
+  final TransactionEntity transaction; // ✅ Store full TransactionEntity including `pidx`
+
+  const TransactionInitiated({required this.transaction});
 
   @override
-  List<Object?> get props => [paymentUrl];
+  List<Object?> get props => [transaction];
 }
+
 
 // Transaction verification success
 class TransactionVerified extends WalletState {}
