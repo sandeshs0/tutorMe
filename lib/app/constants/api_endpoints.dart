@@ -29,4 +29,8 @@ class ApiEndpoints {
 // Routes for Notification
   static const String fetchNotifications = "api/notifications";
   static const String readNotification = "api/notifications/mark-read";
+
+  // Routes for Booking:
+  static String createBooking= "api/bookings/request";
+  static String getStudentBookings= "api/bookings/student";
 }

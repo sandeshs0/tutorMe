@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tutorme/features/booking/presentation/view/confirm_booking_view.dart';
 import 'package:tutorme/features/tutors/domain/entity/tutor_entity.dart';
 
 class TutorProfileView extends StatefulWidget {
@@ -57,7 +58,12 @@ class _TutorProfileViewState extends State<TutorProfileView> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          // Your onPressed code here
+         Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BookingConfirmationView(tutor: widget.tutor),
+      ),
+    );
         },
         backgroundColor: const Color(0xFF0961F5),
         shape: RoundedRectangleBorder(
