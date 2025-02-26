@@ -58,12 +58,12 @@ class _TutorProfileViewState extends State<TutorProfileView> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-         Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => BookingConfirmationView(tutor: widget.tutor),
-      ),
-    );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => BookingConfirmationView(tutor: tutor),
+            ),
+          );
         },
         backgroundColor: const Color(0xFF0961F5),
         shape: RoundedRectangleBorder(
