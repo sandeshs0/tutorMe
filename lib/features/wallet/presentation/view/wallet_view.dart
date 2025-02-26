@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:khalti_checkout_flutter/khalti_checkout_flutter.dart';
-import 'package:tutorme/features/wallet/presentation/view/khalti_webview.dart';
 import 'package:tutorme/features/wallet/presentation/view/transaction_history_screen.dart';
 import 'package:tutorme/features/wallet/presentation/view_model/bloc/wallet_bloc.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class WalletView extends StatefulWidget {
   const WalletView({super.key});
@@ -615,85 +615,6 @@ class _WalletViewState extends State<WalletView> {
   //   );
   // }
 
-  // void _showLoadWalletBottomSheet() {
-  //   TextEditingController amountController = TextEditingController();
-
-  //   showModalBottomSheet(
-  //     context: context,
-  //     shape: const RoundedRectangleBorder(
-  //       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-  //     ),
-  //     builder: (context) {
-  //       return Padding(
-  //         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-  //         child: Column(
-  //           mainAxisSize: MainAxisSize.min,
-  //           children: [
-  //             const Text("Enter Amount",
-  //                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-  //             const SizedBox(height: 15),
-  //             TextField(
-  //               controller: amountController,
-  //               keyboardType: TextInputType.number,
-  //               decoration: InputDecoration(
-  //                 labelText: "Enter amount",
-  //                 prefixIcon: const Icon(FontAwesomeIcons.coins),
-  //                 border: OutlineInputBorder(
-  //                     borderRadius: BorderRadius.circular(12)),
-  //               ),
-  //             ),
-  //             const SizedBox(height: 10),
-  //             ElevatedButton(
-  //               onPressed: () {
-  //                 final amount = double.tryParse(amountController.text) ?? 0;
-  //                 if (amount >= 50) {
-  //                   debugPrint("🟢 Initiating transaction for amount: $amount");
-
-  //                   context.read<WalletBloc>().add(
-  //                         InitiateTransaction(
-  //                           amount: amount,
-  //                           paymentGateway: "Khalti",
-  //                         ),
-  //                       );
-
-  //                   context.read<WalletBloc>().stream.listen((state) async {
-  //                     if (state is TransactionInitiated) {
-  //                       debugPrint(
-  //                           "✅ Transaction Initiated, Opening Khalti in browser...");
-
-  //                       final paymentUrl = state.transaction.paymentUrl ?? "";
-  //                       if (paymentUrl.isNotEmpty) {
-  //                         debugPrint("🌍 Opening URL: $paymentUrl");
-  //                         if (await canLaunchUrl(Uri.parse(paymentUrl))) {
-  //                           await launchUrl(Uri.parse(paymentUrl),
-  //                               mode: LaunchMode.externalApplication);
-  //                         } else {
-  //                           debugPrint("❌ Could not open the payment URL");
-  //                           ScaffoldMessenger.of(context).showSnackBar(
-  //                             const SnackBar(
-  //                                 content: Text("Could not open payment link")),
-  //                           );
-  //                         }
-  //                       }
-  //                       Navigator.pop(context);
-  //                     }
-  //                   });
-  //                 } else {
-  //                   ScaffoldMessenger.of(context).showSnackBar(
-  //                     const SnackBar(
-  //                         content: Text("Amount must be greater than 50.")),
-  //                   );
-  //                 }
-  //               },
-  //               child: const Text("Pay with Khalti"),
-  //             ),
-  //           ],
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
-
   void _showLoadWalletBottomSheet() {
     TextEditingController amountController = TextEditingController();
 
@@ -735,24 +656,26 @@ class _WalletViewState extends State<WalletView> {
                           ),
                         );
 
-                    context.read<WalletBloc>().stream.listen((state) {
+                    context.read<WalletBloc>().stream.listen((state) async {
                       if (state is TransactionInitiated) {
                         debugPrint(
-                            "✅ Transaction Initiated, Opening Khalti WebView...");
+                            "✅ Transaction Initiated, Opening Khalti in browser...");
 
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => KhaltiWebView(
-                              paymentUrl: state.transaction.paymentUrl ?? "",
-                              pidx: state.transaction.pidx ?? "",
-                              transactionId:
-                                  state.transaction.transactionId ?? "",
-                            ),
-                          ),
-                        );
-
-                        Navigator.pop(context); // Close Bottom Sheet
+                        final paymentUrl = state.transaction.paymentUrl ?? "";
+                        if (paymentUrl.isNotEmpty) {
+                          debugPrint("🌍 Opening URL: $paymentUrl");
+                          if (await canLaunchUrl(Uri.parse(paymentUrl))) {
+                            await launchUrl(Uri.parse(paymentUrl),
+                                mode: LaunchMode.externalApplication);
+                          } else {
+                            debugPrint("❌ Could not open the payment URL");
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text("Could not open payment link")),
+                            );
+                          }
+                        }
+                        Navigator.pop(context);
                       }
                     });
                   } else {
@@ -770,6 +693,83 @@ class _WalletViewState extends State<WalletView> {
       },
     );
   }
+
+  // void _showLoadWalletBottomSheet() {
+  //   TextEditingController amountController = TextEditingController();
+
+  //   showModalBottomSheet(
+  //     context: context,
+  //     shape: const RoundedRectangleBorder(
+  //       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+  //     ),
+  //     builder: (context) {
+  //       return Padding(
+  //         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+  //         child: Column(
+  //           mainAxisSize: MainAxisSize.min,
+  //           children: [
+  //             const Text("Enter Amount",
+  //                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+  //             const SizedBox(height: 15),
+  //             TextField(
+  //               controller: amountController,
+  //               keyboardType: TextInputType.number,
+  //               decoration: InputDecoration(
+  //                 labelText: "Enter amount",
+  //                 prefixIcon: const Icon(FontAwesomeIcons.coins),
+  //                 border: OutlineInputBorder(
+  //                     borderRadius: BorderRadius.circular(12)),
+  //               ),
+  //             ),
+  //             const SizedBox(height: 10),
+  //             ElevatedButton(
+  //               onPressed: () {
+  //                 final amount = double.tryParse(amountController.text) ?? 0;
+  //                 if (amount >= 50) {
+  //                   debugPrint("🟢 Initiating transaction for amount: $amount");
+
+  //                   context.read<WalletBloc>().add(
+  //                         InitiateTransaction(
+  //                           amount: amount,
+  //                           paymentGateway: "Khalti",
+  //                         ),
+  //                       );
+
+  //                   context.read<WalletBloc>().stream.listen((state) {
+  //                     if (state is TransactionInitiated) {
+  //                       debugPrint(
+  //                           "✅ Transaction Initiated, Opening Khalti WebView...");
+
+  //                       Navigator.push(
+  //                         context,
+  //                         MaterialPageRoute(
+  //                           builder: (context) => KhaltiWebView(
+  //                             paymentUrl: state.transaction.paymentUrl ?? "",
+  //                             pidx: state.transaction.pidx ?? "",
+  //                             transactionId:
+  //                                 state.transaction.transactionId ?? "",
+  //                           ),
+  //                         ),
+  //                       );
+
+  //                       Navigator.pop(context); // Close Bottom Sheet
+  //                     }
+  //                   });
+  //                 } else {
+  //                   ScaffoldMessenger.of(context).showSnackBar(
+  //                     const SnackBar(
+  //                         content: Text("Amount must be greater than 50.")),
+  //                   );
+  //                 }
+  //               },
+  //               child: const Text("Pay with Khalti"),
+  //             ),
+  //           ],
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
   /// Transaction History Section
   Widget _buildTransactionSection(BuildContext context) {
