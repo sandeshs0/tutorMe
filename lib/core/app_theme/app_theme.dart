@@ -220,6 +220,15 @@ ThemeData getApplicationTheme() {
         ),
       ),
     ),
+
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      backgroundColor: Color.fromARGB(255, 0, 29, 56),
+      selectedItemColor: Color.fromARGB(255, 0, 94, 255),
+      unselectedItemColor: Colors.grey,
+      selectedLabelStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+      unselectedLabelStyle: TextStyle(fontSize: 12),
+      elevation: 8,
+    ),
   );
 }
 
@@ -270,6 +279,16 @@ ThemeData getDarkTheme() {
         backgroundColor: const Color.fromARGB(255, 0, 94, 255),
         foregroundColor: Colors.white,
       ),
+    ),
+
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      backgroundColor: Colors.black87,
+      selectedItemColor: Colors.blueAccent,
+      unselectedItemColor: Colors.grey.shade500,
+      selectedLabelStyle:
+          const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+      unselectedLabelStyle: const TextStyle(fontSize: 12),
+      elevation: 8,
     ),
   );
 }

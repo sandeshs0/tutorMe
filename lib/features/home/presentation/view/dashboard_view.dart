@@ -267,6 +267,7 @@ import 'package:tutorme/features/wallet/presentation/view_model/bloc/wallet_bloc
 class DashboardView extends StatefulWidget {
   const DashboardView({super.key});
 
+  
   @override
   State<DashboardView> createState() => _DashboardViewState();
 }
@@ -308,6 +309,8 @@ class _DashboardViewState extends State<DashboardView> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return BlocProvider(
       create: (_) => getIt<HomeCubit>(), // ✅ Inject HomeCubit
       child: BlocBuilder<HomeCubit, DashboardState>(
@@ -343,35 +346,79 @@ class _DashboardViewState extends State<DashboardView> {
   }
 
   Widget _buildBottomNavigationBar(BuildContext context) {
-    return BottomNavigationBar(
-      // backgroundColor: Colors.transparent,
-      selectedItemColor: Colors.blue,
-      unselectedItemColor: Colors.grey,
-      selectedFontSize: 14,
-      currentIndex: _currentIndex,
-      onTap: (index) {
-        setState(() {
-          _currentIndex = index;
-        });
-        if (index == 2) {
-          context.read<WalletBloc>().add(FetchWalletDetails());
-        }
-        if (index == 4) {
-          context.read<StudentProfileBloc>().add(const FetchStudentProfile());
-        }
-        context.read<HomeCubit>().selectTab(index);
-      },
-      type: BottomNavigationBarType.fixed,
-      items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'HOME'),
-        BottomNavigationBarItem(icon: Icon(Icons.mail_outline), label: 'INBOX'),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.account_balance_wallet_outlined), label: 'WALLET'),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.notifications), label: 'Updates'),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline), label: 'PROFILE'),
-      ],
+    return ClipRRect(
+      borderRadius: const BorderRadius.only(
+        topLeft: Radius.circular(20),
+        topRight: Radius.circular(20),
+      ),
+      child: BottomNavigationBar(
+        backgroundColor:
+            Theme.of(context).bottomNavigationBarTheme.backgroundColor,
+        selectedItemColor:
+            Theme.of(context).bottomNavigationBarTheme.selectedItemColor,
+        unselectedItemColor:
+            Theme.of(context).bottomNavigationBarTheme.unselectedItemColor,
+        selectedFontSize: 14,
+        unselectedFontSize: 12,
+        showUnselectedLabels: false,
+        showSelectedLabels: false,
+        elevation: 0,
+        currentIndex: _currentIndex,
+        type: BottomNavigationBarType.fixed,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+          if (index == 2) {
+            context.read<WalletBloc>().add(FetchWalletDetails());
+          }
+          if (index == 4) {
+            context.read<StudentProfileBloc>().add(const FetchStudentProfile());
+          }
+          context.read<HomeCubit>().selectTab(index);
+        },
+        items: [
+          BottomNavigationBarItem(
+            icon: _buildNavIcon(Icons.home, 0),
+            label: "Home",
+          ),
+          BottomNavigationBarItem(
+            icon: _buildNavIcon(Icons.bedroom_baby, 1),
+            label: "Activity",
+          ),
+          BottomNavigationBarItem(
+            icon: _buildNavIcon(Icons.account_balance_wallet_outlined, 2),
+            label: "Wallet",
+          ),
+          BottomNavigationBarItem(
+            icon: _buildNavIcon(Icons.notifications, 3),
+            label: "Updates",
+          ),
+          BottomNavigationBarItem(
+            icon: _buildNavIcon(Icons.person_outline, 4),
+            label: "Profile",
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 🔹 **Helper Function to Build Animated Icons**
+  Widget _buildNavIcon(IconData icon, int index) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 100),
+      curve: Curves.easeInOut,
+      padding: const EdgeInsets.all(6),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color:
+            _currentIndex == index ? Colors.blue.shade100 : Colors.transparent,
+      ),
+      child: Icon(
+        icon,
+        size: _currentIndex == index ? 28 : 24, // Slightly larger when selected
+        color: _currentIndex == index ? Colors.blue : Colors.grey,
+      ),
     );
   }
 }
