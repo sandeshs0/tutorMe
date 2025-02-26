@@ -1,10 +1,9 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:tutorme/app/constants/api_endpoints.dart';
 import 'package:tutorme/app/shared_prefs/token_shared_prefs.dart';
-import 'package:tutorme/core/error/failure.dart';
 import 'package:tutorme/features/booking/data/datasource/booking_datasource.dart';
 import 'package:tutorme/features/booking/data/dto/create_booking_dto.dart';
-import 'package:tutorme/features/booking/data/dto/get_student_bookings_dto.dart';
 import 'package:tutorme/features/booking/data/model/booking_api_model.dart';
 import 'package:tutorme/features/booking/domain/entity/booking_entity.dart';
 
@@ -42,7 +41,8 @@ class BookingRemoteDataSource implements IBookingRemoteDataSource {
       );
 
       if (response.statusCode == 201) {
-        final bookingApiModel = BookingApiModel.fromJson(response.data['booking']);
+        final bookingApiModel =
+            BookingApiModel.fromJson(response.data['booking']);
         return bookingApiModel.toEntity();
       } else {
         throw Exception(response.statusMessage);
@@ -58,7 +58,6 @@ class BookingRemoteDataSource implements IBookingRemoteDataSource {
   @override
   Future<List<BookingEntity>> getStudentBookings() async {
     try {
-      // ✅ Retrieve the stored JWT token
       final tokenResult = await _tokenSharedPrefs.getToken();
       final token = tokenResult.fold((failure) => null, (token) => token);
 
@@ -66,24 +65,30 @@ class BookingRemoteDataSource implements IBookingRemoteDataSource {
         throw Exception("Token not found in shared prefs");
       }
 
-      // ✅ API Request to Fetch Student's Bookings
+      // ✅ API Request
       final response = await _dio.get(
         ApiEndpoints.getStudentBookings,
-        options: Options(
-          headers: {
-            "Authorization": "Bearer $token", // ✅ Send JWT token
-          },
-        ),
+        options: Options(headers: {"Authorization": "Bearer $token"}),
       );
 
-      if (response.statusCode == 200) {
-        final data = GetStudentBookingsDTO.fromJson(response.data);
-        return data.bookings.map((booking) => booking.toEntity()).toList();
-      } else {
-        throw Exception(response.statusMessage);
-      }
-    } on DioException catch (e) {
-      throw Exception(e.response?.data['message'] ?? e.message);
+      debugPrint("🔹 Full API Response: ${response.data}");
+
+      // ✅ Extract `bookings` array safely
+      final rawData = response.data;
+      final bookingsData = rawData['bookings'] as List<dynamic>? ?? [];
+
+      final parsedBookings = bookingsData.map((booking) {
+        debugPrint("📌 Parsing Booking: $booking");
+        return BookingApiModel.fromJson(booking as Map<String, dynamic>)
+            .toEntity();
+      }).toList();
+
+      debugPrint("✅ Parsed ${parsedBookings.length} bookings successfully");
+      return parsedBookings;
+    } catch (e, stacktrace) {
+      debugPrint("❌ Parsing Error: $e");
+      debugPrint("🛠 Stacktrace: $stacktrace");
+      throw Exception("Failed to fetch bookings");
     }
   }
 }

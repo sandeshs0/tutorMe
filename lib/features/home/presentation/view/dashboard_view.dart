@@ -251,6 +251,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tutorme/app/di/di.dart';
+import 'package:tutorme/features/booking/presentation/view/student_bookings_view.dart';
+import 'package:tutorme/features/booking/presentation/viewmodel/booking_bloc.dart';
 import 'package:tutorme/features/home/presentation/view/home_view.dart';
 import 'package:tutorme/features/home/presentation/view_model/home_cubit.dart';
 import 'package:tutorme/features/home/presentation/view_model/home_state.dart';
@@ -260,8 +262,6 @@ import 'package:tutorme/features/student/presentation/view/student_profile_view.
 import 'package:tutorme/features/student/presentation/view_model/bloc/student_profile_bloc.dart';
 import 'package:tutorme/features/wallet/presentation/view/wallet_view.dart';
 import 'package:tutorme/features/wallet/presentation/view_model/bloc/wallet_bloc.dart';
-// import 'package:tutorme/view/home_view.dart';
-import 'package:tutorme/view/inbox_view.dart';
 // import 'package:tutorme/view/profile_view.dart';
 
 class DashboardView extends StatefulWidget {
@@ -276,8 +276,13 @@ class _DashboardViewState extends State<DashboardView> {
 
   final List<Widget> _screens = [
     const HomeScreen(),
-    const InboxScreen(),
+    // const InboxScreen(),
     // ✅ Wrap WalletScreen with BlocProvider
+    BlocProvider(
+      create: (_) => getIt<BookingBloc>()
+        ..add(FetchStudentBookingsEvent()), // 👈 Fetch wallet on navigation
+      child: const StudentBookingsView(),
+    ),
     BlocProvider(
       create: (_) => getIt<WalletBloc>()
         ..add(FetchWalletDetails()), // 👈 Fetch wallet on navigation
