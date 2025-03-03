@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:equatable/equatable.dart';
 import 'package:tutorme/app/usecase/usecase.dart';
 import 'package:tutorme/core/error/failure.dart';
 import 'package:tutorme/features/tutors/domain/entity/tutor_entity.dart';
@@ -11,14 +12,19 @@ class GetAllTutorsUsecase
   GetAllTutorsUsecase({required this.tutorRepository});
 
   @override
-  Future<Either<Failure, List<TutorEntity>>> call(GetTutorsParams params) async {
-    return await tutorRepository.getAllTutors(page: params.page, limit: params.limit);
+  Future<Either<Failure, List<TutorEntity>>> call(
+      GetTutorsParams params) async {
+    return await tutorRepository.getAllTutors(
+        page: params.page, limit: params.limit);
   }
 }
 
-class GetTutorsParams {
+class GetTutorsParams extends Equatable {
   final int page;
   final int limit;
   const GetTutorsParams({required this.page, required this.limit});
-}
 
+  @override
+  // TODO: implement props
+  List<Object?> get props => [page, limit];
+}

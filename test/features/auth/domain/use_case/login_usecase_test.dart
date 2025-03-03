@@ -16,7 +16,6 @@ void main() {
     repository = MockAuthRepository();
     tokenSharedPrefs = MockTokenSharedPrefs();
     usecase = LoginUsecase(repository, tokenSharedPrefs);
-    // registerFallbackValue(BatchEntity.empty());
   });
 
   const userLoginParams =

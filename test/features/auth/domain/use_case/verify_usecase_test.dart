@@ -17,7 +17,7 @@ void main() {
   });
 
   const params = VerifyEmailParams.empty();
-
+  
   group('Verify Email Tests', () {
     test('should return true for successful verification', () async {
       when(() => repository.verifyEmail(any(), any())).thenAnswer(

@@ -20,7 +20,6 @@ class TutorRemoteDataSource implements ITutorDataSource {
         ApiEndpoints.getAllTutors,
         queryParameters: {"page": page, "limit": limit},
       );
-
       if (response.statusCode == 200) {
         final data = GetAllTutorsDTO.fromJson(response.data);
         return data.tutors.map((tutor) => tutor.toEntity()).toList();

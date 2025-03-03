@@ -8,7 +8,7 @@ part of 'tutor_api_model.dart';
 
 TutorApiModel _$TutorApiModelFromJson(Map<String, dynamic> json) =>
     TutorApiModel(
-      tutorId: json['_id'] as String?,
+      id: json['id'] as String?,
       name: json['name'] as String,
       email: json['email'] as String,
       bio: json['bio'] as String,
@@ -23,7 +23,7 @@ TutorApiModel _$TutorApiModelFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$TutorApiModelToJson(TutorApiModel instance) =>
     <String, dynamic>{
-      '_id': instance.tutorId,
+      'id': instance.id,
       'name': instance.name,
       'email': instance.email,
       'username': instance.username,

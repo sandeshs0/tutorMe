@@ -6,8 +6,8 @@ part 'tutor_api_model.g.dart';
 
 @JsonSerializable()
 class TutorApiModel extends Equatable {
-  @JsonKey(name: '_id')
-  final String? tutorId;
+  // @JsonKey(name: 'id')
+  final String? id;
   final String name;
   final String email;
   final String username;
@@ -19,7 +19,7 @@ class TutorApiModel extends Equatable {
   final List<String> subjects;
 
   const TutorApiModel({
-    this.tutorId,
+    this.id,
     required this.name,
     required this.email,
     required this.bio,
@@ -41,7 +41,7 @@ class TutorApiModel extends Equatable {
 // Convert to Domain Entity
   TutorEntity toEntity() {
     return TutorEntity(
-      tutorId: tutorId,
+      tutorId: id,
       name: name,
       email: email,
       bio: bio,
@@ -58,7 +58,7 @@ class TutorApiModel extends Equatable {
 
   factory TutorApiModel.fromEntity(TutorEntity entity) {
     return TutorApiModel(
-      tutorId: entity.tutorId,
+      id: entity.tutorId,
       name: entity.name,
       email: entity.email,
       bio: entity.bio,
@@ -74,7 +74,7 @@ class TutorApiModel extends Equatable {
   @override
   // TODO: implement props
   List<Object?> get props => [
-        tutorId,
+        id,
         name,
         email,
         username,

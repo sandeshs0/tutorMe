@@ -7,7 +7,7 @@ class KhaltiWebView extends StatefulWidget {
   final String paymentUrl;
   final String pidx;
   final String transactionId;
-
+  
   const KhaltiWebView({
     super.key,
     required this.paymentUrl,

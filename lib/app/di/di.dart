@@ -14,6 +14,13 @@ import 'package:tutorme/features/auth/domain/use_case/register_usecase.dart';
 import 'package:tutorme/features/auth/domain/use_case/verify_usecase.dart';
 import 'package:tutorme/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:tutorme/features/auth/presentation/view_model/register/register_bloc.dart';
+import 'package:tutorme/features/booking/data/datasource/booking_datasource.dart';
+import 'package:tutorme/features/booking/data/datasource/booking_remote_datasource.dart/booking_remote_datasource.dart';
+import 'package:tutorme/features/booking/data/repository/remote_repository/booking_remote_datasource.dart';
+import 'package:tutorme/features/booking/domain/repository/booking_repository.dart';
+import 'package:tutorme/features/booking/domain/usecase/create_booking_usecase.dart';
+import 'package:tutorme/features/booking/domain/usecase/get_student_bookings.dart';
+import 'package:tutorme/features/booking/presentation/viewmodel/booking_bloc.dart';
 import 'package:tutorme/features/home/presentation/view_model/home_cubit.dart';
 import 'package:tutorme/features/notifications/data/datasource/remote_datasource/notification_remote_datasource.dart';
 import 'package:tutorme/features/notifications/data/repository/notification_remote_repository.dart';
@@ -53,6 +60,7 @@ Future<void> initDependencies() async {
   _initStudentProfileDependencies();
   _initHomeDependencies();
   _initWalletDependencies();
+  _initBookingDependencies();
   _initNotificationDependencies();
   // _initSocketService();
   _initNotificationService();
@@ -234,5 +242,35 @@ void _initWalletDependencies() {
         initiateTransactionUseCase: getIt<InitiateTransactionUsecase>(),
         verifyTransactionUseCase: getIt<VerifyTransactionUsecase>(),
         getTransactionHistoryUseCase: getIt<GetTransactionHistoryUsecase>(),
+      ));
+}
+
+void _initBookingDependencies() {
+  // ✅ Register Remote Data Source
+  getIt.registerLazySingleton<IBookingRemoteDataSource>(
+    () => BookingRemoteDataSource(
+      dio: getIt<Dio>(),
+      tokenSharedPrefs: getIt<TokenSharedPrefs>(),
+    ),
+  );
+
+  // ✅ Register Repository
+  getIt.registerLazySingleton<IBookingRepository>(
+    () => RemoteBookingRepository(getIt<IBookingRemoteDataSource>()),
+  );
+
+  // ✅ Register Use Cases
+  getIt.registerLazySingleton<CreateBookingUseCase>(
+    () => CreateBookingUseCase(bookingRepository: getIt<IBookingRepository>()),
+  );
+
+  getIt.registerLazySingleton<GetStudentBookingsUseCase>(
+    () => GetStudentBookingsUseCase(
+        bookingRepository: getIt<IBookingRepository>()),
+  );
+
+  getIt.registerFactory(() => BookingBloc(
+        createBookingUseCase: getIt<CreateBookingUseCase>(),
+        getStudentBookingsUseCase: getIt<GetStudentBookingsUseCase>(),
       ));
 }

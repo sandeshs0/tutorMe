@@ -10,30 +10,31 @@ class ThemeCubit extends Cubit<ThemeMode> {
   }
 
   StreamSubscription<int>? _lightSubscription;
-  int _lastLuxValue = 100; // Default starting lux value
+  int _lastLuxValue = 100;
 
-  void _startListening() {
+  void _startListening()
+   {
     final lightSensor = Light();
 
     try {
       _lightSubscription = lightSensor.lightSensorStream.listen(
         (lux) {
-          // debugPrint("🔆 Light Sensor Value: $lux lux");
+          // debugPrint("Light Sensor Value: $lux lux");
 
-          // ✅ Only update theme if the value has changed significantly
+          // Only update theme if the value has changed significantly
           if ((lux < 10 && _lastLuxValue >= 10) ||
               (lux >= 10 && _lastLuxValue < 10)) {
             _lastLuxValue = lux;
             emit(lux < 10 ? ThemeMode.dark : ThemeMode.light);
-            debugPrint("🎨 Theme Changed: ${lux < 10 ? 'Dark' : 'Light'} Mode");
+            debugPrint("Theme Changed: ${lux < 10 ? 'Dark' : 'Light'} Mode");
           }
         },
         onError: (error) {
-          debugPrint("❌ Light sensor error: $error");
+          debugPrint("Light sensor error: $error");
         },
       );
     } on Exception catch (e) {
-      debugPrint('❌ Failed to access light sensor: $e');
+      debugPrint('Failed to access light sensor: $e');
     }
   }
 
