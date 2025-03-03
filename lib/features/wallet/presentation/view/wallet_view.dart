@@ -95,9 +95,11 @@ class _WalletViewState extends State<WalletView> {
                                     transactionId: transactionId,
                                   ),
                                 );
+                            // Show the new snackbar message after verification
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                  content: Text("Payment Successful!")),
+                                  content: Text(
+                                      "Payment Successful, Wallet Updated!")),
                             );
                             khaltiInstance.close(context);
                           },
@@ -108,14 +110,19 @@ class _WalletViewState extends State<WalletView> {
                               needsPaymentConfirmation}) async {
                             debugPrint(
                                 '🔴 Error: $description, Status Code: $statusCode, Event: $event, Needs Confirmation: $needsPaymentConfirmation');
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                  content: Text(
-                                      "Payment event: $event - $description")),
-                            );
+                            if (event != KhaltiEvent.returnUrlLoadFailure) {
+                              // Only show other payment events, not return URL failures
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                    content: Text(
+                                        "Payment event: $event - $description")),
+                              );
+                            }
                           },
-                          onReturn: () => debugPrint(
-                              '✅ Successfully redirected to return_url.'),
+                          // onReturn: (_) {
+                          //   // Do nothing or remove this callback entirely since you don't want redirection
+                          //   debugPrint('Return URL ignored as per requirement.');
+                          // },
                         );
 
                         debugPrint("🟢 Opening Khalti Checkout...");
