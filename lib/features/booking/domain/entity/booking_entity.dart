@@ -4,7 +4,6 @@ class BookingEntity extends Equatable {
   final String id;
   final String? tutorId;
   final String studentId;
-  // final TutorApiModel? tutorObj;
   final String date;
   final String startTime;
   final String note;
@@ -13,13 +12,11 @@ class BookingEntity extends Equatable {
   final String? tutorName;
   final String? profileImage;
   final int? hourlyRate;
-  // final String? updatedAt;
 
   const BookingEntity({
     required this.id,
     required this.tutorId,
     required this.studentId,
-    // this.tutorObj,
     this.bookingFee,
     required this.date,
     required this.startTime,
@@ -28,14 +25,12 @@ class BookingEntity extends Equatable {
     this.hourlyRate,
     this.profileImage,
     this.tutorName,
-    // this.updatedAt,
   });
 
   @override
   List<Object?> get props => [
         id,
         tutorId,
-        // tutorObj,
         bookingFee,
         studentId,
         date,

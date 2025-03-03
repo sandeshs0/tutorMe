@@ -7,13 +7,10 @@ sealed class BookingState extends Equatable {
   List<Object> get props => [];
 }
 
-/// 🔹 Initial State
 final class BookingInitial extends BookingState {}
 
-/// 🔹 Loading State
 final class BookingLoading extends BookingState {}
 
-/// 🔹 Booking Created Successfully
 final class BookingCreated extends BookingState {
   final BookingEntity booking;
 
@@ -23,7 +20,6 @@ final class BookingCreated extends BookingState {
   List<Object> get props => [booking];
 }
 
-/// 🔹 Student's Bookings Loaded
 final class StudentBookingsLoaded extends BookingState {
   final List<BookingEntity> bookings;
 
@@ -33,7 +29,6 @@ final class StudentBookingsLoaded extends BookingState {
   List<Object> get props => [bookings];
 }
 
-/// 🔹 Error State
 final class BookingError extends BookingState {
   final String message;
 

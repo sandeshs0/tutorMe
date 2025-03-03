@@ -22,7 +22,6 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
     on<FetchStudentBookingsEvent>(_onFetchStudentBookings);
   }
 
-  /// 🔹 Handle Creating a Booking
   Future<void> _onCreateBooking(
       CreateBookingEvent event, Emitter<BookingState> emit) async {
     emit(BookingLoading());
@@ -42,7 +41,6 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
     );
   }
 
-  /// 🔹 Handle Fetching Student's Bookings
   Future<void> _onFetchStudentBookings(
       FetchStudentBookingsEvent event, Emitter<BookingState> emit) async {
     emit(BookingLoading());
@@ -55,7 +53,6 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
     );
   }
 
-  /// 🔹 Maps API failures to readable messages
   String _mapFailureToMessage(Failure failure) {
     if (failure is ApiFailure) {
       return failure.message;

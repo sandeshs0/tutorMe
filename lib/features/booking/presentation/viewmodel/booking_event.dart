@@ -7,7 +7,6 @@ sealed class BookingEvent extends Equatable {
   List<Object> get props => [];
 }
 
-/// 🔹 Event for Creating a Booking
 class CreateBookingEvent extends BookingEvent {
   final String tutorId;
   final String date;
@@ -25,5 +24,4 @@ class CreateBookingEvent extends BookingEvent {
   List<Object> get props => [tutorId, date, time, note];
 }
 
-/// 🔹 Event for Fetching Student's Bookings
 class FetchStudentBookingsEvent extends BookingEvent {}
