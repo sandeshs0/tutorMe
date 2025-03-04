@@ -45,4 +45,53 @@ class SessionRemoteDataSource implements ISessionDataSource {
       throw Exception("Something went wrong (datasource): $e");
     }
   }
+
+  @override
+  Future<Map<String, dynamic>> joinSession(String bookingId) async {
+    try {
+      final tokenResult = await _tokenSharedPrefs.getToken();
+      final token = tokenResult.fold((failure) => null, (token) => token);
+
+      if (token == null || token.isEmpty) {
+        throw Exception("Authentication token missing.");
+      }
+
+      // Fetch Jitsi JWT token
+      final tokenResponse = await _dio.get(
+        '${ApiEndpoints.baseUrl}api/sessions/jaas-token/$bookingId',
+        options: Options(headers: {"Authorization": "Bearer $token"}),
+      );
+
+      if (tokenResponse.statusCode != 200) {
+        throw Exception(
+            'Failed to fetch Jitsi token: ${tokenResponse.statusMessage}');
+      }
+
+      final jwtToken = tokenResponse.data['token'] as String;
+
+      // Fetch session room details
+      final roomResponse = await _dio.get(
+        '${ApiEndpoints.baseUrl}api/sessions/room/$bookingId',
+        options: Options(headers: {"Authorization": "Bearer $token"}),
+      );
+
+      if (roomResponse.statusCode != 200) {
+        throw Exception(
+            'Failed to fetch session room: ${roomResponse.statusMessage}');
+      }
+
+      final roomData = roomResponse.data as Map<String, dynamic>;
+      final roomId = roomData['roomId'] as String;
+      final jitsiUrl = 'https://8x8.vc/$roomId?jwt=$jwtToken';
+      return {
+        'roomUrl': jitsiUrl,
+        'jwtToken': jwtToken,
+        // 'roomId': roomData['roomId'] as String,
+      };
+    } on DioException catch (e) {
+      throw Exception(e.response?.data['message'] ?? e.message);
+    } catch (e) {
+      throw Exception("Something went wrong (joining session): $e");
+    }
+  }
 }

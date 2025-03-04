@@ -20,4 +20,14 @@ class SessionRemoteRepository implements ISessionRepository {
       return Left(ApiFailure(message: e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, Map<String, dynamic>>> joinSession(String bookingId) async {
+    try {
+      final result = await _sessionRemoteDataSource.joinSession(bookingId);
+      return Right(result);
+    } catch (e) {
+      return Left(ApiFailure(message: e.toString()));
+    }
+  }
 }

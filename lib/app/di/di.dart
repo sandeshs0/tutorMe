@@ -34,6 +34,7 @@ import 'package:tutorme/features/session/data/datasource/session_datasource.dart
 import 'package:tutorme/features/session/data/repository/session_remote_repository.dart';
 import 'package:tutorme/features/session/domain/repository/session_repository.dart';
 import 'package:tutorme/features/session/domain/usecase/get_student_session_usecase.dart';
+import 'package:tutorme/features/session/domain/usecase/join_session_usecase.dart';
 import 'package:tutorme/features/session/presentation/bloc/session_bloc.dart';
 import 'package:tutorme/features/student/data/data_source/repository/remote_repository/student_remote_repository.dart';
 import 'package:tutorme/features/student/data/data_source/student_remote_data_source.dart/student_remote_data_source.dart';
@@ -300,9 +301,14 @@ void _initSessionDependencies() {
   getIt.registerLazySingleton<GetStudentSessionsUsecase>(() =>
       GetStudentSessionsUsecase(
           sessionRepository: getIt<ISessionRepository>()));
+  
+  getIt.registerLazySingleton<JoinSessionUseCase>(()=>
+  JoinSessionUseCase(
+    sessionRepository: getIt<ISessionRepository>()));
 
   // Register Bloc
   getIt.registerFactory(() => SessionBloc(
         getStudentSessionsUsecase: getIt<GetStudentSessionsUsecase>(),
+        joinSessionUseCase: getIt<JoinSessionUseCase>(),
       ));
 }

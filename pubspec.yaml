@@ -65,7 +65,7 @@ dependencies:
   light: ^4.0.0
   khalti_checkout_flutter: ^1.0.0-dev.8
   webview_flutter: ^4.10.0
-  jitsi_meet_flutter_sdk: ^11.0.2
+  # jitsi_meet_flutter_sdk: ^11.0.2
 
 dev_dependencies:
   flutter_test:

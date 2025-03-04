@@ -1,10 +1,12 @@
 import 'dart:core';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tutorme/features/session/domain/entity/session_entity.dart';
 import 'package:tutorme/features/session/presentation/bloc/session_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class SessionView extends StatefulWidget {
   const SessionView({super.key});
@@ -17,11 +19,32 @@ class _SessionViewState extends State<SessionView> {
   final TextEditingController _searchController = TextEditingController();
   bool _sortNewestFirst = true; // Default sorting: Newest First
   String? _selectedStatus; // Track selected status for filtering
+  final WebViewController _webViewController = WebViewController();
 
   @override
   void initState() {
     super.initState();
     context.read<SessionBloc>().add(FetchStudentSessions());
+    _configureWebViewController();
+  }
+
+  void _configureWebViewController() {
+    _webViewController
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(const Color(0x00000000))
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onPageStarted: (String url) {
+            debugPrint('Page started loading: $url');
+          },
+          onPageFinished: (String url) {
+            debugPrint('Page finished loading: $url');
+          },
+          onWebResourceError: (WebResourceError error) {
+            debugPrint('WebView error: ${error.description}');
+          },
+        ),
+      );
   }
 
   @override
@@ -146,6 +169,13 @@ class _SessionViewState extends State<SessionView> {
                         return _buildSessionCard(session, context);
                       },
                     );
+                  } else if (state is SessionJoining) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (state is SessionJoined) {
+                    // return const Center(
+                    //   child: Text("Joining video Session...", style: TextStyle(color: Colors.blueGrey),),
+                    // );
+                    return _buildJitsiWebView(state.roomUrl);
                   }
                   return const Center(
                       child: Text("No sessions available.",
@@ -156,6 +186,12 @@ class _SessionViewState extends State<SessionView> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildJitsiWebView(String roomUrl) {
+    return WebViewWidget(
+      controller: _webViewController..loadRequest(Uri.parse(roomUrl)),
     );
   }
 
@@ -289,7 +325,10 @@ class _SessionViewState extends State<SessionView> {
               Center(
                 child: ElevatedButton.icon(
                   onPressed: () {
-                    _joinSession(session.roomId ?? '');
+                    // _joinSession(session.roomId ?? '');
+                    context
+                        .read<SessionBloc>()
+                        .add(JoinSession(session.bookingId ?? ""));
                   },
                   icon: const Icon(Icons.video_call_rounded,
                       color: Colors.white, size: 20),
@@ -335,6 +374,38 @@ class _SessionViewState extends State<SessionView> {
       ),
     );
   }
+
+// Widget _buildJitsiMeeting(SessionJoined state) {
+//   return JitsiMeet(
+//     room: state.roomId,
+//     onWebOptions: (options) {
+//       options["roomName"] = state.roomId.split('/').last; // Extract room name
+//       options["jwt"] = state.jwtToken;
+//       options["userInfo"] = {"displayName": "Student"}; // Use actual user name
+//       options["configOverwrite"] = {
+//         "startWithAudioMuted": false,
+//         "startWithVideoMuted": false,
+//         "prejoinPageEnabled": false,
+//         "requireDisplayName": false,
+//       };
+//       options["interfaceConfigOverwrite"] = {
+//         "DISABLE_JOIN_LEAVE_NOTIFICATIONS": true,
+//         "MOBILE_APP_PROMO": false,
+//         "TOOLBAR_BUTTONS": [
+//           "microphone",
+//           "camera",
+//           "desktop",
+//           "fullscreen",
+//           "hangup",
+//           "chat",
+//         ],
+//       };
+//     },
+//     onClosed: () {
+//       context.read<SessionBloc>().add(FetchStudentSessions());
+//     },
+//   );
+// }
 
   void _joinSession(String roomId) async {
     final Uri url = Uri.parse(roomId);
