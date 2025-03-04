@@ -5,8 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tutorme/features/session/domain/entity/session_entity.dart';
 import 'package:tutorme/features/session/presentation/bloc/session_bloc.dart';
+import 'package:tutorme/features/session/presentation/view/video_call_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class SessionView extends StatefulWidget {
   const SessionView({super.key});
@@ -19,33 +19,33 @@ class _SessionViewState extends State<SessionView> {
   final TextEditingController _searchController = TextEditingController();
   bool _sortNewestFirst = true; // Default sorting: Newest First
   String? _selectedStatus; // Track selected status for filtering
-  final WebViewController _webViewController = WebViewController();
+  // final WebViewController _webViewController = WebViewController();
 
   @override
   void initState() {
     super.initState();
     context.read<SessionBloc>().add(FetchStudentSessions());
-    _configureWebViewController();
+    // _configureWebViewController();
   }
 
-  void _configureWebViewController() {
-    _webViewController
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(const Color(0x00000000))
-      ..setNavigationDelegate(
-        NavigationDelegate(
-          onPageStarted: (String url) {
-            debugPrint('Page started loading: $url');
-          },
-          onPageFinished: (String url) {
-            debugPrint('Page finished loading: $url');
-          },
-          onWebResourceError: (WebResourceError error) {
-            debugPrint('WebView error: ${error.description}');
-          },
-        ),
-      );
-  }
+  // void _configureWebViewController() {
+  //   _webViewController
+  //     ..setJavaScriptMode(JavaScriptMode.unrestricted)
+  //     ..setBackgroundColor(const Color(0x00000000))
+  //     ..setNavigationDelegate(
+  //       NavigationDelegate(
+  //         onPageStarted: (String url) {
+  //           debugPrint('Page started loading: $url');
+  //         },
+  //         onPageFinished: (String url) {
+  //           debugPrint('Page finished loading: $url');
+  //         },
+  //         onWebResourceError: (WebResourceError error) {
+  //           debugPrint('WebView error: ${error.description}');
+  //         },
+  //       ),
+  //     );
+  // }
 
   @override
   void dispose() {
@@ -175,7 +175,20 @@ class _SessionViewState extends State<SessionView> {
                     // return const Center(
                     //   child: Text("Joining video Session...", style: TextStyle(color: Colors.blueGrey),),
                     // );
-                    return _buildJitsiWebView(state.roomUrl);
+                    // return _buildJitsiWebView(state.roomUrl);
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              JitsiWebViewScreen(roomUrl: state.roomUrl),
+                        ),
+                      ).then((_) {
+                        // When the Jitsi screen is popped, refresh sessions
+                        context.read<SessionBloc>().add(FetchStudentSessions());
+                      });
+                    });
+                    return const SizedBox.shrink();
                   }
                   return const Center(
                       child: Text("No sessions available.",
@@ -189,11 +202,11 @@ class _SessionViewState extends State<SessionView> {
     );
   }
 
-  Widget _buildJitsiWebView(String roomUrl) {
-    return WebViewWidget(
-      controller: _webViewController..loadRequest(Uri.parse(roomUrl)),
-    );
-  }
+  // Widget _buildJitsiWebView(String roomUrl) {
+  //   return WebViewWidget(
+  //     controller: _webViewController..loadRequest(Uri.parse(roomUrl)),
+  //   );
+  // }
 
   Widget _buildSessionFilters() {
     return BlocBuilder<SessionBloc, SessionState>(
