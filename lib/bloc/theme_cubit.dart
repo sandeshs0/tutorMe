@@ -11,17 +11,12 @@ class ThemeCubit extends Cubit<ThemeMode> {
 
   StreamSubscription<int>? _lightSubscription;
   int _lastLuxValue = 100;
-
   void _startListening()
    {
     final lightSensor = Light();
-
     try {
       _lightSubscription = lightSensor.lightSensorStream.listen(
         (lux) {
-          // debugPrint("Light Sensor Value: $lux lux");
-
-          // Only update theme if the value has changed significantly
           if ((lux < 10 && _lastLuxValue >= 10) ||
               (lux >= 10 && _lastLuxValue < 10)) {
             _lastLuxValue = lux;

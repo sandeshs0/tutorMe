@@ -258,6 +258,8 @@ import 'package:tutorme/features/home/presentation/view_model/home_cubit.dart';
 import 'package:tutorme/features/home/presentation/view_model/home_state.dart';
 import 'package:tutorme/features/notifications/presentation/view/notification_view.dart';
 import 'package:tutorme/features/notifications/presentation/view_model/notification_bloc.dart';
+import 'package:tutorme/features/session/presentation/bloc/session_bloc.dart';
+import 'package:tutorme/features/session/presentation/view/sessions_view.dart';
 import 'package:tutorme/features/student/presentation/view/student_profile_view.dart';
 import 'package:tutorme/features/student/presentation/view_model/bloc/student_profile_bloc.dart';
 import 'package:tutorme/features/wallet/presentation/view/wallet_view.dart';
@@ -267,7 +269,6 @@ import 'package:tutorme/features/wallet/presentation/view_model/bloc/wallet_bloc
 class DashboardView extends StatefulWidget {
   const DashboardView({super.key});
 
-  
   @override
   State<DashboardView> createState() => _DashboardViewState();
 }
@@ -280,9 +281,12 @@ class _DashboardViewState extends State<DashboardView> {
     // const InboxScreen(),
     // ✅ Wrap WalletScreen with BlocProvider
     BlocProvider(
-      create: (_) => getIt<BookingBloc>()
-        ..add(FetchStudentBookingsEvent()), // 👈 Fetch wallet on navigation
+      create: (_) => getIt<BookingBloc>()..add(FetchStudentBookingsEvent()),
       child: const StudentBookingsView(),
+    ),
+    BlocProvider(
+      create: (_) => getIt<SessionBloc>()..add(FetchStudentSessions()),
+      child: const SessionView(),
     ),
     BlocProvider(
       create: (_) => getIt<WalletBloc>()
@@ -383,19 +387,23 @@ class _DashboardViewState extends State<DashboardView> {
             label: "Home",
           ),
           BottomNavigationBarItem(
-            icon: _buildNavIcon(Icons.bedroom_baby, 1),
+            icon: _buildNavIcon(Icons.document_scanner, 1),
             label: "Activity",
           ),
           BottomNavigationBarItem(
-            icon: _buildNavIcon(Icons.account_balance_wallet_outlined, 2),
+            icon: _buildNavIcon(Icons.video_call_rounded, 2),
+            label: "Sessions",
+          ),
+          BottomNavigationBarItem(
+            icon: _buildNavIcon(Icons.account_balance_wallet_outlined, 3),
             label: "Wallet",
           ),
           BottomNavigationBarItem(
-            icon: _buildNavIcon(Icons.notifications, 3),
+            icon: _buildNavIcon(Icons.notifications, 4),
             label: "Updates",
           ),
           BottomNavigationBarItem(
-            icon: _buildNavIcon(Icons.person_outline, 4),
+            icon: _buildNavIcon(Icons.person_outline, 5),
             label: "Profile",
           ),
         ],

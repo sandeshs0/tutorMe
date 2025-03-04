@@ -52,7 +52,7 @@ class _StudentBookingsViewState extends State<StudentBookingsView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   if (upcomingBookings.isNotEmpty) ...[
-                    const Text("Upcoming Bookings",
+                    const Text("My Bookings",
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold)),
                     const SizedBox(height: 8),

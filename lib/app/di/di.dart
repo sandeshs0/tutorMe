@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tutorme/app/shared_prefs/token_shared_prefs.dart';
@@ -28,6 +29,12 @@ import 'package:tutorme/features/notifications/domain/repository/notification_re
 import 'package:tutorme/features/notifications/domain/usecase/get_notification_usecase.dart';
 import 'package:tutorme/features/notifications/domain/usecase/mark_notification_usecase.dart';
 import 'package:tutorme/features/notifications/presentation/view_model/notification_bloc.dart';
+import 'package:tutorme/features/session/data/datasource/remote_datasource.dart/session_remote_datasource.dart';
+import 'package:tutorme/features/session/data/datasource/session_datasource.dart';
+import 'package:tutorme/features/session/data/repository/session_remote_repository.dart';
+import 'package:tutorme/features/session/domain/repository/session_repository.dart';
+import 'package:tutorme/features/session/domain/usecase/get_student_session_usecase.dart';
+import 'package:tutorme/features/session/presentation/bloc/session_bloc.dart';
 import 'package:tutorme/features/student/data/data_source/repository/remote_repository/student_remote_repository.dart';
 import 'package:tutorme/features/student/data/data_source/student_remote_data_source.dart/student_remote_data_source.dart';
 import 'package:tutorme/features/student/domain/repository/student_repository.dart';
@@ -51,9 +58,11 @@ import 'package:tutorme/features/wallet/presentation/view_model/bloc/wallet_bloc
 final getIt = GetIt.instance;
 
 Future<void> initDependencies() async {
+  WidgetsFlutterBinding
+      .ensureInitialized(); // Ensure Flutter bindings are initialized
   _initHiveService();
   _initApiService();
-  _initSharedPreferences();
+  await _initSharedPreferences();
 
   _initAuthDependencies();
   _initTutorDependencies();
@@ -64,6 +73,7 @@ Future<void> initDependencies() async {
   _initNotificationDependencies();
   // _initSocketService();
   _initNotificationService();
+  _initSessionDependencies();
   _initThemeCubit();
 }
 
@@ -272,5 +282,27 @@ void _initBookingDependencies() {
   getIt.registerFactory(() => BookingBloc(
         createBookingUseCase: getIt<CreateBookingUseCase>(),
         getStudentBookingsUseCase: getIt<GetStudentBookingsUseCase>(),
+      ));
+}
+
+void _initSessionDependencies() {
+  // Register Remote Data Source
+  getIt.registerLazySingleton<SessionRemoteDataSource>(() => SessionRemoteDataSource(
+        dio: getIt<Dio>(),
+        tokenSharedPrefs: getIt<TokenSharedPrefs>(),
+      ));
+
+  // Register Repository
+  getIt.registerLazySingleton<ISessionRepository>(
+      () => SessionRemoteRepository(getIt<SessionRemoteDataSource>()));
+
+  // Register Use Case
+  getIt.registerLazySingleton<GetStudentSessionsUsecase>(() =>
+      GetStudentSessionsUsecase(
+          sessionRepository: getIt<ISessionRepository>()));
+
+  // Register Bloc
+  getIt.registerFactory(() => SessionBloc(
+        getStudentSessionsUsecase: getIt<GetStudentSessionsUsecase>(),
       ));
 }

@@ -33,4 +33,7 @@ class ApiEndpoints {
   // Routes for Booking:
   static String createBooking = "api/bookings/request";
   static String getStudentBookings = "api/bookings/student";
+
+  // Routes for Sessions
+  static String getStudentSessions = "api/sessions/student";
 }
