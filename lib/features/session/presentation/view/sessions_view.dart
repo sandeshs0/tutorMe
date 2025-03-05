@@ -5,8 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tutorme/features/session/domain/entity/session_entity.dart';
 import 'package:tutorme/features/session/presentation/bloc/session_bloc.dart';
+import 'package:tutorme/features/session/presentation/view/video_call_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class SessionView extends StatefulWidget {
   const SessionView({super.key});
@@ -17,35 +17,35 @@ class SessionView extends StatefulWidget {
 
 class _SessionViewState extends State<SessionView> {
   final TextEditingController _searchController = TextEditingController();
-  bool _sortNewestFirst = true; // Default sorting: Newest First
-  String? _selectedStatus; // Track selected status for filtering
-  final WebViewController _webViewController = WebViewController();
+  bool _sortNewestFirst = true;
+  String? _selectedStatus;
+  // final WebViewController _webViewController = WebViewController();
 
   @override
   void initState() {
     super.initState();
     context.read<SessionBloc>().add(FetchStudentSessions());
-    _configureWebViewController();
+    // _configureWebViewController();
   }
 
-  void _configureWebViewController() {
-    _webViewController
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(const Color(0x00000000))
-      ..setNavigationDelegate(
-        NavigationDelegate(
-          onPageStarted: (String url) {
-            debugPrint('Page started loading: $url');
-          },
-          onPageFinished: (String url) {
-            debugPrint('Page finished loading: $url');
-          },
-          onWebResourceError: (WebResourceError error) {
-            debugPrint('WebView error: ${error.description}');
-          },
-        ),
-      );
-  }
+  // void _configureWebViewController() {
+  //   _webViewController
+  //     ..setJavaScriptMode(JavaScriptMode.unrestricted)
+  //     ..setBackgroundColor(const Color(0x00000000))
+  //     ..setNavigationDelegate(
+  //       NavigationDelegate(
+  //         onPageStarted: (String url) {
+  //           debugPrint('Page started loading: $url');
+  //         },
+  //         onPageFinished: (String url) {
+  //           debugPrint('Page finished loading: $url');
+  //         },
+  //         onWebResourceError: (WebResourceError error) {
+  //           debugPrint('WebView error: ${error.description}');
+  //         },
+  //       ),
+  //     );
+  // }
 
   @override
   void dispose() {
@@ -87,29 +87,29 @@ class _SessionViewState extends State<SessionView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "View and manage your scheduled learning sessions",
-              style: TextStyle(
-                  fontSize: 14,
-                  color: Theme.of(context).textTheme.bodyMedium?.color),
-            ),
-            const SizedBox(height: 16),
+            // Text(
+            //   "View and manage your scheduled learning sessions",
+            //   style: TextStyle(
+            //       fontSize: 16,
+            //       color: Theme.of(context).textTheme.bodyMedium?.color),
+            // ),
+            // const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   "Today: ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}",
                   style: TextStyle(
-                      fontSize: 14,
-                      color: Theme.of(context).primaryColor.withOpacity(0.8)),
+                      fontSize: 14, color: Theme.of(context).primaryColor),
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            // const SizedBox(height: 16),
             _buildSessionFilters(),
-            const SizedBox(height: 16),
+            // const SizedBox(height: 16),
             TextField(
               controller: _searchController,
+              style: const TextStyle(color: Colors.blueGrey),
               decoration: InputDecoration(
                 hintText: "Search by tutor name...",
                 prefixIcon: const Icon(Icons.search, color: Colors.grey),
@@ -124,7 +124,7 @@ class _SessionViewState extends State<SessionView> {
                 setState(() {});
               },
             ),
-            const SizedBox(height: 16),
+            // const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -145,7 +145,7 @@ class _SessionViewState extends State<SessionView> {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            // const SizedBox(height: 16),
             Expanded(
               child: BlocBuilder<SessionBloc, SessionState>(
                 builder: (context, state) {
@@ -175,7 +175,20 @@ class _SessionViewState extends State<SessionView> {
                     // return const Center(
                     //   child: Text("Joining video Session...", style: TextStyle(color: Colors.blueGrey),),
                     // );
-                    return _buildJitsiWebView(state.roomUrl);
+                    // return _buildJitsiWebView(state.roomUrl);
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              JitsiWebViewScreen(roomUrl: state.roomUrl),
+                        ),
+                      ).then((_) {
+                        // When the Jitsi screen is popped, refresh sessions
+                        context.read<SessionBloc>().add(FetchStudentSessions());
+                      });
+                    });
+                    return const SizedBox.shrink();
                   }
                   return const Center(
                       child: Text("No sessions available.",
@@ -189,11 +202,11 @@ class _SessionViewState extends State<SessionView> {
     );
   }
 
-  Widget _buildJitsiWebView(String roomUrl) {
-    return WebViewWidget(
-      controller: _webViewController..loadRequest(Uri.parse(roomUrl)),
-    );
-  }
+  // Widget _buildJitsiWebView(String roomUrl) {
+  //   return WebViewWidget(
+  //     controller: _webViewController..loadRequest(Uri.parse(roomUrl)),
+  //   );
+  // }
 
   Widget _buildSessionFilters() {
     return BlocBuilder<SessionBloc, SessionState>(
@@ -221,16 +234,17 @@ class _SessionViewState extends State<SessionView> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const SizedBox(width: 8), // Padding at the start
-              _buildFilterChip("All Sessions", allCount, Colors.grey, null),
+              _buildFilterChip("All Sessions", allCount,
+                  const Color.fromARGB(255, 17, 5, 5), null),
               const SizedBox(width: 8),
-              _buildFilterChip(
-                  "Scheduled", scheduledCount, Colors.blue[100]!, 'scheduled'),
+              _buildFilterChip("Scheduled", scheduledCount,
+                  const Color.fromARGB(255, 85, 0, 142), 'scheduled'),
               const SizedBox(width: 8),
               _buildFilterChip("In Progress", inProgressCount,
-                  Colors.green[100]!, 'in-progress'),
+                  const Color.fromARGB(255, 6, 138, 10), 'in-progress'),
               const SizedBox(width: 8),
-              _buildFilterChip(
-                  "Completed", completedCount, Colors.pink[100]!, 'completed'),
+              _buildFilterChip("Completed", completedCount,
+                  const Color.fromARGB(255, 0, 80, 126), 'completed'),
               const SizedBox(width: 8), // Padding at the end
             ],
           ),
@@ -249,14 +263,14 @@ class _SessionViewState extends State<SessionView> {
       },
       child: Chip(
         label: Text("$label $count",
-            style: TextStyle(
-                fontSize: 12,
-                color: _selectedStatus == status
-                    ? Colors.white
-                    : Theme.of(context).textTheme.bodyMedium?.color)),
-        backgroundColor: _selectedStatus == status
-            ? color.withOpacity(0.8)
-            : color.withOpacity(0.3),
+            style: const TextStyle(
+              fontSize: 12,
+              color: Colors.white,
+            )),
+        // color: _selectedStatus == status
+        //     ? Colors.white
+        //     : Theme.of(context).textTheme.bodyMedium?.color)),
+        backgroundColor: _selectedStatus == status ? color : color,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
             side: BorderSide(color: color)),
@@ -276,12 +290,27 @@ class _SessionViewState extends State<SessionView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Session with ${session.tutorName}",
-              style: GoogleFonts.lato(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).primaryColor),
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: "Session with ",
+                    style: GoogleFonts.montserrat(
+                      fontSize: 18,
+                      fontWeight: FontWeight.normal,
+                      color: Theme.of(context).textTheme.bodyMedium?.color,
+                    ),
+                  ),
+                  TextSpan(
+                    text: session.tutorName,
+                    style: GoogleFonts.lato(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).textTheme.bodyMedium?.color,
+                    ),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 8),
             Row(
@@ -289,7 +318,7 @@ class _SessionViewState extends State<SessionView> {
                 const Icon(Icons.calendar_today, size: 16, color: Colors.grey),
                 const SizedBox(width: 8),
                 Text(
-                  "${session.date.day}, ${session.date.month} ${session.date.year}",
+                  "${session.date.day}/${session.date.month}/${session.date.year}",
                   style: TextStyle(
                       fontSize: 14,
                       color: Theme.of(context).textTheme.bodyMedium?.color),
@@ -298,7 +327,7 @@ class _SessionViewState extends State<SessionView> {
                 const Icon(Icons.access_time, size: 16, color: Colors.grey),
                 const SizedBox(width: 8),
                 Text(
-                  session.startTime?.split(' ').first ?? "N/A",
+                  session.startTime?.split(' ')[4] ?? "N/A",
                   style: TextStyle(
                       fontSize: 14,
                       color: Theme.of(context).textTheme.bodyMedium?.color),
@@ -310,16 +339,15 @@ class _SessionViewState extends State<SessionView> {
               session.status.toUpperCase(),
               style: TextStyle(
                   fontSize: 14,
-                  color: Theme.of(context).primaryColor.withOpacity(0.5)),
+                  color: Theme.of(context).primaryColor.withOpacity(1)),
             ),
             const SizedBox(height: 8),
-            Text(
-              "Tutor Email: ${session.tutorEmail}",
-              style: TextStyle(
-                  fontSize: 14,
-                  color: Theme.of(context).textTheme.bodyMedium?.color),
-            ),
-            const SizedBox(height: 16),
+            // Text(
+            //   "Tracking id: ${session.sessionId}",
+            //   style: TextStyle(
+            //       fontSize: 14,
+            //       color: Theme.of(context).textTheme.bodyMedium?.color),
+            // ),
             if (session.status == 'scheduled' ||
                 session.status == 'in-progress')
               Center(
@@ -336,7 +364,7 @@ class _SessionViewState extends State<SessionView> {
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 16,
-                          fontFamily: 'Montserrat Regular')),
+                          fontFamily: 'Montserrat Bold')),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Theme.of(context).primaryColor,
                     padding: const EdgeInsets.symmetric(
@@ -425,12 +453,13 @@ class _SessionViewState extends State<SessionView> {
       builder: (context) => AlertDialog(
         title: Text("Session Details with ${session.tutorName}",
             style: GoogleFonts.lato(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).primaryColor)),
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              // color: Theme.of(context).textTheme.bodyMedium?.color
+            )),
         content: Container(
           padding: const EdgeInsets.all(16),
-          color: Theme.of(context).cardColor, // Solid background
+          // color: Theme.of(context).cardColor, // Solid background
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -461,9 +490,8 @@ class _SessionViewState extends State<SessionView> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text("Close",
-                style: TextStyle(
-                    color: Theme.of(context).primaryColor, fontSize: 16)),
+            child: const Text("Close",
+                style: TextStyle(color: Colors.redAccent, fontSize: 16)),
           ),
         ],
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),

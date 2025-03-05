@@ -72,7 +72,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return BlocBuilder<HomeCubit, DashboardState>(
       builder: (context, state) {
         return Scaffold(
-          // backgroundColor: const Color(0xFFF8FAFF),
           body: SafeArea(
             child: CustomScrollView(
               slivers: [
@@ -110,11 +109,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         _buildSectionHeader('Browse Tutors'),
                         const SizedBox(height: 16),
                         _buildTutorList(state),
-                        // Here we show the load more button
                         _buildLoadMoreButton(state),
-                        // Removed the final 24px gap if there's no more tutors
-                        // If you want a small gap even when there's no button, you can do:
-                        // const SizedBox(height: 8),
+                      
                       ],
                     ),
                   ),
