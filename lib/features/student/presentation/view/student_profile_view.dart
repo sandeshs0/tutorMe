@@ -84,7 +84,7 @@ class StudentProfileView extends StatelessWidget {
                   child: CircleAvatar(
                     radius: 100,
                     backgroundColor: theme.dividerColor,
-                    backgroundImage: NetworkImage(student.profileImage),
+                    backgroundImage: _getImageProvider(student.profileImage),
                   ),
                 ),
               ],
@@ -147,6 +147,14 @@ class StudentProfileView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  ImageProvider _getImageProvider(String imagePath) {
+    if (imagePath.startsWith('http')) {
+      return NetworkImage(imagePath);
+    } else {
+      return AssetImage(imagePath);
+    }
   }
 
   Widget _buildWalletBalanceCard(double balance, ThemeData theme) {

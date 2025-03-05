@@ -4,7 +4,7 @@ class ApiEndpoints {
   static const Duration receiveTimeout = Duration(seconds: 1000);
   // static const String baseUrl = "http://10.0.2.2:3000/";
   // To Run in USB Connected Android Device:
-  static const String baseUrl = "http://192.168.0.103:3000/";
+  static const String baseUrl = "http://192.168.18.29:3000/";
 
   // Routes for Auth
   static const String register = "auth/register";

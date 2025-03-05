@@ -131,7 +131,7 @@ class _WalletViewState extends State<WalletView> {
                         try {
                           khalti.open(navigatorContext);
                         } catch (e) {
-                          debugPrint("❌ Error opening Khalti: $e");
+                          debugPrint(" Error opening Khalti: $e");
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                                 content:
@@ -239,7 +239,7 @@ class _WalletViewState extends State<WalletView> {
           ),
           const SizedBox(height: 10),
           Text(
-            "\$${balance.toStringAsFixed(2)}",
+            "Rs. ${balance.toStringAsFixed(2)}",
             style: GoogleFonts.lato(
                 fontSize: 36, fontWeight: FontWeight.bold, color: Colors.white),
           ),
@@ -292,14 +292,14 @@ class _WalletViewState extends State<WalletView> {
             )
           ],
         ),
-        const SizedBox(height: 10),
-        _buildSampleTransaction("Angga Big Park", "10 hours ago", "\$49,509",
-            FontAwesomeIcons.buildingColumns),
-        _buildSampleTransaction("Top Up", "12 January 2025", "\$43,129,509",
-            FontAwesomeIcons.wallet,
-            color: Colors.green),
-        _buildSampleTransaction("Angga Big Park", "10 hours ago", "\$49,509",
-            FontAwesomeIcons.buildingColumns),
+        // const SizedBox(height: 10),
+        // _buildSampleTransaction("Angga Big Park", "10 hours ago", "\$49,509",
+        //     FontAwesomeIcons.buildingColumns),
+        // _buildSampleTransaction("Top Up", "12 January 2025", "\$43,129,509",
+        //     FontAwesomeIcons.wallet,
+        //     color: Colors.green),
+        // _buildSampleTransaction("Angga Big Park", "10 hours ago", "\$49,509",
+        //     FontAwesomeIcons.buildingColumns),
       ],
     );
   }
