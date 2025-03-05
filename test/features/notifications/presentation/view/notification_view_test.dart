@@ -6,7 +6,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:tutorme/features/notifications/presentation/view/notification_view.dart';
 import 'package:tutorme/features/notifications/presentation/view_model/notification_bloc.dart';
 
-import '../test_data/notification_test_data.dart'; // Import the test data
+import '../test_data/notification_test_data.dart'; 
 
 class MockNotificationBloc
     extends MockBloc<NotificationEvent, NotificationState>
@@ -18,7 +18,6 @@ void main() {
   setUp(() {
     notificationBloc = MockNotificationBloc();
 
-    // Set up the initial state for the Bloc
     when(() => notificationBloc.state).thenReturn(NotificationInitial());
   });
 
