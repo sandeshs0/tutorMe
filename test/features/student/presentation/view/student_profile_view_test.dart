@@ -6,7 +6,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:tutorme/features/student/presentation/view/student_profile_view.dart';
 import 'package:tutorme/features/student/presentation/view_model/bloc/student_profile_bloc.dart';
 
-import '../test_data/student_test_data.dart'; // Import the updated test data
+import '../test_data/student_test_data.dart';
 
 class MockStudentProfileBloc
     extends MockBloc<StudentProfileEvent, StudentProfileState>
@@ -18,7 +18,6 @@ void main() {
   setUp(() {
     studentProfileBloc = MockStudentProfileBloc();
 
-    // Set up the initial state to simulate loading, then loaded after fetch
     when(() => studentProfileBloc.state).thenReturn(StudentProfileLoading());
     when(() => studentProfileBloc.state).thenAnswer((_) {
       return const StudentProfileLoaded(student: student);

@@ -5,7 +5,7 @@ const student = StudentEntity(
   name: 'Sandesh Sapkota',
   email: 'sandeshsapkota@example.com',
   phone: '+977 9812345678',
-  profileImage: 'assets/images/avatar.jpg', // Use a local asset
+  profileImage: 'assets/images/avatar.jpg', 
   role: 'Student',
   walletBalance: 950.0,
 );
