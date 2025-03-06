@@ -10,6 +10,16 @@ class HiveService {
     Hive.registerAdapter(UserHiveModelAdapter());
   }
 
+  Future<void> addItem<T>(String boxName, String key, T item) async {
+    var box = await Hive.openBox<T>(boxName);
+    await box.put(key, item);
+  }
+
+  Future<List<T>> getAllItems<T>(String boxName) async {
+    var box = await Hive.openBox<T>(boxName);
+    return box.values.toList();
+  }
+
   // Register
   Future<void> addUser(UserHiveModel user)async{
     var box = await Hive.openBox<UserHiveModel>('userBox');

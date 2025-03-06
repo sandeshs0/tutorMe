@@ -6,6 +6,7 @@ import 'package:tutorme/app/shared_prefs/token_shared_prefs.dart';
 import 'package:tutorme/bloc/theme_cubit.dart';
 import 'package:tutorme/core/network/api_service.dart';
 import 'package:tutorme/core/network/hive_service.dart';
+import 'package:tutorme/core/services/connectivity_service.dart';
 import 'package:tutorme/core/services/notification_service.dart';
 import 'package:tutorme/core/services/socket_service.dart';
 import 'package:tutorme/features/auth/data/data_source/remote_data_source.dart/auth_remote_datasource.dart';
@@ -64,6 +65,7 @@ Future<void> initDependencies() async {
   _initHiveService();
   _initApiService();
   await _initSharedPreferences();
+_initConnectivityService(); 
 
   _initAuthDependencies();
   _initTutorDependencies();
@@ -311,4 +313,8 @@ void _initSessionDependencies() {
         getStudentSessionsUsecase: getIt<GetStudentSessionsUsecase>(),
         joinSessionUseCase: getIt<JoinSessionUseCase>(),
       ));
+}
+
+void _initConnectivityService() {
+  getIt.registerLazySingleton<ConnectivityService>(() => ConnectivityService());
 }
