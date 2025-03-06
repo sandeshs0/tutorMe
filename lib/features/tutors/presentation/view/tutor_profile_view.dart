@@ -13,9 +13,30 @@ class TutorProfileView extends StatefulWidget {
 
 class _TutorProfileViewState extends State<TutorProfileView> {
   bool _isDescriptionExpanded = false;
+  final ScrollController _scrollController = ScrollController();
+  bool _showBookButton = true;
+
+  @override
+  void initState() {
+    super.initState();
+    // Hide book button when scrolling to bottom
+    _scrollController.addListener(() {
+      final isBottom = _scrollController.offset >=
+          _scrollController.position.maxScrollExtent - 50;
+      setState(() {
+        _showBookButton = !isBottom;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   /// Builds a row of 5 stars (with half-star support) based on the given [rating].
-  Widget _buildStarRating(double rating, {double size = 20}) {
+  Widget _buildStarRating(double rating, {double size = 20, Color? color}) {
     final int fullStars = rating.floor();
     final bool hasHalfStar = (rating - fullStars) >= 0.5;
 
@@ -23,14 +44,11 @@ class _TutorProfileViewState extends State<TutorProfileView> {
       mainAxisSize: MainAxisSize.min,
       children: List.generate(5, (index) {
         if (index < fullStars) {
-          return Icon(Icons.star,
-              color: const Color.fromARGB(255, 230, 158, 3), size: size);
+          return Icon(Icons.star, color: color, size: size);
         } else if (index == fullStars && hasHalfStar) {
-          return Icon(Icons.star_half,
-              color: const Color.fromARGB(255, 230, 158, 3), size: size);
+          return Icon(Icons.star_half, color: color, size: size);
         } else {
-          return Icon(Icons.star_border,
-              color: const Color.fromARGB(255, 230, 158, 3), size: size);
+          return Icon(Icons.star_border, color: color, size: size);
         }
       }),
     );
@@ -39,124 +57,269 @@ class _TutorProfileViewState extends State<TutorProfileView> {
   @override
   Widget build(BuildContext context) {
     final tutor = widget.tutor;
+    final theme = Theme.of(context);
+    final primaryColor = theme.primaryColor;
+    final isDark = theme.brightness == Brightness.dark;
+
+    // Determine text and background colors based on theme
+    final textColor = isDark ? Colors.white : Colors.black87;
+    final backgroundColor = theme.scaffoldBackgroundColor;
+    final cardColor = theme.cardColor;
+
+    // Secondary color for gradient effects
+    final primaryDarkColor = isDark
+        ? primaryColor.withOpacity(0.7)
+        : const Color.fromARGB(255, 0, 74, 203); // Darker shade for light theme
 
     return Scaffold(
-      // backgroundColor: const Color(0xFFF8FAFF),
-      appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.white),
-        title: Text(
-          tutor.name,
-          style: const TextStyle(
-            fontWeight: FontWeight.w600,
-            color: Colors.white,
+      backgroundColor: backgroundColor,
+      body: CustomScrollView(
+        controller: _scrollController,
+        slivers: [
+          // Custom app bar with tutor image as background
+          SliverAppBar(
+            expandedHeight: 220,
+            pinned: true,
+            backgroundColor: primaryColor,
+            title: Text(tutor.name),
+            elevation: 0,
+            flexibleSpace: FlexibleSpaceBar(
+              background: _buildHeaderBackground(tutor),
+            ),
+            iconTheme: const IconThemeData(color: Colors.white),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.favorite_border, color: Colors.white),
+                onPressed: () {},
+              ),
+              IconButton(
+                icon: const Icon(Icons.share, color: Colors.white),
+                onPressed: () {},
+              ),
+            ],
+          ),
+          // Content
+          SliverToBoxAdapter(
+            child: _buildProfileContent(
+                tutor, primaryColor, primaryDarkColor, textColor, cardColor),
+          ),
+        ],
+      ),
+      floatingActionButton: _showBookButton
+          ? FloatingActionButton.extended(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BookingConfirmationView(tutor: tutor),
+                  ),
+                );
+              },
+              backgroundColor: primaryColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              elevation: 4,
+              label: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "Book a Session",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Container(
+                    width: 32,
+                    height: 32,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.arrow_forward,
+                      color: Colors.white,
+                      size: 18,
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : null,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    );
+  }
+
+  // Header background with tutor image and gradient overlay
+  Widget _buildHeaderBackground(TutorEntity tutor) {
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        // Background image with gradient overlay
+        ShaderMask(
+          shaderCallback: (rect) {
+            return const LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Colors.transparent, Colors.black87],
+            ).createShader(rect);
+          },
+          blendMode: BlendMode.darken,
+          child: Image.network(
+            tutor.profileImage,
+            fit: BoxFit.cover,
+            errorBuilder: (_, __, ___) => Container(
+              color: Theme.of(context).primaryColor,
+              child: const Icon(Icons.person, size: 80, color: Colors.white54),
+            ),
           ),
         ),
-        centerTitle: true,
-        backgroundColor: const Color(0xFF0961F5),
-        elevation: 4,
-        shadowColor: Colors.blueAccent.withOpacity(0.2),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => BookingConfirmationView(tutor: tutor),
-            ),
-          );
-        },
-        backgroundColor: const Color(0xFF0961F5),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(50), // Pill shape
-        ),
-        label: Row(
-          // Ensures the contents are centered horizontally
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              "Book a Session",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-                color: Colors.white,
+        // Tutor info at the bottom
+        Positioned(
+          left: 20,
+          right: 20,
+          bottom: 20,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                tutor.name,
+                style: const TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  shadows: [
+                    Shadow(
+                      color: Colors.black45,
+                      offset: Offset(0, 1),
+                      blurRadius: 2,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(width: 12),
-            // Circular container for the arrow icon
-            Container(
-              width: 36,
-              height: 36,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
+              const SizedBox(height: 4),
+              Row(
+                children: [
+                  _buildStarRating(tutor.rating, size: 20, color: Colors.amber),
+                  const SizedBox(width: 8),
+                  Text(
+                    "(${tutor.rating.toStringAsFixed(1)})",
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
               ),
-              child: const Icon(
-                Icons.arrow_forward,
-                color: Color(0xFF0961F5),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 80),
-        child: Column(
-          children: [
-            _buildProfileHeader(tutor),
-            const SizedBox(height: 20),
-            _buildBioSection(tutor),
-            const SizedBox(height: 20),
-            _buildSubjectsSection(tutor),
-            const SizedBox(height: 24),
-            _buildReviewsSection(),
-          ],
-        ),
+      ],
+    );
+  }
+
+  // Main content of the profile
+  Widget _buildProfileContent(TutorEntity tutor, Color primaryColor,
+      Color primaryDarkColor, Color textColor, Color cardColor) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 24, 16, 80),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Hourly Rate Section (Prioritized)
+          _buildHourlyRateCard(tutor, primaryColor, textColor, cardColor),
+          const SizedBox(height: 24),
+
+          // About section
+          _buildSectionCard(
+            title: "About",
+            icon: Icons.person,
+            iconColor: primaryColor,
+            content: _buildAboutSection(tutor, primaryColor, textColor),
+            cardColor: cardColor,
+            textColor: textColor,
+          ),
+          const SizedBox(height: 16),
+
+          // Subjects section
+          _buildSectionCard(
+            title: "Subjects",
+            icon: Icons.school,
+            iconColor: primaryColor,
+            content: _buildSubjectsSection(tutor, primaryColor),
+            cardColor: cardColor,
+            textColor: textColor,
+          ),
+          const SizedBox(height: 16),
+
+          // Reviews section
+          _buildSectionCard(
+            title: "Reviews",
+            icon: Icons.star,
+            iconColor: primaryColor,
+            content: _buildReviewsSection(primaryColor, textColor),
+            cardColor: cardColor,
+            textColor: textColor,
+          ),
+        ],
       ),
     );
   }
 
-// Somewhere in your code where you show the hourly rate:
-  Widget _buildHourlyRate(double rate) {
+  // Hourly Rate Card (New, prioritized section)
+  Widget _buildHourlyRateCard(
+      TutorEntity tutor, Color primaryColor, Color textColor, Color cardColor) {
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 0, 70, 128)
-            .withOpacity(0.1), // Light background
-        borderRadius: BorderRadius.circular(16), // Pill shape
+        color: cardColor,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Row(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Optional: Flutter 2.10+ has Icons.currency_rupee
-          // Otherwise, you could just use a Text('₹') or 'Rs.'
-          // const Icon(
-          //   Icons.monetization_on,
-          //   color: Color.fromARGB(255, 0, 70, 128),
-          //   size: 18,
+          // Container(
+          //   padding: const EdgeInsets.all(12),
+          //   decoration: BoxDecoration(
+          //     color: const Color.fromARGB(255, 141, 68, 0).withOpacity(0.1),
+          //     borderRadius: BorderRadius.circular(12),
+          //   ),
+          //   child: const Icon(
+          //     Icons.wallet,
+          //     color: Color.fromARGB(255, 141, 68, 0),
+          //     size: 28,
+          //   ),
           // ),
-          const Text(
-            'Rs. ',
-            style: TextStyle(
-              fontSize: 16,
-              // fontWeight: FontWeigh,
-              color: Color.fromARGB(255, 0, 70, 128),
+          const SizedBox(width: 16),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: theme.primaryColor.withOpacity(0.15),
+              borderRadius: BorderRadius.circular(20),
             ),
-          ),
-          Text(
-            rate.toStringAsFixed(2),
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Color.fromARGB(255, 0, 70, 128),
-            ),
-          ),
-          const Text(
-            ' /hour',
-            style: TextStyle(
-              fontSize: 14,
-              // fontWeight: FontWeigh,
-              color: Color.fromARGB(255, 0, 70, 128),
+            child: Text(
+              "Rs. ${tutor.hourlyRate.toStringAsFixed(2)}/hr",
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: isDarkMode
+                    ? const Color.fromARGB(255, 12, 167, 136)
+                    : theme.primaryColor,
+                // : theme.primaryColor,
+              ),
             ),
           ),
         ],
@@ -164,112 +327,24 @@ class _TutorProfileViewState extends State<TutorProfileView> {
     );
   }
 
-  /// A stack-based header that places the avatar partially overlapping the top container.
-  Widget _buildProfileHeader(TutorEntity tutor) {
-    final theme = Theme.of(context);
-
-    return Stack(
-      alignment: Alignment.topCenter,
-      children: [
-        // Background container (where the avatar is half inside/outside).
-        Container(
-          margin: const EdgeInsets.only(top: 60),
-          padding:
-              const EdgeInsets.only(top: 80, bottom: 16, right: 80, left: 80),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.blueAccent.withOpacity(0.1),
-                blurRadius: 12,
-                offset: const Offset(0, 6),
-              ),
-            ],
-          ),
-          child: Column(
-            children: [
-              // Tutor Name
-              Text(
-                tutor.name,
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w800,
-                  color: Color(0xFF1A237E),
-                ),
-              ),
-
-              const SizedBox(height: 8),
-              // Short bio
-              Text(
-                tutor.bio.isNotEmpty ? tutor.bio : "Expert Tutor",
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey.shade800,
-                  fontWeight: FontWeight.w400,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 10),
-              // Star rating (out of 5)
-              _buildStarRating(tutor.rating, size: 26),
-              const SizedBox(height: 8),
-              // Hourly Rate (visual priority)
-              // Text(
-              //   'Rs. ${tutor.hourlyRate} /hr',
-              //   style: const TextStyle(
-              //     fontSize: 20,
-              //     fontWeight: FontWeight.bold,
-              //     color: Color.fromARGB(255, 91, 3, 3),
-              //   ),
-              // ),
-              _buildHourlyRate(tutor.hourlyRate),
-            ],
-          ),
-        ),
-        // Avatar image
-        Hero(
-          tag: 'tutor-avatar-${tutor.tutorId}',
-          child: Container(
-            width: 120,
-            height: 120,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.blueAccent.withOpacity(0.1),
-                  blurRadius: 12,
-                  offset: const Offset(0, 6),
-                ),
-              ],
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: Image.network(
-                tutor.profileImage,
-                fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) =>
-                    const Icon(Icons.person, size: 60),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  /// Bio section with read more/less functionality.
-  Widget _buildBioSection(TutorEntity tutor) {
+  // Section card with title and content
+  Widget _buildSectionCard({
+    required String title,
+    required IconData icon,
+    required Color iconColor,
+    required Widget content,
+    required Color cardColor,
+    required Color textColor,
+  }) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: cardColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.blueAccent.withOpacity(0.05),
-            blurRadius: 8,
+            color: Colors.black.withOpacity(0.03),
+            blurRadius: 10,
             offset: const Offset(0, 4),
           ),
         ],
@@ -277,24 +352,57 @@ class _TutorProfileViewState extends State<TutorProfileView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'About me',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w800,
-              color: Color(0xFF1A237E),
+          // Section header
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: iconColor.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(icon, color: iconColor, size: 20),
+                ),
+                const SizedBox(width: 12),
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: textColor,
+                  ),
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: 12),
+          // Divider
+          Divider(color: textColor.withOpacity(0.1), height: 1),
+          // Content
+          content,
+        ],
+      ),
+    );
+  }
+
+  // About section with read more functionality
+  Widget _buildAboutSection(
+      TutorEntity tutor, Color primaryColor, Color textColor) {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
           LayoutBuilder(
             builder: (context, constraints) {
               final textSpan = TextSpan(
                 text: tutor.description.isNotEmpty
                     ? tutor.description
-                    : "No description available.",
+                    : "No Description",
                 style: TextStyle(
                   fontSize: 14,
-                  color: Colors.grey.shade700,
+                  color: textColor.withOpacity(0.8),
                   height: 1.5,
                 ),
               );
@@ -311,16 +419,38 @@ class _TutorProfileViewState extends State<TutorProfileView> {
                   Text.rich(
                     textSpan,
                     maxLines: _isDescriptionExpanded ? null : 3,
-                    overflow: TextOverflow.fade,
+                    overflow: _isDescriptionExpanded
+                        ? TextOverflow.visible
+                        : TextOverflow.ellipsis,
                   ),
                   if (textPainter.didExceedMaxLines)
                     TextButton(
                       onPressed: () => setState(() {
                         _isDescriptionExpanded = !_isDescriptionExpanded;
                       }),
-                      child: Text(
-                        _isDescriptionExpanded ? 'Read Less' : 'Read More',
-                        style: const TextStyle(color: Color(0xFF0961F5)),
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.zero,
+                        minimumSize: const Size(50, 30),
+                        alignment: Alignment.centerLeft,
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            _isDescriptionExpanded ? 'Read Less' : 'Read More',
+                            style: TextStyle(
+                              color: primaryColor,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Icon(
+                            _isDescriptionExpanded
+                                ? Icons.keyboard_arrow_up
+                                : Icons.keyboard_arrow_down,
+                            color: primaryColor,
+                            size: 16,
+                          ),
+                        ],
                       ),
                     ),
                 ],
@@ -332,218 +462,239 @@ class _TutorProfileViewState extends State<TutorProfileView> {
     );
   }
 
-  /// Section listing the tutor's teaching subjects.
-  Widget _buildSubjectsSection(TutorEntity tutor) {
-    return Container(
-      width: double.infinity,
+  // Subjects section with chips
+  Widget _buildSubjectsSection(TutorEntity tutor, Color primaryColor) {
+    return Padding(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.blueAccent.withOpacity(0.05),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            "I can teach",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-              color: Color(0xFF1A237E),
+      child: Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        children: tutor.subjects.map((subject) {
+          return Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color: primaryColor.withOpacity(0.08),
+              borderRadius: BorderRadius.circular(30),
+              border: Border.all(color: primaryColor.withOpacity(0.2)),
             ),
-          ),
-          const SizedBox(height: 12),
-          Center(
-            child: Wrap(
-              alignment: WrapAlignment.center,
-              spacing: 10,
-              runSpacing: 10,
-              children: tutor.subjects.map((subject) {
-                return Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF0961F5).withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(24),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  _getSubjectIcon(subject),
+                  color: primaryColor,
+                  size: 16,
+                ),
+                const SizedBox(width: 6),
+                Text(
+                  subject,
+                  style: TextStyle(
+                    color: primaryColor,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
                   ),
-                  child: Text(
-                    subject,
-                    style: const TextStyle(
-                      color: Color(0xFF0961F5),
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                );
-              }).toList(),
+                ),
+              ],
             ),
-          ),
-        ],
+          );
+        }).toList(),
       ),
     );
   }
 
-  /// Section displaying sample reviews.
-  Widget _buildReviewsSection() {
+  // Get icon based on subject name
+  IconData _getSubjectIcon(String subject) {
+    final subjectLow = subject.toLowerCase();
+    if (subjectLow.contains('math')) return Icons.calculate;
+    if (subjectLow.contains('science')) return Icons.science;
+    if (subjectLow.contains('computer')) return Icons.computer;
+    if (subjectLow.contains('history')) return Icons.history_edu;
+    if (subjectLow.contains('english')) return Icons.menu_book;
+    if (subjectLow.contains('language')) return Icons.language;
+    if (subjectLow.contains('art')) return Icons.palette;
+    if (subjectLow.contains('music')) return Icons.music_note;
+    return Icons.school;
+  }
+
+  // Reviews section
+  Widget _buildReviewsSection(Color primaryColor, Color textColor) {
     final sampleReviews = [
       {
-        "reviewer": "Will",
+        "reviewer": "Will Smith",
         "rating": 4.5,
         "text":
-            "This course has been very helpful. Mentor was extremely knowledgeable.",
-        "date": "2 days ago"
+            "This course has been very helpful. The mentor was extremely knowledgeable and patient with my questions.",
+        "date": "2 days ago",
+        "avatar": "W",
       },
       {
-        "reviewer": "Sophia",
+        "reviewer": "Sophia Chen",
         "rating": 5.0,
         "text":
-            "Loved the sessions! The tutor was patient and explained everything clearly.",
-        "date": "1 week ago"
+            "Loved the sessions! The tutor explained everything clearly and provided great examples to help me understand difficult concepts.",
+        "date": "1 week ago",
+        "avatar": "S",
       },
     ];
 
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.blueAccent.withOpacity(0.05),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Header
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                "Student Reviews",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w800,
-                  color: Color(0xFF1A237E),
-                ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Review items
+        ...sampleReviews.map((review) => _buildReviewItem(
+              reviewer: review["reviewer"] as String,
+              rating: review["rating"] as double,
+              text: review["text"] as String,
+              date: review["date"] as String,
+              avatar: review["avatar"] as String,
+              primaryColor: primaryColor,
+              textColor: textColor,
+            )),
+        // View all button
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: ElevatedButton(
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.transparent,
+              foregroundColor: primaryColor,
+              elevation: 0,
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+                side: BorderSide(color: primaryColor.withOpacity(0.5)),
               ),
-              TextButton(
-                onPressed: () {},
-                child: const Row(
-                  children: [
-                    Text(
-                      "View All",
-                      style: TextStyle(
-                        color: Color(0xFF0961F5),
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    SizedBox(width: 4),
-                    Icon(Icons.arrow_forward_rounded, size: 16),
-                  ],
-                ),
-              ),
-            ],
+            ),
+            child: const Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Text(
+                //   "View all 26 reviews",
+                //   style: TextStyle(
+                //     color: primaryColor,
+                //     fontWeight: FontWeight.w600,
+                //   ),
+                // ),
+                // const SizedBox(width: 8),
+                // Icon(Icons.arrow_forward, size: 16, color: primaryColor),
+              ],
+            ),
           ),
-          // Review items
-          ...sampleReviews.map((review) => _buildReviewItem(
-                reviewer: review["reviewer"] as String,
-                rating: review["rating"] as double,
-                text: review["text"] as String,
-                date: review["date"] as String,
-              )),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
-  /// A single review item with star rating.
+  // Individual review item
   Widget _buildReviewItem({
     required String reviewer,
     required double rating,
     required String text,
     required String date,
+    required String avatar,
+    required Color primaryColor,
+    required Color textColor,
   }) {
+    // Create gradient colors for avatar background
+    final colors = [
+      primaryColor,
+      primaryColor.withOpacity(0.7),
+    ];
+
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.grey[50],
-        borderRadius: BorderRadius.circular(12),
+        border: Border(
+          bottom: BorderSide(
+            color: textColor.withOpacity(0.1),
+            width: 1,
+          ),
+        ),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Initial letter avatar
-          CircleAvatar(
-            radius: 20,
-            backgroundColor: Colors.blueAccent.withOpacity(0.1),
-            child: Text(
-              reviewer[0],
-              style: const TextStyle(
-                color: Color(0xFF0961F5),
-                fontWeight: FontWeight.bold,
+          // Avatar
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: colors,
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Center(
+              child: Text(
+                avatar,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
               ),
             ),
           ),
           const SizedBox(width: 12),
-          // Review details
+          // Review content
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Reviewer name & star rating
+                // Reviewer and rating
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      reviewer,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xFF1A237E),
+                    Expanded(
+                      child: Text(
+                        reviewer,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14,
+                          color: textColor,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                     Row(
                       children: [
-                        _buildStarRating(rating, size: 16),
-                        const SizedBox(width: 4),
                         Text(
                           rating.toString(),
                           style: const TextStyle(
-                            fontWeight: FontWeight.w700,
-                            color: Color(0xFF0961F5),
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                            color: Color(0xFFFFC107),
                           ),
+                        ),
+                        const SizedBox(width: 4),
+                        const Icon(
+                          Icons.star,
+                          color: Color(0xFFFFC107),
+                          size: 16,
                         ),
                       ],
                     ),
                   ],
                 ),
-                const SizedBox(height: 6),
+                const SizedBox(height: 4),
                 // Review text
                 Text(
                   text,
                   style: TextStyle(
-                    color: Colors.grey.shade700,
+                    color: textColor.withOpacity(0.8),
+                    fontSize: 13,
                     height: 1.4,
                   ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 6),
                 // Date
                 Text(
                   date,
                   style: TextStyle(
-                    color: Colors.grey.shade500,
+                    color: textColor.withOpacity(0.5),
                     fontSize: 12,
                   ),
                 ),

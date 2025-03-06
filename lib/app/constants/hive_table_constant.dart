@@ -4,4 +4,7 @@ class HiveTableConstant {
 
   static const int userTableId = 0;
   static const String userBox = 'userBox';
+
+  static const int tutorTableId = 1;
+  static const String tutorBox = 'tutorBox';
 }

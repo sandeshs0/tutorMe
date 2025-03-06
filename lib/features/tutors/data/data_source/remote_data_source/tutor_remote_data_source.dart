@@ -8,7 +8,6 @@ import 'package:tutorme/features/tutors/domain/entity/tutor_entity.dart';
 class TutorRemoteDataSource implements ITutorDataSource {
   final Dio _dio;
   
-
   TutorRemoteDataSource({
     required Dio dio,
   }) : _dio = dio;

@@ -13,9 +13,9 @@ class ApiEndpoints {
 
   // Routes for Tutors
   static const String getAllTutors =
-      "api/tutors"; // Use query params for pagination
+      "api/tutors";
   static const String getTutorProfile =
-      "api/tutors/profile"; // Append "/{username}" dynamically
+      "api/tutors/profile"; 
 
   // Routes for Student Profile Fetching
   static const String getStudentProfile = "api/student/profile";

@@ -11,8 +11,7 @@ class ThemeCubit extends Cubit<ThemeMode> {
 
   StreamSubscription<int>? _lightSubscription;
   int _lastLuxValue = 100;
-  void _startListening()
-   {
+  void _startListening() {
     final lightSensor = Light();
     try {
       _lightSubscription = lightSensor.lightSensorStream.listen(
