@@ -2,20 +2,53 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:tutorme/app/usecase/usecase.dart';
 import 'package:tutorme/core/error/failure.dart';
+import 'package:tutorme/core/services/connectivity_service.dart';
 import 'package:tutorme/features/tutors/domain/entity/tutor_entity.dart';
 import 'package:tutorme/features/tutors/domain/repository/tutor_repository.dart';
 
 class GetAllTutorsUsecase
     implements UsecaseWithParams<List<TutorEntity>, GetTutorsParams> {
-  final ITutorRepository tutorRepository;
+  final ITutorRepository remoteRepository;
+  final ITutorRepository localRepository;
+  final ConnectivityService connectivityService;
 
-  GetAllTutorsUsecase({required this.tutorRepository});
+  GetAllTutorsUsecase(
+      {required this.remoteRepository,
+      required this.localRepository,
+      required this.connectivityService});
 
   @override
   Future<Either<Failure, List<TutorEntity>>> call(
       GetTutorsParams params) async {
-    return await tutorRepository.getAllTutors(
-        page: params.page, limit: params.limit);
+    try {
+      final isConnected = await connectivityService.isConnected();
+
+      if (isConnected) {
+        final remoteResult = await remoteRepository.getAllTutors(
+          page: params.page,
+          limit: params.limit,
+        );
+        return remoteResult.fold(
+          (failure) => Left(failure),
+          (tutors) async {
+            await localRepository
+                .saveTutors(tutors); // Fixed: Clean call to saveTutors
+            return Right(tutors);
+          },
+        );
+      } else {
+        final localResult = await localRepository.getAllTutors(
+          page: params.page,
+          limit: params.limit,
+        );
+        return localResult.fold(
+          (failure) => Left(failure),
+          (tutors) => Right(tutors.isEmpty ? [] : tutors),
+        );
+      }
+    } catch (e) {
+      return Left(ApiFailure(message: "Failed to fetch tutors: $e"));
+    }
   }
 }
 

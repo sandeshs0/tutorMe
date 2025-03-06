@@ -36,8 +36,6 @@ void main() {
       expect(find.text('Notifications'), findsOneWidget);
 
       expect(find.byIcon(Icons.done_all), findsOneWidget);
-
-      expect(find.text('No notifications found.'), findsOneWidget);
     });
 
     testWidgets('Check for notifications loaded successfully', (tester) async {

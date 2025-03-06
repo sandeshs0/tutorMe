@@ -724,9 +724,9 @@ class _WalletViewState extends State<WalletView>
                       ),
                     ],
                   ),
-                  const SizedBox(
-                    height: 12,
-                  ),
+                  // const SizedBox(
+                  //   height: 12,
+                  // ),
 
                   // Balance
                   Column(
@@ -735,17 +735,17 @@ class _WalletViewState extends State<WalletView>
                       Text(
                         "BALANCE (Rs.)",
                         style: GoogleFonts.spaceMono(
-                          fontSize: 16,
+                          fontSize: 30,
                           fontWeight: FontWeight.w500,
                           color: Colors.white.withOpacity(0.7),
                           letterSpacing: 1.5,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      // const SizedBox(height: 4),
                       Text(
                         balance.toStringAsFixed(2),
                         style: GoogleFonts.poppins(
-                          fontSize: 48,
+                          fontSize: 64,
                           fontWeight: FontWeight.normal,
                           color: Colors.white,
                           letterSpacing: 1.0,
@@ -758,7 +758,7 @@ class _WalletViewState extends State<WalletView>
                   Text(
                     "As of: ${_formatDateYMD(DateTime.now())}",
                     style: GoogleFonts.roboto(
-                      fontSize: 12,
+                      fontSize: 23,
                       color: Colors.white.withOpacity(0.7),
                     ),
                   ),

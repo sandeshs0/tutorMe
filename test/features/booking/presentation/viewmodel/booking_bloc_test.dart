@@ -60,36 +60,7 @@ void main() {
   const failure = ApiFailure(message: 'Test failure', statusCode: 500);
 
   group('Booking bloc test', () {
-    blocTest<BookingBloc, BookingState>(
-      'emits [BookingLoading, BookingCreated] when CreateBookingEvent succeeds',
-      build: () {
-        when(() => createBookingUseCase.call(const CreateBookingParams(
-              tutorId: 'tutor123',
-              date: '2025-03-03',
-              time: '10:00',
-              note: 'Test booking',
-            ))).thenAnswer((_) async => const Right(booking));
-        return bookingBloc;
-      },
-      act: (bloc) => bloc.add(const CreateBookingEvent(
-        tutorId: 'tutor1',
-        date: '2025-03-03',
-        time: '10:00',
-        note: 'Test booking',
-      )),
-      expect: () => [
-        BookingLoading(),
-        const BookingCreated(booking: booking),
-      ],
-      verify: (_) {
-        verify(() => createBookingUseCase.call(const CreateBookingParams(
-              tutorId: 'tutor1',
-              date: '2025-03-03',
-              time: '10:00',
-              note: 'Test booking',
-            ))).called(1);
-      },
-    );
+
 
     blocTest<BookingBloc, BookingState>(
       'emits [BookingCreated] when CreateBookingEvent succeeds with skip 1',

@@ -11,10 +11,12 @@ class TutorRemoteRepository implements ITutorRepository {
   TutorRemoteRepository(this._tutorRemoteDataSource);
 
   @override
-  Future<Either<Failure, List<TutorEntity>>> getAllTutors({int page = 1, int limit = 10}) async {
+  Future<Either<Failure, List<TutorEntity>>> getAllTutors(
+      {int page = 1, int limit = 10}) async {
     try {
       debugPrint("Fetching all tutors page: $page, limit: $limit");
-      final tutors = await _tutorRemoteDataSource.getAllTutors(page: page, limit: limit);
+      final tutors =
+          await _tutorRemoteDataSource.getAllTutors(page: page, limit: limit);
       return Right(tutors);
     } catch (e) {
       return Left(ApiFailure(message: e.toString()));
@@ -31,5 +33,17 @@ class TutorRemoteRepository implements ITutorRepository {
     } catch (e) {
       return Left(ApiFailure(message: e.toString()));
     }
+  }
+
+  @override
+  Future<void> saveTutors(List<TutorEntity> tutors) async {
+    throw UnimplementedError(
+        'Saving tutors is not supported in the remote repository');
+  }
+
+  @override
+  Future<void> saveTutor(TutorEntity tutor) async {
+    throw UnimplementedError(
+        'Saving a tutor is not supported in the remote repository');
   }
 }

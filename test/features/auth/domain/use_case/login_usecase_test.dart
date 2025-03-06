@@ -25,14 +25,12 @@ void main() {
 
   group('Login Usecase Tests', () {
     test('login fails when incorrect credentials', () async {
-      // Arrange
+      
       when(() => repository.loginUser(any(), any())).thenAnswer(
           (_) async => const Left(ApiFailure(message: "Invalid Credentials")));
 
-      // Act
+      
       final result = await usecase(userLoginParams);
-
-      // Assert
       expect(result, const Left(ApiFailure(message: "Invalid Credentials")));
       verify(() => repository.loginUser(any(), any())).called(1);
       verifyNever(() => tokenSharedPrefs.saveToken(any()));

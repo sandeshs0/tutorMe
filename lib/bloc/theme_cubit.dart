@@ -16,11 +16,11 @@ class ThemeCubit extends Cubit<ThemeMode> {
     try {
       _lightSubscription = lightSensor.lightSensorStream.listen(
         (lux) {
-          if ((lux < 20 && _lastLuxValue >= 20) ||
-              (lux >= 20 && _lastLuxValue < 20)) {
+          if ((lux < 10 && _lastLuxValue >= 10) ||
+              (lux >= 10 && _lastLuxValue < 10)) {
             _lastLuxValue = lux;
-            emit(lux < 30 ? ThemeMode.dark : ThemeMode.light);
-            debugPrint("Theme Changed: ${lux < 30 ? 'Dark' : 'Light'} Mode");
+            emit(lux < 10 ? ThemeMode.dark : ThemeMode.light);
+            debugPrint("Theme Changed: ${lux < 10 ? 'Dark' : 'Light'} Mode");
           }
         },
         onError: (error) {

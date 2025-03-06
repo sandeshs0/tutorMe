@@ -42,21 +42,21 @@ ThemeData getApplicationTheme() {
     ),
 
     // Elevated buttons (like Book Session)
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(40),
-        ),
-        padding: const EdgeInsets.symmetric(vertical: 16.0),
-        minimumSize: const Size(0, 50),
-        backgroundColor: const Color.fromARGB(255, 0, 94, 255),
-        textStyle: const TextStyle(
-          fontSize: 25.0,
-          fontFamily: 'Montserrat Bold',
-          color: Colors.white,
-        ),
-      ),
-    ),
+    // elevatedButtonTheme: ElevatedButtonThemeData(
+    //   style: ElevatedButton.styleFrom(
+    //     shape: RoundedRectangleBorder(
+    //       borderRadius: BorderRadius.circular(40),
+    //     ),
+    //     padding: const EdgeInsets.symmetric(vertical: 16.0),
+    //     minimumSize: const Size(0, 50),
+    //     backgroundColor: const Color.fromARGB(255, 0, 94, 255),
+    //     textStyle: const TextStyle(
+    //       fontSize: 25.0,
+    //       fontFamily: 'Montserrat Bold',
+    //       color: Colors.white,
+    //     ),
+    //   ),
+    // ),
 
     // Updated bottom navigation bar theme
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
@@ -116,6 +116,22 @@ ThemeData getDarkTheme() {
       bodyColor: Colors.white,
       displayColor: Colors.white,
     ),
+
+    // elevatedButtonTheme: ElevatedButtonThemeData(
+    //   style: ElevatedButton.styleFrom(
+    //     shape: RoundedRectangleBorder(
+    //       borderRadius: BorderRadius.circular(40),
+    //     ),
+    //     padding: const EdgeInsets.symmetric(vertical: 16.0),
+    //     minimumSize: const Size(0, 50),
+    //     backgroundColor: const Color.fromARGB(255, 0, 94, 255),
+    //     textStyle: const TextStyle(
+    //       fontSize: 25.0,
+    //       fontFamily: 'Montserrat Bold',
+    //       color: Colors.white,
+    //     ),
+    //   ),
+    // ),
 
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: const Color(0xFF202020),

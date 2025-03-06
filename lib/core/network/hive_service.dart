@@ -1,6 +1,8 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:tutorme/app/constants/hive_table_constant.dart';
 import 'package:tutorme/features/auth/data/model/auth_hive_model.dart';
+import 'package:tutorme/features/tutors/data/model/tutor_hive_model.dart';
 
 class HiveService {
   static Future<void> init() async {
@@ -8,6 +10,7 @@ class HiveService {
     var path='${directory.path}/tutorme.db';
     Hive.init(path);
     Hive.registerAdapter(UserHiveModelAdapter());
+    Hive.registerAdapter(TutorHiveModelAdapter());
   }
 
   Future<void> addItem<T>(String boxName, String key, T item) async {
@@ -57,6 +60,28 @@ class HiveService {
   Future<void> clearUserBox() async {
     await Hive.deleteBoxFromDisk('userBox');
   }
+
+// Tutor specific methods
+  Future<void> addTutor(TutorHiveModel tutor) async {
+    var box = await Hive.openBox<TutorHiveModel>(HiveTableConstant.tutorBox);
+    await box.put(tutor.username, tutor);  // Using username as key
+  }
+
+  Future<List<TutorHiveModel>> getAllTutors() async {
+    var box = await Hive.openBox<TutorHiveModel>(HiveTableConstant.tutorBox);
+    return box.values.toList();
+  }
+
+  Future<TutorHiveModel?> getTutorByUsername(String username) async {
+    var box = await Hive.openBox<TutorHiveModel>(HiveTableConstant.tutorBox);
+    return box.get(username);
+  }
+
+  Future<void> clearTutors() async {
+    var box = await Hive.openBox<TutorHiveModel>(HiveTableConstant.tutorBox);
+    await box.clear();
+  }
+
 
   Future<void> close() async {
     await Hive.close();

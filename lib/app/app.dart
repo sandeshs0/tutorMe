@@ -23,11 +23,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // return MaterialApp(
-    //   debugShowCheckedModeBanner: false,
-    //   home: const SplashScreen(),
-    //   theme: getApplicationTheme(),
-    // );
 
     return MultiBlocProvider(
         providers: [
