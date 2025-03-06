@@ -28,7 +28,7 @@ class NotificationRemoteDataSource implements INotificationRemoteDataSource {
         ApiEndpoints.fetchNotifications,
         options: Options(
           headers: {
-            "Authorization": "Bearer $token", // Send JWT token
+            "Authorization": "Bearer $token", 
           },
         ),
       );
@@ -59,7 +59,7 @@ class NotificationRemoteDataSource implements INotificationRemoteDataSource {
         ApiEndpoints.readNotification,
         options: Options(
           headers: {
-            "Authorization": "Bearer $token", // Send JWT token
+            "Authorization": "Bearer $token", 
           },
         ),
       );

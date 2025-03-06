@@ -7,10 +7,8 @@ sealed class NotificationEvent extends Equatable {
   List<Object> get props => [];
 }
 
-/// Event to fetch all notifications
 class FetchNotificationsEvent extends NotificationEvent {}
 
-/// Event to mark all notifications as read
 class MarkNotificationsAsReadEvent extends NotificationEvent {}
 
 class AddNewNotificationEvent extends NotificationEvent {

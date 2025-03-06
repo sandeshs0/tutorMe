@@ -19,14 +19,11 @@ class TransactionApiModel extends Equatable {
     required this.paymentDate,
   });
 
-  /// **Convert from JSON**
   factory TransactionApiModel.fromJson(Map<String, dynamic> json) =>
       _$TransactionApiModelFromJson(json);
 
-  /// **Convert to JSON**
   Map<String, dynamic> toJson() => _$TransactionApiModelToJson(this);
 
-  /// **Convert to Domain Entity**
   TransactionEntity toEntity() {
     return TransactionEntity(
       transactionId: transactionId,

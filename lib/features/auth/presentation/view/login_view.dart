@@ -18,11 +18,9 @@ class LoginScreen extends StatelessWidget {
     final isTablet = screenWidth >= 600;
 
     return Scaffold(
-      // backgroundColor: const Color.fromRGBO(245, 249, 255, 1),
       body: BlocConsumer<LoginBloc, LoginState>(
         listener: (context, state) {
           if (state.isLoading) {
-            // Ideally show a loading indicator
           } else if (state.isSuccess) {
             Navigator.pushReplacement(
               context,
@@ -68,13 +66,11 @@ class LoginScreen extends StatelessWidget {
                       'Login and start learning!',
                       style: TextStyle(
                         fontSize: 14.0,
-                        // color: Color.fromARGB(255, 61, 26, 26),
                       ),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 50.0),
 
-                    // Email Field
                     TextFormField(
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
@@ -97,7 +93,6 @@ class LoginScreen extends StatelessWidget {
 
                     const SizedBox(height: 19.0),
 
-                    // Password Field
                     TextFormField(
                       controller: _passwordController,
                       obscureText: !_isPasswordVisible,
@@ -125,7 +120,6 @@ class LoginScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 28.0),
 
-                    // Login Button
                     ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
@@ -158,7 +152,6 @@ class LoginScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 16.0),
 
-                    // Sign Up Text
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

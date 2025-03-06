@@ -18,7 +18,6 @@ class TutorBloc extends Bloc<TutorEvent, TutorState> {
     required this.getTutorByUsernameUsecase,
   }) : super(TutorInitial()) {
     
-    // Handle Fetch All Tutors Event
     on<GetAllTutorsEvent>((event, emit) async {
       emit(TutorLoading());
 
@@ -31,7 +30,6 @@ class TutorBloc extends Bloc<TutorEvent, TutorState> {
       );
     });
 
-    // Handle Fetch Tutor By Username Event
     on<GetTutorByUsernameEvent>((event, emit) async {
       emit(TutorLoading());
 

@@ -19,15 +19,6 @@ final class SessionLoaded extends SessionState {
   @override
   List<Object?> get props => [sessions];
 }
-// final class SessionJoined extends SessionState {
-//   final String roomId;
-//   final String jwtToken;
-
-//   const SessionJoined({required this.roomId, required this.jwtToken});
-
-//   @override
-//   List<Object?> get props => [roomId, jwtToken];
-// }
 final class SessionJoined extends SessionState {
   final String roomUrl;
 

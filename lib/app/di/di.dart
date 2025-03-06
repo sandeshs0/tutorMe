@@ -6,7 +6,7 @@ import 'package:tutorme/app/shared_prefs/token_shared_prefs.dart';
 import 'package:tutorme/bloc/theme_cubit.dart';
 import 'package:tutorme/core/network/api_service.dart';
 import 'package:tutorme/core/network/hive_service.dart';
-import 'package:tutorme/core/services/connectivity_service.dart';
+import 'package:tutorme/core/common/internet_checker/connectivity_service.dart';
 import 'package:tutorme/core/services/notification_service.dart';
 import 'package:tutorme/core/services/socket_service.dart';
 import 'package:tutorme/features/auth/data/data_source/remote_data_source.dart/auth_remote_datasource.dart';
@@ -36,7 +36,7 @@ import 'package:tutorme/features/session/domain/repository/session_repository.da
 import 'package:tutorme/features/session/domain/usecase/get_student_session_usecase.dart';
 import 'package:tutorme/features/session/domain/usecase/join_session_usecase.dart';
 import 'package:tutorme/features/session/presentation/bloc/session_bloc.dart';
-import 'package:tutorme/features/student/data/data_source/repository/remote_repository/student_remote_repository.dart';
+import 'package:tutorme/features/student/data/remote_repository/student_remote_repository.dart';
 import 'package:tutorme/features/student/data/data_source/student_remote_data_source.dart/student_remote_data_source.dart';
 import 'package:tutorme/features/student/domain/repository/student_repository.dart';
 import 'package:tutorme/features/student/domain/usecase/get_student_profile_usecase.dart';
@@ -61,8 +61,7 @@ final getIt = GetIt.instance;
 
 Future<void> initDependencies() async {
   WidgetsFlutterBinding
-      .ensureInitialized(); // Ensure Flutter bindings are initialized
-  _initHiveService();
+      .ensureInitialized(); 
   _initApiService();
   await _initSharedPreferences();
   _initConnectivityService();
@@ -89,21 +88,18 @@ void _initThemeCubit() {
 }
 
 void _initTutorDependencies() {
-  // Register Remote Data Source
   getIt.registerLazySingleton<TutorRemoteDataSource>(
       () => TutorRemoteDataSource(dio: getIt<Dio>()));
 
   getIt.registerLazySingleton<TutorLocalDataSource>(
       () => TutorLocalDataSource(getIt<HiveService>()));
 
-  // Register Repository
   getIt.registerLazySingleton<TutorRemoteRepository>(
       () => TutorRemoteRepository(getIt<TutorRemoteDataSource>()));
 
   getIt.registerLazySingleton<TutorLocalRepository>(
       () => TutorLocalRepository(getIt<TutorLocalDataSource>()));
 
-  // Register Use Case
   getIt.registerLazySingleton<GetAllTutorsUsecase>(
     () => GetAllTutorsUsecase(
       remoteRepository: getIt<TutorRemoteRepository>(),
@@ -114,16 +110,13 @@ void _initTutorDependencies() {
 }
 
 void _initStudentProfileDependencies() {
-  // ✅ Register Remote Data Source
   getIt.registerLazySingleton<StudentRemoteDataSource>(() =>
       StudentRemoteDataSource(
           dio: getIt<Dio>(), tokenSharedPrefs: getIt<TokenSharedPrefs>()));
 
-  // ✅ Register Repository
   getIt.registerLazySingleton<IStudentRepository>(
       () => StudentRemoteRepository(getIt<StudentRemoteDataSource>()));
 
-  // ✅ Register Use Case
   getIt.registerLazySingleton<GetStudentProfileUsecase>(
       () => GetStudentProfileUsecase(repository: getIt<IStudentRepository>()));
 
@@ -138,7 +131,6 @@ void _initStudentProfileDependencies() {
 }
 
 _initApiService() {
-  // Remote Data Source
   getIt.registerLazySingleton<Dio>(
     () => ApiService(Dio()).dio,
   );
@@ -154,21 +146,14 @@ void _initAuthDependencies() {
     () => TokenSharedPrefs(getIt<SharedPreferences>()),
   );
 
-  // Auth Local Data Source
   getIt.registerLazySingleton<AuthRemoteDataSource>(
       () => AuthRemoteDataSource(getIt<Dio>()));
-  // getIt.registerLazySingleton<AuthLocalDataSource>(
-  //     () => AuthLocalDataSource(getIt<HiveService>()));
   getIt.registerLazySingleton<VerifyEmailUsecase>(
       () => VerifyEmailUsecase(getIt<AuthRemoteRepository>()));
 
-  // Auth Repository
-  // getIt.registerLazySingleton<AuthLocalRepository>(
-  //     () => AuthLocalRepository(getIt<AuthLocalDataSource>()));
   getIt.registerLazySingleton<AuthRemoteRepository>(
       () => AuthRemoteRepository(getIt<AuthRemoteDataSource>()));
 
-  // Use Cases
   getIt.registerLazySingleton<LoginUsecase>(() => LoginUsecase(
         getIt<AuthRemoteRepository>(),
         getIt<TokenSharedPrefs>(),
@@ -176,7 +161,6 @@ void _initAuthDependencies() {
   getIt.registerLazySingleton<RegisterUsecase>(
       () => RegisterUsecase(getIt<AuthRemoteRepository>()));
 
-  // Login Bloc
   getIt.registerFactory<LoginBloc>(
     () => LoginBloc(
       loginUseCase: getIt<LoginUsecase>(),
@@ -184,7 +168,6 @@ void _initAuthDependencies() {
     ),
   );
 
-  // Register Bloc
   getIt.registerFactory<RegisterBloc>(
     () => RegisterBloc(
       registerUseCase: getIt<RegisterUsecase>(),
@@ -201,22 +184,19 @@ void _initHomeDependencies() {
 
 void _initSocketService() {
   final userId =
-      getIt<TokenSharedPrefs>().getUserId(); // Retrieve logged-in user's ID
+      getIt<TokenSharedPrefs>().getUserId();
   getIt.registerLazySingleton<SocketService>(
       () => SocketService(userId: "67ab301840c082415bc12e5a"));
 }
 
 void _initNotificationDependencies() {
-  // Register Remote Data Source
   getIt.registerLazySingleton<NotificationRemoteDataSource>(() =>
       NotificationRemoteDataSource(
           dio: getIt<Dio>(), tokenSharedPrefs: getIt<TokenSharedPrefs>()));
 
-  // Register Repository
   getIt.registerLazySingleton<INotificationRepository>(() =>
       NotificationRemoteRepository(getIt<NotificationRemoteDataSource>()));
 
-  // Register Use Cases
   getIt.registerLazySingleton<GetNotificationsUsecase>(() =>
       GetNotificationsUsecase(
           notificationRepository: getIt<INotificationRepository>()));
@@ -238,16 +218,13 @@ void _initNotificationService() {
 }
 
 void _initWalletDependencies() {
-  // ✅ Register Remote Data Source
   getIt.registerLazySingleton<IWalletDataSource>(() => WalletRemoteDataSource(
         dio: getIt<Dio>(),
         tokenSharedPrefs: getIt<TokenSharedPrefs>(),
       ));
-// ✅ Correct
   getIt.registerLazySingleton<IWalletRepository>(() =>
       WalletRemoteRepository(walletDataSource: getIt<IWalletDataSource>()));
 
-  // ✅ Register Use Cases
   getIt.registerLazySingleton<GetWalletDetailsUsecase>(
       () => GetWalletDetailsUsecase(repository: getIt<IWalletRepository>()));
 
@@ -260,7 +237,6 @@ void _initWalletDependencies() {
   getIt.registerLazySingleton<GetTransactionHistoryUsecase>(() =>
       GetTransactionHistoryUsecase(repository: getIt<IWalletRepository>()));
 
-  // ✅ Register Bloc
   getIt.registerFactory(() => WalletBloc(
         getWalletDetailsUseCase: getIt<GetWalletDetailsUsecase>(),
         initiateTransactionUseCase: getIt<InitiateTransactionUsecase>(),
@@ -270,7 +246,6 @@ void _initWalletDependencies() {
 }
 
 void _initBookingDependencies() {
-  // ✅ Register Remote Data Source
   getIt.registerLazySingleton<IBookingRemoteDataSource>(
     () => BookingRemoteDataSource(
       dio: getIt<Dio>(),
@@ -278,12 +253,10 @@ void _initBookingDependencies() {
     ),
   );
 
-  // ✅ Register Repository
   getIt.registerLazySingleton<IBookingRepository>(
     () => RemoteBookingRepository(getIt<IBookingRemoteDataSource>()),
   );
 
-  // ✅ Register Use Cases
   getIt.registerLazySingleton<CreateBookingUseCase>(
     () => CreateBookingUseCase(bookingRepository: getIt<IBookingRepository>()),
   );
@@ -300,18 +273,15 @@ void _initBookingDependencies() {
 }
 
 void _initSessionDependencies() {
-  // Register Remote Data Source
   getIt.registerLazySingleton<SessionRemoteDataSource>(
       () => SessionRemoteDataSource(
             dio: getIt<Dio>(),
             tokenSharedPrefs: getIt<TokenSharedPrefs>(),
           ));
 
-  // Register Repository
   getIt.registerLazySingleton<ISessionRepository>(
       () => SessionRemoteRepository(getIt<SessionRemoteDataSource>()));
 
-  // Register Use Case
   getIt.registerLazySingleton<GetStudentSessionsUsecase>(() =>
       GetStudentSessionsUsecase(
           sessionRepository: getIt<ISessionRepository>()));
@@ -319,7 +289,6 @@ void _initSessionDependencies() {
   getIt.registerLazySingleton<JoinSessionUseCase>(
       () => JoinSessionUseCase(sessionRepository: getIt<ISessionRepository>()));
 
-  // Register Bloc
   getIt.registerFactory(() => SessionBloc(
         getStudentSessionsUsecase: getIt<GetStudentSessionsUsecase>(),
         joinSessionUseCase: getIt<JoinSessionUseCase>(),

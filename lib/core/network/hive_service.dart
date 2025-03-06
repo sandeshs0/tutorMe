@@ -61,7 +61,6 @@ class HiveService {
     await Hive.deleteBoxFromDisk('userBox');
   }
 
-// Tutor specific methods
   Future<void> addTutor(TutorHiveModel tutor) async {
     var box = await Hive.openBox<TutorHiveModel>(HiveTableConstant.tutorBox);
     await box.put(tutor.username, tutor);  // Using username as key

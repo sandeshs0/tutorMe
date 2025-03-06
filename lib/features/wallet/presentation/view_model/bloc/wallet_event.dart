@@ -7,10 +7,8 @@ sealed class WalletEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-// Fetch wallet balance
 class FetchWalletDetails extends WalletEvent {}
 
-// Initiate a transaction
 class InitiateTransaction extends WalletEvent {
   final double amount;
   final String paymentGateway;
@@ -24,15 +22,13 @@ class InitiateTransaction extends WalletEvent {
 
 class TransactionInitiatedEvent extends WalletEvent {
   final TransactionEntity
-      transaction; // ✅ Now stores `TransactionEntity` including `pidx`
-
+      transaction; 
   const TransactionInitiatedEvent({required this.transaction});
 
   @override
   List<Object?> get props => [transaction];
 }
 
-// Verify transaction
 class VerifyTransaction extends WalletEvent {
   final String pidx;
   final String transactionId;
@@ -43,5 +39,4 @@ class VerifyTransaction extends WalletEvent {
   List<Object?> get props => [pidx, transactionId];
 }
 
-// Fetch transaction history
 class FetchTransactionHistory extends WalletEvent {}

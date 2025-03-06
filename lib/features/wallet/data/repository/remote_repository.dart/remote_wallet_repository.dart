@@ -13,7 +13,6 @@ class WalletRemoteRepository implements IWalletRepository {
   WalletRemoteRepository({required IWalletDataSource walletDataSource})
       : _walletDataSource = walletDataSource;
 
-  /// 🔹 Fetch Wallet Details
   @override
   Future<Either<Failure, WalletEntity>> getWalletDetails() async {
     try {
@@ -24,7 +23,6 @@ class WalletRemoteRepository implements IWalletRepository {
     }
   }
 
-  /// 🔹 Initiate a Transaction
   @override
   Future<Either<Failure, TransactionEntity>> initiateTransaction({
     required double amount,
@@ -38,7 +36,7 @@ class WalletRemoteRepository implements IWalletRepository {
       );
       final transactionEntity = TransactionEntity(
         transactionId: transactionDTO.transactionId,
-        pidx: transactionDTO.pidx, // ✅ Use `pidx` in Entity
+        pidx: transactionDTO.pidx,
         paymentUrl: transactionDTO.paymentUrl,
         paymentDate: DateTime.now().toIso8601String(),
         paymentGateway: paymentGateway,
@@ -55,7 +53,6 @@ class WalletRemoteRepository implements IWalletRepository {
     }
   }
 
-  /// 🔹 Verify a Transaction
   @override
   Future<Either<Failure, bool>> verifyTransaction({
     required String pidx,
@@ -71,8 +68,6 @@ class WalletRemoteRepository implements IWalletRepository {
       return Left(ApiFailure(message: "Transaction verification failed: $e"));
     }
   }
-
-  /// 🔹 Fetch Transaction History
   @override
   Future<Either<Failure, List<TransactionEntity>>>
       getTransactionHistory() async {

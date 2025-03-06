@@ -25,14 +25,11 @@ class StudentApiModel extends Equatable {
     required this.walletBalance,
   });
 
-  /// **Convert from JSON**
   factory StudentApiModel.fromJson(Map<String, dynamic> json) =>
       _$StudentApiModelFromJson(json);
 
-  /// **Convert to JSON**
   Map<String, dynamic> toJson() => _$StudentApiModelToJson(this);
 
-  /// **Convert to Domain Entity**
   StudentEntity toEntity() {
     return StudentEntity(
       studentId: studentId,
@@ -45,7 +42,6 @@ class StudentApiModel extends Equatable {
     );
   }
 
-  /// **Convert from Domain Entity**
   factory StudentApiModel.fromEntity(StudentEntity entity) {
     return StudentApiModel(
       studentId: entity.studentId,

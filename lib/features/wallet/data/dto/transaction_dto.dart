@@ -18,14 +18,11 @@ class TransactionDTO {
     required this.paymentDate,
   });
 
-  /// **Convert from JSON**
   factory TransactionDTO.fromJson(Map<String, dynamic> json) =>
       _$TransactionDTOFromJson(json);
 
-  /// **Convert to JSON**
   Map<String, dynamic> toJson() => _$TransactionDTOToJson(this);
 
-  /// **Convert to Domain Entity**
   TransactionEntity toEntity() {
     return TransactionEntity(
       transactionId: transactionId,
@@ -35,7 +32,6 @@ class TransactionDTO {
     );
   }
 
-  /// **Convert from Domain Entity**
   factory TransactionDTO.fromEntity(TransactionEntity entity) {
     return TransactionDTO(
       transactionId: entity.transactionId ?? "",

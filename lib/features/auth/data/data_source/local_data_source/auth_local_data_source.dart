@@ -38,7 +38,6 @@ class AuthLocalDataSource implements IAuthDataSource {
   @override
   Future<void> registerUser(AuthEntity user) async {
     try {
-      // converting AuthEntity to UserHiveModel
       final userHiveModel = UserHiveModel(
         id: user.id,
         fullName: user.fullName,
@@ -56,7 +55,6 @@ class AuthLocalDataSource implements IAuthDataSource {
 
   @override
   Future<void> verifyEmail(String email, String otp) {
-    // TODO: implement verifyEmail
     throw UnimplementedError();
   }
 }

@@ -16,14 +16,11 @@ class InitiateTransactionDTO {
     required this.transactionId,
   });
 
-  // factory InitiateTransactionDTO.fromJson(Map<String, dynamic> json) =>
-  //     _$InitiateTransactionDTOFromJson(json);
 
   factory InitiateTransactionDTO.fromJson(Map<String, dynamic> json) {
-    // ✅ Handle null values safely
     return InitiateTransactionDTO(
       success: true,
-      pidx: json['pidx'] ?? "", // ✅ Use empty string if null
+      pidx: json['pidx'] ?? "", 
       paymentUrl: json['payment_url'] ?? "",
       transactionId: json['transactionId'] ?? "",
     );

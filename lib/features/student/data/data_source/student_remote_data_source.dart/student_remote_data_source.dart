@@ -21,7 +21,6 @@ class StudentRemoteDataSource implements IStudentDataSource {
   @override
   Future<StudentEntity> getStudentProfile() async {
     try {
-      //  Get the stored JWT token
       final tokenResult = await _tokenSharedPrefs.getToken();
       final token = tokenResult.fold((failure) => null, (token) => token);
 
@@ -29,12 +28,11 @@ class StudentRemoteDataSource implements IStudentDataSource {
         throw Exception("Token not found in shared prefs");
       }
 
-      // Send API request with Authorization header
       final response = await _dio.get(
         ApiEndpoints.getStudentProfile,
         options: Options(
           headers: {
-            "Authorization": "Bearer $token", // Send JWT token
+            "Authorization": "Bearer $token", 
           },
         ),
       );
@@ -62,7 +60,6 @@ class StudentRemoteDataSource implements IStudentDataSource {
   Future<StudentEntity> updateStudentProfile(
       UpdateStudentProfileDTO updatedData) async {
     try {
-      //  Get the stored JWT token
       final tokenResult = await _tokenSharedPrefs.getToken();
       final token = tokenResult.fold((failure) => null, (token) => token);
 

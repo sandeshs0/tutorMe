@@ -32,14 +32,12 @@ class _EditStudentProfileViewState extends State<EditStudentProfileView> {
     super.initState();
   }
 
-  // 📸 Check for camera permissions
   Future<void> _checkCameraPermission() async {
     if (await Permission.camera.request().isDenied) {
       await Permission.camera.request();
     }
   }
 
-  // 🖼️ Image Picker (Gallery or Camera)
   Future _pickImage(ImageSource source) async {
     try {
       final image = await ImagePicker().pickImage(source: source);
@@ -128,7 +126,6 @@ class _EditStudentProfileViewState extends State<EditStudentProfileView> {
             ),
             const SizedBox(height: 24),
 
-            // 🟢 Profile Form
             Form(
               key: _formKey,
               child: Column(
@@ -157,7 +154,6 @@ class _EditStudentProfileViewState extends State<EditStudentProfileView> {
             ),
             const SizedBox(height: 30),
 
-            // 🟢 Save Button
             BlocBuilder<StudentProfileBloc, StudentProfileState>(
               builder: (context, state) {
                 return ElevatedButton(
@@ -201,7 +197,6 @@ class _EditStudentProfileViewState extends State<EditStudentProfileView> {
     );
   }
 
-  /// 🔹 Custom Method for Styled TextFields (Same as Signup Page)
   Widget _buildTextField({
     required TextEditingController controller,
     required String label,

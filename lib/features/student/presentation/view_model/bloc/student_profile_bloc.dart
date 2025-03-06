@@ -24,7 +24,6 @@ class StudentProfileBloc
     on<UpdateStudentProfile>(_onUpdateStudentProfile);
   }
 
-  /// 🔹 Fetch Student Profile
   Future<void> _onFetchStudentProfile(
       FetchStudentProfile event, Emitter<StudentProfileState> emit) async {
     emit(StudentProfileLoading());
@@ -38,7 +37,6 @@ class StudentProfileBloc
     );
   }
 
-  /// 🔹 Update Student Profile
   Future<void> _onUpdateStudentProfile(
       UpdateStudentProfile event, Emitter<StudentProfileState> emit) async {
     emit(StudentProfileLoading());
@@ -50,7 +48,6 @@ class StudentProfileBloc
           emit(StudentProfileError(message: _mapFailureToMessage(failure))),
        (updatedStudent) {
       emit(StudentProfileUpdated(student: updatedStudent));
-      // emit(StudentProfileLoaded(student: updatedStudent)); // ✅ Update UI immediately
     },
     );
   }

@@ -14,16 +14,12 @@ class BookingApiModel extends Equatable {
   final String? tutorName;
   final String? profileImage;
   final int? hourlyRate;
-  // @JsonKey(name: 'tutorObj')
-  // final TutorApiModel? tutorObj;
   final String studentId;
   final String date;
   final String startTime;
   final String note;
   final String status;
   final int? bookingFee;
-  // final String? updatedAt;
-  // final String? createdAt;
 
   const BookingApiModel({
     this.bookingId,
@@ -33,47 +29,39 @@ class BookingApiModel extends Equatable {
     required this.startTime,
     required this.note,
     required this.status,
-    // this.tutorObj,
     this.hourlyRate,
     this.tutorName,
     this.profileImage,
     this.bookingFee,
-    //  this.updatedAt,
   });
 
-  /// **Convert from JSON**
-  // factory BookingApiModel.fromJson(Map<String, dynamic> json) =>
-  //     _$BookingApiModelFromJson(json);
 
   factory BookingApiModel.fromJson(Map<String, dynamic> json) {
-    debugPrint("📌 Raw Booking Data: $json"); // <-- Log raw data
+    debugPrint("Raw Booking Data: $json");
 
     return BookingApiModel(
       bookingId:
-          json['_id']?.toString() ?? '', // ✅ Ensure _id is always a String
+          json['_id']?.toString() ?? '', 
       tutorId: json['tutorId']?.toString() ?? '',
       studentId: json['studentId']?.toString() ?? '',
       date: json['date']?.toString() ?? '',
       startTime: json['startTime']?.toString() ?? '',
       note: json['note']?.toString() ?? '',
       status: json['status']?.toString() ?? '',
-      bookingFee: json['bookingFee'] as int? ?? 0, // ✅ Handle null integer case
+      bookingFee: json['bookingFee'] as int? ?? 0, 
       tutorName: json['tutorName']?.toString() ?? '',
       profileImage: json['profileImage']?.toString() ?? '',
       hourlyRate: json['hourlyRate'] as int? ?? 0,
     );
   }
 
-  /// **Convert to JSON**
   Map<String, dynamic> toJson() => _$BookingApiModelToJson(this);
 
-  /// **Convert to Domain Entity**
   BookingEntity toEntity() {
     return BookingEntity(
       id: bookingId ?? '',
       tutorId: tutorId,
       studentId: studentId,
-      // tutorObj: tutorObj,
       date: date,
       tutorName: tutorName,
       profileImage: profileImage,
@@ -82,11 +70,9 @@ class BookingApiModel extends Equatable {
       note: note,
       status: status,
       bookingFee: bookingFee,
-      // updatedAt: updatedAt,
     );
   }
 
-  /// **Convert from Domain Entity**
   factory BookingApiModel.fromEntity(BookingEntity entity) {
     return BookingApiModel(
       bookingId: entity.id,
@@ -99,9 +85,7 @@ class BookingApiModel extends Equatable {
       hourlyRate: entity.hourlyRate,
       note: entity.note,
       status: entity.status,
-      // tutorObj: entity.tutorObj,
       bookingFee: entity.bookingFee,
-      // updatedAt: entity.updatedAt,
     );
   }
 
@@ -109,8 +93,6 @@ class BookingApiModel extends Equatable {
   List<Object?> get props => [
         bookingId,
         tutorId,
-        // tutorObj,
-        // updatedAt,
         studentId,
         tutorName,
         profileImage,

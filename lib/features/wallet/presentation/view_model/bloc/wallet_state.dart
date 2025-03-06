@@ -7,16 +7,12 @@ sealed class WalletState extends Equatable {
   List<Object?> get props => [];
 }
 
-// Initial state
 class WalletInitial extends WalletState {}
 
-// Wallet loading state
 class WalletLoading extends WalletState {}
 
-// 🔹 Transaction history specific loading state
 class TransactionHistoryLoading extends WalletState {}
 
-// Wallet details fetched successfully
 class WalletLoaded extends WalletState {
   final WalletEntity wallet;
 
@@ -25,21 +21,8 @@ class WalletLoaded extends WalletState {
   @override
   List<Object?> get props => [wallet];
 }
-
-// Transaction initiation success
-// class TransactionInitiated extends WalletState {
-//   // final String paymentUrl;
-//   final String transaction;
-//   // const TransactionInitiated({required this.paymentUrl});
-//   const TransactionInitiated({required this.transaction});
-
-//   @override
-//   List<Object?> get props => [transaction];
-//   // List<Object?> get props => [paymentUrl];
-// }
-// Transaction initiation success
 class TransactionInitiated extends WalletState {
-  final TransactionEntity transaction; // ✅ Store full TransactionEntity including `pidx`
+  final TransactionEntity transaction;
 
   const TransactionInitiated({required this.transaction});
 
@@ -48,10 +31,8 @@ class TransactionInitiated extends WalletState {
 }
 
 
-// Transaction verification success
 class TransactionVerified extends WalletState {}
 
-// Transaction history fetched successfully
 class TransactionHistoryLoaded extends WalletState {
   final List<TransactionEntity> transactions;
 
@@ -61,7 +42,6 @@ class TransactionHistoryLoaded extends WalletState {
   List<Object?> get props => [transactions];
 }
 
-// Error state
 class WalletError extends WalletState {
   final String message;
 

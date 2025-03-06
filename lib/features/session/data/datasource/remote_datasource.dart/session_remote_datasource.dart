@@ -18,7 +18,6 @@ class SessionRemoteDataSource implements ISessionDataSource {
   @override
   Future<List<SessionEntity>> getStudentSessions() async {
     try {
-      // Get the token from Shared Preferences
       final tokenResult = await _tokenSharedPrefs.getToken();
       final token = tokenResult.fold((failure) => null, (token) => token);
 
@@ -26,7 +25,6 @@ class SessionRemoteDataSource implements ISessionDataSource {
         throw Exception("Authentication token missing.");
       }
 
-      // API Call with token in headers
       final response = await _dio.get(
         ApiEndpoints.getStudentSessions,
         options: Options(headers: {"Authorization": "Bearer $token"}),
@@ -34,7 +32,6 @@ class SessionRemoteDataSource implements ISessionDataSource {
 
       if (response.statusCode == 200) {
         final data = GetStudentSessionsDTO.fromJson(response.data);
-        // debugPrint(response.toString());
         return data.sessions.map((session) => session.toEntity()).toList();
       } else {
         throw Exception(response.statusMessage);
@@ -56,7 +53,6 @@ class SessionRemoteDataSource implements ISessionDataSource {
         throw Exception("Authentication token missing.");
       }
 
-      // Fetch Jitsi JWT token
       final tokenResponse = await _dio.get(
         '${ApiEndpoints.baseUrl}api/sessions/jaas-token/$bookingId',
         options: Options(headers: {"Authorization": "Bearer $token"}),
@@ -69,7 +65,6 @@ class SessionRemoteDataSource implements ISessionDataSource {
 
       final jwtToken = tokenResponse.data['token'] as String;
 
-      // Fetch session room details
       final roomResponse = await _dio.get(
         '${ApiEndpoints.baseUrl}api/sessions/room/$bookingId',
         options: Options(headers: {"Authorization": "Bearer $token"}),
@@ -86,7 +81,6 @@ class SessionRemoteDataSource implements ISessionDataSource {
       return {
         'roomUrl': jitsiUrl,
         'jwtToken': jwtToken,
-        // 'roomId': roomData['roomId'] as String,
       };
     } on DioException catch (e) {
       throw Exception(e.response?.data['message'] ?? e.message);

@@ -17,11 +17,9 @@ class BookingRemoteDataSource implements IBookingRemoteDataSource {
   })  : _dio = dio,
         _tokenSharedPrefs = tokenSharedPrefs;
 
-  /// **🔹 Create a New Booking**
   @override
   Future<BookingEntity> createBooking(CreateBookingDTO bookingData) async {
     try {
-      // ✅ Retrieve the stored JWT token
       final tokenResult = await _tokenSharedPrefs.getToken();
       final token = tokenResult.fold((failure) => null, (token) => token);
 
@@ -29,12 +27,11 @@ class BookingRemoteDataSource implements IBookingRemoteDataSource {
         throw Exception("Token not found in shared prefs");
       }
 
-      // ✅ API Request to Create a Booking
       final response = await _dio.post(
         ApiEndpoints.createBooking,
         options: Options(
           headers: {
-            "Authorization": "Bearer $token", // ✅ Send JWT token
+            "Authorization": "Bearer $token", 
           },
         ),
         data: bookingData.toJson(),
@@ -54,7 +51,6 @@ class BookingRemoteDataSource implements IBookingRemoteDataSource {
     }
   }
 
-  /// **🔹 Fetch Student Bookings**
   @override
   Future<List<BookingEntity>> getStudentBookings() async {
     try {
@@ -65,29 +61,27 @@ class BookingRemoteDataSource implements IBookingRemoteDataSource {
         throw Exception("Token not found in shared prefs");
       }
 
-      // ✅ API Request
       final response = await _dio.get(
         ApiEndpoints.getStudentBookings,
         options: Options(headers: {"Authorization": "Bearer $token"}),
       );
 
-      debugPrint("🔹 Full API Response: ${response.data}");
+      debugPrint("Full API Response: ${response.data}");
 
-      // ✅ Extract `bookings` array safely
       final rawData = response.data;
       final bookingsData = rawData['bookings'] as List<dynamic>? ?? [];
 
       final parsedBookings = bookingsData.map((booking) {
-        debugPrint("📌 Parsing Booking: $booking");
+        debugPrint(" Parsing Booking: $booking");
         return BookingApiModel.fromJson(booking as Map<String, dynamic>)
             .toEntity();
       }).toList();
 
-      debugPrint("✅ Parsed ${parsedBookings.length} bookings successfully");
+      debugPrint(" Parsed ${parsedBookings.length} bookings successfully");
       return parsedBookings;
     } catch (e, stacktrace) {
-      debugPrint("❌ Parsing Error: $e");
-      debugPrint("🛠 Stacktrace: $stacktrace");
+      debugPrint(" Parsing Error: $e");
+      debugPrint(" Stacktrace: $stacktrace");
       throw Exception("Failed to fetch bookings");
     }
   }

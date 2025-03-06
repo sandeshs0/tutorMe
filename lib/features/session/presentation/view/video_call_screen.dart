@@ -44,7 +44,7 @@ class _JitsiWebViewScreenState extends State<JitsiWebViewScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context); // Go back to SessionView
+            Navigator.pop(context); 
           },
         ),
       ),

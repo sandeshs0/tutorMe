@@ -24,7 +24,7 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
 
   Future<void> _onFetchStudentSessions(
       FetchStudentSessions event, Emitter<SessionState> emit) async {
-    emit(SessionLoading()); // Show loading state
+    emit(SessionLoading()); 
 
     final result = await getStudentSessionsUsecase();
 
@@ -36,7 +36,7 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
 
   Future<void> _onJoinSession(
       JoinSession event, Emitter<SessionState> emit) async {
-    emit(SessionJoining()); // Show joining state
+    emit(SessionJoining()); 
     final cameraPermission = await Permission.camera.status;
     final micPermission = await Permission.microphone.status;
 
@@ -56,72 +56,12 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
     result.fold(
       (failure) => emit(SessionError(message: failure.message)),
       (data) async {
-        // final jwtToken = data['jwtToken'] as String;
-        // final roomId = data['roomId'] as String;
-        // _joinJitsiMeeting(jwtToken, roomId);
-        // emit(SessionJoined(roomId: roomId, jwtToken: jwtToken));
+     
         final roomUrl = data['roomUrl'] as String;
-        emit(SessionJoined(roomUrl: roomUrl)); // Emit state with room URL for WebView
+        emit(SessionJoined(roomUrl: roomUrl));
       },
     );
   }
-
-  // void _joinJitsiMeeting(String jwtToken, String roomId) async {
-  //   final options = JitsiMeetConferenceOptions(
-  //     serverURL: "https://8x8.vc", // JAAS domain
-  //     room: roomId.split('/').last, // Extract room name (e.g., bookingId)
-  //     token: jwtToken,
-  //     userInfo: JitsiMeetUserInfo(
-  //       displayName: "Sandesh", // Use actual user name from auth
-  //     ),
-  //     configOverrides: {
-  //       "startWithAudioMuted": false,
-  //       "startWithVideoMuted": false,
-  //       "prejoinPageEnabled": false,
-  //       "requireDisplayName": false,
-  //     },
-  //     // interfaceConfigOverrides: {
-  //     //   "DISABLE_JOIN_LEAVE_NOTIFICATIONS": true,
-  //     //   "MOBILE_APP_PROMO": false,
-  //     //   "TOOLBAR_BUTTONS": [
-  //     //     "microphone",
-  //     //     "camera",
-  //     //     "desktop",
-  //     //     "fullscreen",
-  //     //     "hangup",
-  //     //     "chat",
-  //     //   ],
-  //     // },
-  //   );
-
-  //   final jitsiMeet = JitsiMeet();
-  //   try {
-  //     final response = await jitsiMeet.join(
-  //       options,
-  //       JitsiMeetEventListener(
-  //         conferenceWillJoin: (url) {
-  //           debugPrint("Joining conference at $url");
-  //         },
-  //         conferenceJoined: (url) {
-  //           debugPrint("Successfully joined conference at $url");
-  //         },
-  //         conferenceTerminated: (url, error) {
-  //           debugPrint("Conference terminated: $url, Error: $error");
-  //           add(FetchStudentSessions()); // Refresh sessions after closing
-  //         },
-  //         // onError: (error) {
-  //         //   debugPrint("Jitsi Meet error: $error");
-  //         //   emit(SessionError(message: 'Jitsi Meet error: ${error.message ?? error.toString()}'));
-  //         // },
-  //       ),
-  //     );
-  //     debugPrint("Join response: $response");
-  //   } catch (e) {
-  //     debugPrint("Error joining Jitsi Meet: $e");
-  //     emit(SessionError(message: 'Failed to join Jitsi Meet: $e'));
-  //   }
-  // }
-
 
   String _mapFailureToMessage(Failure failure) {
     if (failure is ApiFailure) {

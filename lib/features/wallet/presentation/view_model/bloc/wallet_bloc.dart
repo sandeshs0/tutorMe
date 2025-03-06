@@ -34,10 +34,9 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
     on<FetchTransactionHistory>(_onFetchTransactionHistory);
   }
 
-  /// 🔹 Fetch Wallet Details
   Future<void> _onFetchWalletDetails(
       FetchWalletDetails event, Emitter<WalletState> emit) async {
-    emit(WalletLoading()); // Show loading before API call
+    emit(WalletLoading()); 
 
     final result = await _getWalletDetailsUseCase();
 
@@ -45,12 +44,11 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
       (failure) => emit(WalletError(message: _mapFailureToMessage(failure))),
       (wallet) {
         debugPrint("Wallet Data Emitted: Rs. ${wallet.walletBalance}");
-        emit(WalletLoaded(wallet: wallet)); // ✅ Ensure correct state is emitted
+        emit(WalletLoaded(wallet: wallet)); 
       },
     );
   }
 
-  /// 🔹 Initiate Transaction
   Future<void> _onInitiateTransaction(
       InitiateTransaction event, Emitter<WalletState> emit) async {
     emit(WalletLoading());
@@ -60,18 +58,14 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
       paymentGateway: event.paymentGateway,
     );
 
-    // result.fold(
-    //   (failure) => emit(WalletError(message: _mapFailureToMessage(failure))),
-    //   (paymentUrl) => emit(TransactionInitiated(paymentUrl: paymentUrl)),
-    // );
+   
     result.fold(
       (failure) {
         debugPrint(
-            "❌ Transaction Initiation Failed: ${_mapFailureToMessage(failure)}");
+            " Transaction Initiation Failed: ${_mapFailureToMessage(failure)}");
         emit(WalletError(message: _mapFailureToMessage(failure)));
       },
       (transaction) {
-        // ✅ `pidx` received, now use KhaltiCheckout
         debugPrint("✅ Transaction Successful, pidx: ${transaction.pidx}");
 
         emit(TransactionInitiated(transaction: transaction));
@@ -79,7 +73,6 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
     );
   }
 
-  /// 🔹 Verify Transaction
   Future<void> _onVerifyTransaction(
       VerifyTransaction event, Emitter<WalletState> emit) async {
     emit(WalletLoading());
@@ -93,14 +86,14 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
         (failure) => emit(WalletError(message: _mapFailureToMessage(failure))),
         (_) {
       emit(TransactionVerified());
-      add(FetchWalletDetails()); // ✅ Refresh Wallet Balance after payment
+      add(FetchWalletDetails()); 
     });
   }
 
   /// 🔹 Fetch Transaction History
   Future<void> _onFetchTransactionHistory(
       FetchTransactionHistory event, Emitter<WalletState> emit) async {
-    emit(TransactionHistoryLoading()); // 🔹 Show loader only for history
+    emit(TransactionHistoryLoading()); 
 
     final result = await _getTransactionHistoryUseCase();
 
@@ -116,7 +109,6 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
     );
   }
 
-  /// 🔹 Map API failures to readable messages
   String _mapFailureToMessage(Failure failure) {
     if (failure is ApiFailure) {
       return failure.message;

@@ -16,7 +16,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc({required LoginUsecase loginUseCase, required HomeCubit homeCubit})
       : _loginUseCase = loginUseCase,
         super(LoginState.initial()) {
-    // Handle Login Event
     on<LoginUserEvent>((event, emit) async {
       emit(state.copyWith(isLoading: true));
 
@@ -55,7 +54,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       );
     });
 
-    // Handle Navigation to Register Screen
     on<NavigateRegisterScreenEvent>((event, emit) {
       Navigator.push(
         event.context,

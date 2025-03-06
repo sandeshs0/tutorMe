@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:tutorme/app/usecase/usecase.dart';
 import 'package:tutorme/core/error/failure.dart';
-import 'package:tutorme/core/services/connectivity_service.dart';
+import 'package:tutorme/core/common/internet_checker/connectivity_service.dart';
 import 'package:tutorme/features/tutors/domain/entity/tutor_entity.dart';
 import 'package:tutorme/features/tutors/domain/repository/tutor_repository.dart';
 
@@ -32,7 +32,7 @@ class GetAllTutorsUsecase
           (failure) => Left(failure),
           (tutors) async {
             await localRepository
-                .saveTutors(tutors); // Fixed: Clean call to saveTutors
+                .saveTutors(tutors);
             return Right(tutors);
           },
         );
@@ -58,6 +58,5 @@ class GetTutorsParams extends Equatable {
   const GetTutorsParams({required this.page, required this.limit});
 
   @override
-  // TODO: implement props
   List<Object?> get props => [page, limit];
 }

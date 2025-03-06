@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tutorme/app/di/di.dart';
 import 'package:tutorme/bloc/theme_cubit.dart';
-import 'package:tutorme/bloc/tutor_bloc.dart';
 import 'package:tutorme/core/app_theme/app_theme.dart';
 import 'package:tutorme/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:tutorme/features/auth/presentation/view_model/register/register_bloc.dart';
 import 'package:tutorme/features/booking/presentation/viewmodel/booking_bloc.dart';
+import 'package:tutorme/features/home/presentation/view/splash_view.dart';
 import 'package:tutorme/features/home/presentation/view_model/home_cubit.dart';
 import 'package:tutorme/features/notifications/presentation/view_model/notification_bloc.dart';
 import 'package:tutorme/features/session/presentation/bloc/session_bloc.dart';
 import 'package:tutorme/features/student/presentation/view_model/bloc/student_profile_bloc.dart';
+import 'package:tutorme/features/tutors/presentation/view_model/bloc/tutor_bloc.dart';
 import 'package:tutorme/features/wallet/presentation/view_model/bloc/wallet_bloc.dart';
-import 'package:tutorme/view/splash_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -54,12 +54,12 @@ class MyApp extends StatelessWidget {
             create: (_) => getIt<HomeCubit>(),
           ),
           BlocProvider<ThemeCubit>(
-              create: (_) => getIt<ThemeCubit>()), // ✅ Register ThemeCubit
+              create: (_) => getIt<ThemeCubit>()), 
         ],
         child: Builder(builder: (context) {
           return BlocBuilder<ThemeCubit, ThemeMode>(
             builder: (context, themeMode) {
-              debugPrint("🎨 ThemeMode Updated: $themeMode");
+              debugPrint("ThemeMode Updated: $themeMode");
               return MaterialApp(
                 title: 'TutorMe',
                 // theme: ThemeData(primaryColor: const Color(0xFF0961F5)),

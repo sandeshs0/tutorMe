@@ -7,13 +7,10 @@ sealed class StudentProfileState extends Equatable {
   List<Object?> get props => [];
 }
 
-// Initial state when no data is loaded yet
 final class StudentProfileInitial extends StudentProfileState {}
 
-// Loading state when fetching data
 final class StudentProfileLoading extends StudentProfileState {}
 
-// Loaded state when data is successfully fetched
 final class StudentProfileLoaded extends StudentProfileState {
   final StudentEntity student;
 
@@ -23,7 +20,6 @@ final class StudentProfileLoaded extends StudentProfileState {
   List<Object?> get props => [student];
 }
 
-// Error state when fetching fails
 final class StudentProfileError extends StudentProfileState {
   final String message;
 

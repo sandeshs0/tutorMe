@@ -11,7 +11,6 @@ class GetNotificationsDTO {
     required this.notifications,
   });
 
-  /// **Fix: Handle list response properly**
   factory GetNotificationsDTO.fromJson(List<dynamic> jsonList) {
     return GetNotificationsDTO(
       notifications: jsonList
@@ -20,7 +19,6 @@ class GetNotificationsDTO {
     );
   }
 
-  /// **Convert to JSON** (Not really needed for list responses, but keeping for consistency)
   Map<String, dynamic> toJson() => {
         'notifications': notifications.map((notification) => notification.toJson()).toList(),
       };

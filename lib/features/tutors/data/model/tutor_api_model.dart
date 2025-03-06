@@ -54,7 +54,6 @@ class TutorApiModel extends Equatable {
     );
   }
 
-// Creating API Model from Domain Entiry
 
   factory TutorApiModel.fromEntity(TutorEntity entity) {
     return TutorApiModel(
@@ -72,7 +71,6 @@ class TutorApiModel extends Equatable {
   }
 
   @override
-  // TODO: implement props
   List<Object?> get props => [
         id,
         name,

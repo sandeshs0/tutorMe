@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tutorme/view/onboarding_page.dart';
+import 'package:tutorme/features/home/presentation/view/onboarding_view.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -26,7 +26,6 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Colors.white,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

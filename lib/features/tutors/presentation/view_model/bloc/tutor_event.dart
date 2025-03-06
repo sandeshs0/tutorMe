@@ -7,7 +7,6 @@ sealed class TutorEvent extends Equatable {
   List<Object> get props => [];
 }
 
-// Event to Fetch All Tutors
 class GetAllTutorsEvent extends TutorEvent {
   final int page;
   final int limit;
@@ -18,7 +17,6 @@ class GetAllTutorsEvent extends TutorEvent {
   List<Object> get props => [page, limit];
 }
 
-// Event to Fetch a Tutor by Username
 class GetTutorByUsernameEvent extends TutorEvent {
   final String username;
 

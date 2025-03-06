@@ -69,7 +69,6 @@ class SessionApiModel extends Equatable {
     );
   }
 
-  // Creating API Model from Domain Entity
   factory SessionApiModel.fromEntity(SessionEntity entity) {
     return SessionApiModel(
       sessionId: entity.sessionId,

@@ -14,7 +14,6 @@ class RegisterUserEvent extends RegisterEvent {
   final String phone;
   final String role;
   final String username;
-  // final String? profileImage;
   final String password;
   final String confirmPassword;
   final File file;

@@ -111,7 +111,6 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen>
     );
   }
 
-  /// 🔹 Transaction List
   Widget _buildTransactionList(List<TransactionEntity> transactions) {
     if (transactions.isEmpty) {
       return Center(
@@ -158,7 +157,6 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen>
     );
   }
 
-  /// 🔹 Transaction Card (Copied from WalletView)
   Widget _buildTransactionCard(TransactionEntity transaction) {
     final bool isCredit = transaction.amount > 0;
 
@@ -217,7 +215,6 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen>
     );
   }
 
-  /// 🔹 Format Date (Copied from WalletView)
   String _formatDate(DateTime date) {
     final now = DateTime.now();
 

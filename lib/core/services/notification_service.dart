@@ -5,7 +5,6 @@ class NotificationService {
   static final FlutterLocalNotificationsPlugin _notificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-  /// **Initialize Local Notification Settings**
   static void initialize() {
     const AndroidInitializationSettings androidInitializationSettings =
         AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -16,7 +15,6 @@ class NotificationService {
     _notificationsPlugin.initialize(settings);
   }
 
-  /// **Show a Push Notification**
   Future<void> showNotification(NotificationEntity notification) async {
     const AndroidNotificationDetails androidDetails =
         AndroidNotificationDetails(
@@ -31,7 +29,7 @@ class NotificationService {
         NotificationDetails(android: androidDetails);
 
     await _notificationsPlugin.show(
-      int.parse(notification.id.substring(0, 5), radix: 16), // Unique ID
+      int.parse(notification.id.substring(0, 5), radix: 16),
       "New Notification",
       notification.message,
       details,

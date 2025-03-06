@@ -27,7 +27,6 @@ class _SignupViewState extends State<SignupView> {
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
 
-  // Check for camera permission
   Future<void> checkCameraPermission() async {
     if (await Permission.camera.request().isRestricted ||
         await Permission.camera.request().isDenied) {
@@ -42,10 +41,6 @@ class _SignupViewState extends State<SignupView> {
       if (image != null) {
         setState(() {
           _img = File(image.path);
-          // Send image to server
-          // context.read<RegisterBloc>().add(
-          //       UploadImage(file: _img!),
-          //     );
         });
       } else {
         return;
@@ -61,21 +56,10 @@ class _SignupViewState extends State<SignupView> {
     final isTablet = screenWidth >= 600;
 
     return Scaffold(
-      // backgroundColor: const Color(0xFFF5F9FF),
       body: BlocConsumer<RegisterBloc, RegisterState>(
         listener: (context, state) {
           if (state.isSuccess) {
-            // ScaffoldMessenger.of(context).showSnackBar(
-            //   const SnackBar(content: Text("Registration Successful")),
-            // );
-            // Navigator.pushReplacement(
-            //   context,
-            //   MaterialPageRoute(builder: (context) => LoginScreen()),
-            // );
           } else if (state.errorMessage.isNotEmpty) {
-            // ScaffoldMessenger.of(context).showSnackBar(
-            //   SnackBar(content: Text(state.errorMessage)),
-            // );
           }
         },
         builder: (context, state) {
@@ -102,7 +86,6 @@ class _SignupViewState extends State<SignupView> {
                         'Kick start your learning journey with an account',
                         style: TextStyle(
                           fontSize: 14.0,
-                          // color: Color.fromARGB(255, 61, 26, 26),
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -151,23 +134,18 @@ class _SignupViewState extends State<SignupView> {
                             height: 150,
                             width: 150,
                             child: CircleAvatar(
-                              // radius: 50,
                               backgroundColor: Colors.transparent,
                               backgroundImage: _img != null
                                   ? FileImage(_img!)
                                   : const AssetImage(
                                           'assets/images/uploadImage.png')
                                       as ImageProvider,
-                              // backgroundImage:
-                              //     const AssetImage('assets/images/profile.png')
-                              //         as ImageProvider,
                             ),
                           ),
                         ),
                       ),
                       const SizedBox(height: 15.0),
 
-                      // Full Name Field
                       TextFormField(
                         controller: _fullNameController,
                         keyboardType: TextInputType.text,
@@ -187,7 +165,6 @@ class _SignupViewState extends State<SignupView> {
                       ),
                       const SizedBox(height: 19.0),
 
-                      // Username Field
                       TextFormField(
                         controller: _usernameController,
                         keyboardType: TextInputType.text,
@@ -207,7 +184,6 @@ class _SignupViewState extends State<SignupView> {
                       ),
                       const SizedBox(height: 19.0),
 
-                      // Email Field
                       TextFormField(
                         controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
@@ -230,7 +206,6 @@ class _SignupViewState extends State<SignupView> {
                       ),
                       const SizedBox(height: 19.0),
 
-                      // Phone Number Field
                       TextFormField(
                         controller: _phoneController,
                         keyboardType: TextInputType.phone,
@@ -252,7 +227,6 @@ class _SignupViewState extends State<SignupView> {
                       ),
                       const SizedBox(height: 19.0),
 
-                      // Password Field
                       TextFormField(
                         controller: _passwordController,
                         obscureText: _obscurePassword,
@@ -317,14 +291,13 @@ class _SignupViewState extends State<SignupView> {
                           return null;
                         },
                       ),
-                     
+
                       const SizedBox(height: 28.0),
 
                       // Signup Button
                       ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            // final registerState= context.read<RegisterBloc>
                             context.read<RegisterBloc>().add(
                                   RegisterUserEvent(
                                       context: context,
@@ -370,7 +343,6 @@ class _SignupViewState extends State<SignupView> {
                           const Text("Already have an account? "),
                           GestureDetector(
                             onTap: () {
-                              // Navigate to login screen
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(

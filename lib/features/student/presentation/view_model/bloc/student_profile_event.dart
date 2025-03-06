@@ -7,12 +7,10 @@ sealed class StudentProfileEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-// Event to fetch student profile
 final class FetchStudentProfile extends StudentProfileEvent {
   const FetchStudentProfile();
 }
 
-// Event to update student profile
 final class UpdateStudentProfile extends StudentProfileEvent {
   final UpdateStudentProfileDTO updatedData;
 

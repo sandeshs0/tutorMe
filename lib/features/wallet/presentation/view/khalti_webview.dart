@@ -31,7 +31,7 @@ class _KhaltiWebViewState extends State<KhaltiWebView> {
         NavigationDelegate(
           onPageFinished: (url) {
             if (url.contains("payment-callback")) {
-              debugPrint("✅ Payment Completed! Verifying transaction...");
+              debugPrint("Payment Completed! Verifying transaction...");
               _verifyTransaction();
             }
           },
@@ -48,7 +48,7 @@ class _KhaltiWebViewState extends State<KhaltiWebView> {
           ),
         );
 
-    Navigator.pop(context); // Close the WebView after verification
+    Navigator.pop(context); 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text("Payment Successful!")),
     );

@@ -17,7 +17,6 @@ class NotificationEntity extends Equatable {
     required this.createdAt,
   });
 
-  /// **Fix: Add `copyWith` method to update properties**
   NotificationEntity copyWith({
     String? id,
     String? userId,

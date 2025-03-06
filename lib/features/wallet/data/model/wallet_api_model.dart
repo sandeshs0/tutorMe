@@ -15,14 +15,11 @@ class WalletApiModel extends Equatable {
     required this.transactions,
   });
 
-  /// **Convert from JSON**
   factory WalletApiModel.fromJson(Map<String, dynamic> json) =>
       _$WalletApiModelFromJson(json);
 
-  /// **Convert to JSON**
   Map<String, dynamic> toJson() => _$WalletApiModelToJson(this);
 
-  /// **Convert to Domain Entity**
   WalletEntity toEntity() {
     return WalletEntity(
       walletBalance: walletBalance,

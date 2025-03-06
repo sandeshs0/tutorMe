@@ -19,7 +19,6 @@ class _TutorProfileViewState extends State<TutorProfileView> {
   @override
   void initState() {
     super.initState();
-    // Hide book button when scrolling to bottom
     _scrollController.addListener(() {
       final isBottom = _scrollController.offset >=
           _scrollController.position.maxScrollExtent - 50;
@@ -35,7 +34,6 @@ class _TutorProfileViewState extends State<TutorProfileView> {
     super.dispose();
   }
 
-  /// Builds a row of 5 stars (with half-star support) based on the given [rating].
   Widget _buildStarRating(double rating, {double size = 20, Color? color}) {
     final int fullStars = rating.floor();
     final bool hasHalfStar = (rating - fullStars) >= 0.5;
@@ -61,22 +59,19 @@ class _TutorProfileViewState extends State<TutorProfileView> {
     final primaryColor = theme.primaryColor;
     final isDark = theme.brightness == Brightness.dark;
 
-    // Determine text and background colors based on theme
     final textColor = isDark ? Colors.white : Colors.black87;
     final backgroundColor = theme.scaffoldBackgroundColor;
     final cardColor = theme.cardColor;
 
-    // Secondary color for gradient effects
     final primaryDarkColor = isDark
         ? primaryColor.withOpacity(0.7)
-        : const Color.fromARGB(255, 0, 74, 203); // Darker shade for light theme
+        : const Color.fromARGB(255, 0, 74, 203);
 
     return Scaffold(
       backgroundColor: backgroundColor,
       body: CustomScrollView(
         controller: _scrollController,
         slivers: [
-          // Custom app bar with tutor image as background
           SliverAppBar(
             expandedHeight: 220,
             pinned: true,
@@ -98,7 +93,6 @@ class _TutorProfileViewState extends State<TutorProfileView> {
               ),
             ],
           ),
-          // Content
           SliverToBoxAdapter(
             child: _buildProfileContent(
                 tutor, primaryColor, primaryDarkColor, textColor, cardColor),
@@ -153,12 +147,10 @@ class _TutorProfileViewState extends State<TutorProfileView> {
     );
   }
 
-  // Header background with tutor image and gradient overlay
   Widget _buildHeaderBackground(TutorEntity tutor) {
     return Stack(
       fit: StackFit.expand,
       children: [
-        // Background image with gradient overlay
         ShaderMask(
           shaderCallback: (rect) {
             return const LinearGradient(
@@ -177,7 +169,6 @@ class _TutorProfileViewState extends State<TutorProfileView> {
             ),
           ),
         ),
-        // Tutor info at the bottom
         Positioned(
           left: 20,
           right: 20,
@@ -221,7 +212,6 @@ class _TutorProfileViewState extends State<TutorProfileView> {
     );
   }
 
-  // Main content of the profile
   Widget _buildProfileContent(TutorEntity tutor, Color primaryColor,
       Color primaryDarkColor, Color textColor, Color cardColor) {
     return Padding(
@@ -229,11 +219,9 @@ class _TutorProfileViewState extends State<TutorProfileView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Hourly Rate Section (Prioritized)
           _buildHourlyRateCard(tutor, primaryColor, textColor, cardColor),
           const SizedBox(height: 24),
 
-          // About section
           _buildSectionCard(
             title: "About",
             icon: Icons.person,
@@ -244,7 +232,6 @@ class _TutorProfileViewState extends State<TutorProfileView> {
           ),
           const SizedBox(height: 16),
 
-          // Subjects section
           _buildSectionCard(
             title: "Subjects",
             icon: Icons.school,
@@ -255,7 +242,6 @@ class _TutorProfileViewState extends State<TutorProfileView> {
           ),
           const SizedBox(height: 16),
 
-          // Reviews section
           _buildSectionCard(
             title: "Reviews",
             icon: Icons.star,
@@ -269,7 +255,6 @@ class _TutorProfileViewState extends State<TutorProfileView> {
     );
   }
 
-  // Hourly Rate Card (New, prioritized section)
   Widget _buildHourlyRateCard(
       TutorEntity tutor, Color primaryColor, Color textColor, Color cardColor) {
     final theme = Theme.of(context);
@@ -291,18 +276,6 @@ class _TutorProfileViewState extends State<TutorProfileView> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Container(
-          //   padding: const EdgeInsets.all(12),
-          //   decoration: BoxDecoration(
-          //     color: const Color.fromARGB(255, 141, 68, 0).withOpacity(0.1),
-          //     borderRadius: BorderRadius.circular(12),
-          //   ),
-          //   child: const Icon(
-          //     Icons.wallet,
-          //     color: Color.fromARGB(255, 141, 68, 0),
-          //     size: 28,
-          //   ),
-          // ),
           const SizedBox(width: 16),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -318,7 +291,6 @@ class _TutorProfileViewState extends State<TutorProfileView> {
                 color: isDarkMode
                     ? const Color.fromARGB(255, 12, 167, 136)
                     : theme.primaryColor,
-                // : theme.primaryColor,
               ),
             ),
           ),
@@ -327,7 +299,6 @@ class _TutorProfileViewState extends State<TutorProfileView> {
     );
   }
 
-  // Section card with title and content
   Widget _buildSectionCard({
     required String title,
     required IconData icon,
@@ -352,7 +323,6 @@ class _TutorProfileViewState extends State<TutorProfileView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Section header
           Padding(
             padding: const EdgeInsets.all(16),
             child: Row(
@@ -377,16 +347,13 @@ class _TutorProfileViewState extends State<TutorProfileView> {
               ],
             ),
           ),
-          // Divider
           Divider(color: textColor.withOpacity(0.1), height: 1),
-          // Content
           content,
         ],
       ),
     );
   }
 
-  // About section with read more functionality
   Widget _buildAboutSection(
       TutorEntity tutor, Color primaryColor, Color textColor) {
     return Padding(
@@ -462,7 +429,6 @@ class _TutorProfileViewState extends State<TutorProfileView> {
     );
   }
 
-  // Subjects section with chips
   Widget _buildSubjectsSection(TutorEntity tutor, Color primaryColor) {
     return Padding(
       padding: const EdgeInsets.all(16),
@@ -502,7 +468,6 @@ class _TutorProfileViewState extends State<TutorProfileView> {
     );
   }
 
-  // Get icon based on subject name
   IconData _getSubjectIcon(String subject) {
     final subjectLow = subject.toLowerCase();
     if (subjectLow.contains('math')) return Icons.calculate;
@@ -516,31 +481,12 @@ class _TutorProfileViewState extends State<TutorProfileView> {
     return Icons.school;
   }
 
-  // Reviews section
   Widget _buildReviewsSection(Color primaryColor, Color textColor) {
-    final sampleReviews = [
-      {
-        "reviewer": "Will Smith",
-        "rating": 4.5,
-        "text":
-            "This course has been very helpful. The mentor was extremely knowledgeable and patient with my questions.",
-        "date": "2 days ago",
-        "avatar": "W",
-      },
-      {
-        "reviewer": "Sophia Chen",
-        "rating": 5.0,
-        "text":
-            "Loved the sessions! The tutor explained everything clearly and provided great examples to help me understand difficult concepts.",
-        "date": "1 week ago",
-        "avatar": "S",
-      },
-    ];
+    final sampleReviews = [];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Review items
         ...sampleReviews.map((review) => _buildReviewItem(
               reviewer: review["reviewer"] as String,
               rating: review["rating"] as double,
@@ -550,7 +496,6 @@ class _TutorProfileViewState extends State<TutorProfileView> {
               primaryColor: primaryColor,
               textColor: textColor,
             )),
-        // View all button
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: ElevatedButton(
@@ -568,15 +513,6 @@ class _TutorProfileViewState extends State<TutorProfileView> {
             child: const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Text(
-                //   "View all 26 reviews",
-                //   style: TextStyle(
-                //     color: primaryColor,
-                //     fontWeight: FontWeight.w600,
-                //   ),
-                // ),
-                // const SizedBox(width: 8),
-                // Icon(Icons.arrow_forward, size: 16, color: primaryColor),
               ],
             ),
           ),
@@ -585,7 +521,6 @@ class _TutorProfileViewState extends State<TutorProfileView> {
     );
   }
 
-  // Individual review item
   Widget _buildReviewItem({
     required String reviewer,
     required double rating,
@@ -595,7 +530,6 @@ class _TutorProfileViewState extends State<TutorProfileView> {
     required Color primaryColor,
     required Color textColor,
   }) {
-    // Create gradient colors for avatar background
     final colors = [
       primaryColor,
       primaryColor.withOpacity(0.7),
@@ -614,7 +548,6 @@ class _TutorProfileViewState extends State<TutorProfileView> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Avatar
           Container(
             width: 40,
             height: 40,
@@ -638,12 +571,10 @@ class _TutorProfileViewState extends State<TutorProfileView> {
             ),
           ),
           const SizedBox(width: 12),
-          // Review content
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Reviewer and rating
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -680,7 +611,6 @@ class _TutorProfileViewState extends State<TutorProfileView> {
                   ],
                 ),
                 const SizedBox(height: 4),
-                // Review text
                 Text(
                   text,
                   style: TextStyle(
@@ -690,7 +620,6 @@ class _TutorProfileViewState extends State<TutorProfileView> {
                   ),
                 ),
                 const SizedBox(height: 6),
-                // Date
                 Text(
                   date,
                   style: TextStyle(

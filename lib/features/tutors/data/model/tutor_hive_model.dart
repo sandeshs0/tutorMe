@@ -4,7 +4,7 @@ import 'package:tutorme/features/tutors/domain/entity/tutor_entity.dart';
 
 part 'tutor_hive_model.g.dart';
 
-@HiveType(typeId: 1)  // Matches tutorTableId from HiveTableConstant
+@HiveType(typeId: 1) 
 class TutorHiveModel extends HiveObject {
   @HiveField(0)
   final String? id;

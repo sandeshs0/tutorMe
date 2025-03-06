@@ -21,16 +21,14 @@ class StudentProfileView extends StatelessWidget {
       body: BlocConsumer<StudentProfileBloc, StudentProfileState>(
         listener: (context, state) {
           if (state is StudentProfileUpdated) {
-            // ✅ Show toast for success message
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text("Profile updated successfully!"),
                 backgroundColor: Colors.green,
-                duration: Duration(seconds: 5), // Ensure it stays long enough
+                duration: Duration(seconds: 5), 
               ),
             );
 
-            // ✅ Delay fetching profile to prevent overriding the success toast immediately
             Future.delayed(const Duration(seconds: 2), () {
               context
                   .read<StudentProfileBloc>()
@@ -71,7 +69,6 @@ class StudentProfileView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // 🟢 Profile Image with Edit Button and Border
             Stack(
               alignment: Alignment.bottomRight,
               children: [
@@ -79,7 +76,7 @@ class StudentProfileView extends StatelessWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
-                        color: Colors.blueGrey, width: 3), // 🟢 Added outline
+                        color: Colors.blueGrey, width: 3), 
                   ),
                   child: CircleAvatar(
                     radius: 100,
@@ -91,7 +88,6 @@ class StudentProfileView extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-            // 🟢 Name
             Text(
               student.name,
               style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
@@ -99,7 +95,6 @@ class StudentProfileView extends StatelessWidget {
             ),
             const SizedBox(height: 4),
 
-            // 🟢 Email
             Text(
               student.email,
               style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
@@ -107,11 +102,9 @@ class StudentProfileView extends StatelessWidget {
             ),
             const SizedBox(height: 16),
 
-            // 🟢 Wallet Balance Card
             _buildWalletBalanceCard(student.walletBalance, theme),
             const SizedBox(height: 24),
 
-            // 🟢 Profile Options
             _buildProfileOption(Icons.edit, "Edit Profile", () {
               Navigator.push(
                 context,
@@ -119,17 +112,14 @@ class StudentProfileView extends StatelessWidget {
                   builder: (_) => EditStudentProfileView(student: student),
                 ),
               ).then((_) {
-                // ✅ Refresh the profile when returning from Edit Profile
                 context
                     .read<StudentProfileBloc>()
                     .add(const FetchStudentProfile());
               });
             }),
             _buildProfileOption(Icons.notifications, "Notifications", () {
-              // TODO: Implement Notifications
             }),
             _buildProfileOption(Icons.dark_mode, "Dark Mode", () {
-              // TODO: Implement Dark Mode Toggle
             }),
             _buildProfileOption(Icons.security, "Terms & Conditions", () {
               Navigator.push(
@@ -141,7 +131,6 @@ class StudentProfileView extends StatelessWidget {
 
             const SizedBox(height: 10),
 
-            // 🟢 Logout Button (Subtle)
             _buildLogoutButton(context),
           ],
         ),

@@ -20,7 +20,6 @@ class TutorLocalRepository implements ITutorRepository {
           "Fetching all tutors from local storage - page: $page, limit: $limit");
       final tutors = await _tutorLocalDataSource.getAllTutors();
 
-      // Apply pagination locally (since Hive doesn't have built-in pagination)
       final startIndex = (page - 1) * limit;
       final endIndex = startIndex + limit;
 

@@ -7,7 +7,7 @@ class UpdateStudentProfileDTO {
   final String? name;
   final String? email;
   final String? phone;
-  final String? profileImage; // Optional
+  final String? profileImage; 
 
   UpdateStudentProfileDTO({
     this.name,

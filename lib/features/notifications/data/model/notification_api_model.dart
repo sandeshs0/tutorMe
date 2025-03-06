@@ -23,14 +23,11 @@ class NotificationApiModel extends Equatable {
     required this.createdAt,
   });
 
-  /// **Convert from JSON**
   factory NotificationApiModel.fromJson(Map<String, dynamic> json) =>
       _$NotificationApiModelFromJson(json);
 
-  /// **Convert to JSON**
   Map<String, dynamic> toJson() => _$NotificationApiModelToJson(this);
 
-  /// **Convert API Model to Domain Entity**
   NotificationEntity toEntity() {
     return NotificationEntity(
       id: id,
@@ -42,7 +39,6 @@ class NotificationApiModel extends Equatable {
     );
   }
 
-  /// **Create API Model from Domain Entity**
   factory NotificationApiModel.fromEntity(NotificationEntity entity) {
     return NotificationApiModel(
       id: entity.id,

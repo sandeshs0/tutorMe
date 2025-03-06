@@ -11,30 +11,28 @@ class RemoteBookingRepository implements IBookingRepository {
 
   RemoteBookingRepository(this._bookingRemoteDataSource);
 
-  /// **🔹 Create a New Booking**
   @override
   Future<Either<Failure, BookingEntity>> createBooking(CreateBookingDTO bookingData) async {
     try {
-      debugPrint("🔵 Creating booking...");
+      debugPrint(" Creating booking...");
       final booking = await _bookingRemoteDataSource.createBooking(bookingData);
-      debugPrint("✅ Booking created successfully: ${booking.id}");
+      debugPrint(" Booking created successfully: ${booking.id}");
       return Right(booking);
     } catch (e) {
-      debugPrint("❌ Error creating booking: $e");
+      debugPrint(" Error creating booking: $e");
       return Left(ApiFailure(message: e.toString()));
     }
   }
 
-  /// **🔹 Fetch Student Bookings**
   @override
   Future<Either<Failure, List<BookingEntity>>> getStudentBookings() async {
     try {
-      debugPrint("🔵 Fetching student bookings...");
+      debugPrint(" Fetching student bookings...");
       final bookings = await _bookingRemoteDataSource.getStudentBookings();
-      debugPrint("✅ Fetched ${bookings.length} bookings.");
+      debugPrint(" Fetched ${bookings.length} bookings.");
       return Right(bookings);
     } catch (e) {
-      debugPrint("❌ Error fetching bookings: $e");
+      debugPrint(" Error fetching bookings: $e");
       return Left(ApiFailure(message: e.toString()));
     }
   }

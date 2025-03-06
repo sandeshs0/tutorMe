@@ -13,33 +13,17 @@ part 'notification_state.dart';
 class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   final GetNotificationsUsecase getNotificationsUsecase;
   final MarkNotificationsAsReadUsecase markNotificationsAsReadUsecase;
-  // final SocketService socketService;
-  final NotificationService notificationService; // ✅ Add NotificationService
+  final NotificationService notificationService; 
 
   NotificationBloc({
     required this.getNotificationsUsecase,
     required this.markNotificationsAsReadUsecase,
-    // required this.socketService,
-    required this.notificationService, // ✅ Inject NotificationService
+    required this.notificationService, 
   }) : super(NotificationInitial()) {
     on<FetchNotificationsEvent>(_onFetchNotifications);
     on<MarkNotificationsAsReadEvent>(_onMarkNotificationsAsRead);
     on<AddNewNotificationEvent>(
-        _onAddNewNotification); // ✅ Handle real-time event
-
-    // Listening for socket events
-    //  socketService.listenForNotifications((data) {
-    //   final notification = NotificationEntity(
-    //     id: data['_id'],
-    //     userId: data['userId'],
-    //     message: data['message'],
-    //     type: data['type'],
-    //     isRead: false,
-    //     createdAt: DateTime.parse(data['createdAt']),
-    //   );
-    //   add(AddNewNotificationEvent(notification)); // ✅ Dispatch event properly
-    //   NotificationService().showNotification(notification); // 🔔 Show push notification
-    // });
+        _onAddNewNotification);
   }
 
   void _onAddNewNotification(
@@ -51,20 +35,18 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
         ...currentState.notifications
       ];
       NotificationService().showNotification(
-          updatedNotifications[0]); // 🔔 Show push notification
+          updatedNotifications[0]); 
 
       emit(NotificationLoaded(updatedNotifications));
     }
   }
 
-  /// Handles fetching notifications
   Future<void> _onFetchNotifications(
       FetchNotificationsEvent event, Emitter<NotificationState> emit) async {
     emit(NotificationLoading());
 
     final Either<Failure, List<NotificationEntity>> result =
         await getNotificationsUsecase();
-    // NotificationService().showNotification(notification); // 🔔 Show push notification
 
     result.fold(
       (failure) => emit(NotificationError(failure.message)),
@@ -72,7 +54,6 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     );
   }
 
-  /// Handles marking notifications as read
   Future<void> _onMarkNotificationsAsRead(MarkNotificationsAsReadEvent event,
       Emitter<NotificationState> emit) async {
     final Either<Failure, void> result = await markNotificationsAsReadUsecase();
@@ -80,8 +61,8 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     result.fold(
       (failure) => emit(NotificationError(failure.message)),
       (_) {
-        emit(NotificationsMarkedAsRead()); // Show success message
-        add(FetchNotificationsEvent()); // ✅ Re-fetch notifications after marking them as read
+        emit(NotificationsMarkedAsRead()); 
+        add(FetchNotificationsEvent()); 
       },
     );
   }

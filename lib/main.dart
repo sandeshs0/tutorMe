@@ -7,9 +7,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await HiveService.init();
   await initDependencies();
-  // await Hive.initFlutter();
-  // Hive.registerAdapter(UserHiveModelAdapter());
-
   runApp(
     const MyApp(),
   );

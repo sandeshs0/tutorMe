@@ -19,11 +19,9 @@ class WalletRemoteDataSource implements IWalletDataSource {
   })  : _dio = dio,
         _tokenSharedPrefs = tokenSharedPrefs;
 
-  /// **🔹 Fetch Wallet Balance**
   @override
   Future<WalletEntity> getWalletDetails() async {
     try {
-      // ✅ Get Token from Shared Preferences
       final tokenResult = await _tokenSharedPrefs.getToken();
       final token = tokenResult.fold((failure) => null, (token) => token);
 
@@ -31,7 +29,6 @@ class WalletRemoteDataSource implements IWalletDataSource {
         throw const ApiFailure(message: "Authentication token missing.");
       }
 
-      // ✅ API Call
       final response = await _dio.get(
         ApiEndpoints.getWalletBalance,
         options: Options(headers: {"Authorization": "Bearer $token"}),
@@ -48,14 +45,12 @@ class WalletRemoteDataSource implements IWalletDataSource {
     }
   }
 
-  /// **🔹 Initiate a Payment Transaction**
   @override
   Future<InitiateTransactionDTO> initiateTransaction({
     required double amount,
     required String paymentGateway,
   }) async {
     try {
-      // ✅ Get Token
       final tokenResult = await _tokenSharedPrefs.getToken();
       final token = tokenResult.fold((failure) => null, (token) => token);
 
@@ -63,7 +58,6 @@ class WalletRemoteDataSource implements IWalletDataSource {
         throw const ApiFailure(message: "Authentication token missing.");
       }
 
-      // ✅ API Call
       final response = await _dio.post(
         ApiEndpoints.initiateTransaction,
         options: Options(headers: {"Authorization": "Bearer $token"}),
@@ -74,7 +68,7 @@ class WalletRemoteDataSource implements IWalletDataSource {
       );
 
       if (response.statusCode == 201) {
-      return InitiateTransactionDTO.fromJson(response.data); // ✅ Return DTO with pidx
+      return InitiateTransactionDTO.fromJson(response.data); 
       } else {
         throw const ApiFailure(message: "Failed to initiate transaction.");
       }
@@ -83,14 +77,12 @@ class WalletRemoteDataSource implements IWalletDataSource {
     }
   }
 
-  /// **🔹 Verify a Payment Transaction**
   @override
   Future<bool> verifyTransaction({
     required String pidx,
     required String transactionId,
   }) async {
     try {
-      // ✅ Get Token
       final tokenResult = await _tokenSharedPrefs.getToken();
       final token = tokenResult.fold((failure) => null, (token) => token);
 
@@ -98,7 +90,6 @@ class WalletRemoteDataSource implements IWalletDataSource {
         throw const ApiFailure(message: "Authentication token missing.");
       }
 
-      // ✅ API Call
       final response = await _dio.post(
         ApiEndpoints.verifyTransaction,
         options: Options(headers: {"Authorization": "Bearer $token"}),
@@ -118,11 +109,9 @@ class WalletRemoteDataSource implements IWalletDataSource {
     }
   }
 
-  /// **🔹 Fetch Transaction History**
   @override
   Future<List<TransactionEntity>> getTransactionHistory() async {
     try {
-      // ✅ Get Token
       final tokenResult = await _tokenSharedPrefs.getToken();
       final token = tokenResult.fold((failure) => null, (token) => token);
 
@@ -130,7 +119,6 @@ class WalletRemoteDataSource implements IWalletDataSource {
         throw const ApiFailure(message: "Authentication token missing.");
       }
 
-      // ✅ API Call
       final response = await _dio.get(
         ApiEndpoints.getTransactions,
         options: Options(headers: {"Authorization": "Bearer $token"}),
